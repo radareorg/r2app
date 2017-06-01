@@ -1,0 +1,221 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<style>
+td,th {
+  font-family:Courier New;
+}
+font {
+  user-select:text;
+}
+</style>
+<link rel="stylesheet" href="dist/css/photon.css"></link>
+<script src="util.js"></script>
+<script src="shell.js"></script>
+<body>
+<div class="window" style="overflow:hidden">
+<header class="toolbar toolbar-header">
+  <div class="toolbar-actions">
+    <div class="btn-group">
+      <button id="home-button" class="btn btn-default" title="home">
+        <span class="icon icon-home"></span>
+      </button>
+    </div>
+    <div class="btn-group">
+      <button id="floppy-button" class="btn btn-default" title="save project">
+        <span class="icon icon-floppy"></span>
+      </button>
+      <button id="light-button" class="btn btn-default" title="swap theme">
+        <!-- <span class="icon icon-star-empty"></span> -->
+        <span class="icon icon-flashlight"></span>
+      </button>
+      <button id="heart-button" class="btn btn-default" title="<3">
+        <!-- <span class="icon icon-star-empty"></span> -->
+        <span class="icon icon-heart-empty"></span>
+      </button>
+    </div>
+    <div class="btn-group">
+      <button id="pencil-button" class="btn btn-default" title="write text or bytes">
+        <span class="icon icon-pencil"></span>
+      </button>
+      <button id="feather-button" class="btn btn-default" title="write asm">
+        <span class="icon icon-feather"></span>
+      </button>
+      <button id="copy-button" class="btn btn-default" title="copy">
+        <span class="icon icon-docs"></span>
+      </button>
+      <button id="paste-button" class="btn btn-default" title="paste">
+        <span class="icon icon-doc-text"></span>
+      </button>
+    </div>
+    <div class="btn-group">
+      <button id="backstep-button" class="btn btn-default">
+        <span class="icon icon-reply" title="backstep"></span>
+      </button>
+      <button id="continue-button" class="btn btn-default">
+        <span class="icon icon-play" title="continue"></span>
+      </button>
+      <button id="step-button" class="btn btn-default">
+        <span class="icon icon-forward" title="step into"></span>
+      </button>
+      <button id="stepover-button" class="btn btn-default">
+        <span class="icon icon-export" title="step over"></span>
+      </button>
+    </div>
+    <div class="btn-group">
+      <button id="cog-button" class="btn btn-default" title="settings">
+        <span class="icon icon-cog"></span>
+      </button>
+      <button id="help-button" class="btn btn-default" title="help">
+        <span class="icon icon-help"></span>
+      </button>
+    </div>
+  </div>
+  <div class="tab-group">
+    <div class="tab-item active" id="console-tab">
+      <span class="icon icon-cancel icon-close-tab"></span>
+      Console
+    </div>
+    <div class="tab-item" id="dashboard-tab">
+      <span class="icon icon-cancel icon-close-tab"></span>
+      Dashboard
+    </div>
+    <div class="tab-item" id="search-tab">
+      <span class="icon icon-cancel icon-close-tab"></span>
+      Search
+    </div>
+    <div class="tab-item" id="scripting-tab">
+      <span class="icon icon-cancel icon-close-tab"></span>
+      Scripting
+    </div>
+    <div class="tab-item" id="notes-tab">
+      <span class="icon icon-cancel icon-close-tab"></span>
+      Notes 
+    </div>
+ </div>
+</header>
+<!-- ------------- -->
+<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="dashboard-window">
+<div id="dashboard-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
+TODO
+</div>
+</div>
+<!-- ------------- -->
+<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="scripting-window">
+<div id="scripting-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
+TODO
+</div>
+</div>
+<!-- ------------- -->
+<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="search-window">
+<div id="notes-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
+
+<header class="toolbar toolbar-header" "">
+  <input style="width:98%;margin:5px;height:18px;-webkit-box-shadow:none;outline-width:0" id="search-input" type="shell" class="form-control" placeholder="Search...">
+<select>
+<option>string</option>
+<option>hexpairs</option>
+<option>assembly</option>
+<option>code</option>
+<option>word</option>
+<option>dword</option>
+<option>qword</option>
+</select>
+<select>
+<option>file</option>
+<option>io.section</option>
+<option>io.sections.write</option>
+<option>io.sections.exec</option>
+<option>dbg.stack</option>
+<option>dbg.map</option>
+<option>dbg.maps</option>
+<option>dbg.maps.exec</option>
+<option>dbg.maps.write</option>
+</select>
+</header>
+
+<div style="background-color:white;color:black;width:100%;height:100%;overflow:scroll;user-select:text;-webkit-user-select:auto;data-tap-disabled:true;" id="search-console">
+</div>
+
+</div>
+</div>
+
+<!-- ------------- -->
+<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="notes-window">
+<div id="notes-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
+<textarea id="notes-text" style="position:fixed;top:60px;bottom:0px;width:100%;height:auto;-webkit-box-shadow: none;border-color:white;border:0px;padding:10px;font-size:1em;outline-width:0;font-family:Courier New" autofocus>
+TODO: JSON indent, viewer, markdown, base64, ...
+</textarea>
+</div>
+</div>
+
+<!-- ------------- -->
+<div class="window-content" id="wtf-window" style="overflow:hidden; position:absolute;top:60px;bottom:0px;width:100%">
+
+<div class="pane-sm sidebar" style="width:500px;overflow:scroll">
+
+  <div class="toolbar toolbar-actions" style="position:fixed;margin-top:-1px;width:100%">
+    <div class="btn-group">
+      <button id="label-menu-button" class="btn btn-default btn-dropdown pull-left">
+        <span class="icon icon-menu"></span>
+      </button>
+    </div>
+    <div class="btn-group">
+      <button id="label-refresh-button" class="btn btn-default">
+        <span class="icon icon-arrows-ccw"></span>
+      </button>
+      <button id="label-search-button" class="btn btn-default">
+        <span class="icon icon-search"></span>
+      </button>
+    </div>
+    <div class="btn-group">
+      <button id="label-start-button" class="btn btn-default">
+        <span class="icon icon-star-empty"></span>
+      </button>
+    </div>
+  </div>
+
+<table class="table" style="padding-bottom:32px;padding-top:28px">
+  <tbody id="labels" style="background-color:black;color:white">
+<!-- ... -->
+  </tbody>
+</table>
+</div>
+
+  <div class="toolbar toolbar-actions" style="width:100%;position:absolute;bottom:-4px;padding:8px;border:0px;padding-top:5px">
+    <div class="btn-group">
+      <button id="label-hex-button" class="btn btn-default">
+        <span class="icon icon-cancel"></span>
+      </button>
+      <button id="label-dis-button" class="btn btn-default active">
+        <span class="icon icon-menu"></span>
+      </button>
+      <button id="label-dec-button" class="btn btn-default">
+        <span class="icon icon-doc"></span>
+      </button>
+      <button id="label-gph-button" class="btn btn-default">
+        <span class="icon icon-share"></span>
+      </button>
+    </div>
+
+    <div class="btn-group">
+      <button id="label-del-button" class="btn btn-default">
+        <span class="icon icon-minus"></span>
+      </button>
+      <button id="label-add-button" class="btn btn-default">
+        <span class="icon icon-plus"></span>
+      </button>
+    </div>
+</div>
+
+<div class="pane" style="overflow:hidden">
+<!-- <div class="window-content" id="console-div" style="white-space:pre;overflow:scroll;padding:10px;font-family:Courier New"> -->
+<div id="console-div" style="line-height:1em;position:relative;background-color:black;color:white;height:100%;left:0px;white-space:pre;overflow:scroll;padding:10px;top:0px;bottom:0px;font-family:Courier New;padding-bottom:22px;margin-bottom:10px; user-select:text;data-tap-disabled:true;-webkit-user-select: auto">
+</div>
+
+<footer class="toolbar toolbar-footer" style="position:absolute;bottom:0px;width:100%">
+  <input style="width:98%;margin:5px;height:18px;-webkit-box-shadow:none;outline-width:0" id="entry-input" type="shell" class="form-control" placeholder="?">
+</footer>
+</div>
+</div>
+</body>
+</html>

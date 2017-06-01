@@ -1,0 +1,25 @@
+{
+  "name": "RadareApp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "files": [
+    "img",
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "r2pipe": "*",
+    "dialogs": "*",
+    "electron": "*",
+    "electron-packager": "*",
+    "electron-localshortcut": "*",
+    "semistandard": "*",
+    "photonkit": "*"
+  },
+  "main"    : "main.js",
+  "author": "",
+  "license": "MIT"
+}
