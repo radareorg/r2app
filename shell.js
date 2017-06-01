@@ -3,7 +3,7 @@ if (typeof require === 'undefined') {
 }
 const electron = require('electron');
 const dialogs = require('dialogs');
-const {Menu, MenuItem} = electron.remote;
+const {Menu, MenuItem, getCurrentWindow} = electron.remote;
 
 electron.webFrame.setVisualZoomLevelLimits(1, 1);
 electron.webFrame.setLayoutZoomLevelLimits(0, 0);
@@ -15,6 +15,7 @@ var printCommand = 'pd|H';
 var listCommand = 'fcns';
 var filterWord = '';
 
+  getCurrentWindow().webContents.openDevTools();
 function analyze () {
   clearScreen = true;
   electron.ipcRenderer.send('run-command', 'af;' + printCommand);
@@ -501,6 +502,15 @@ if (f.type === 'CCu') {
     electron.ipcRenderer.send('run-command', 'yy;'+printCommand);
   });
 
+  const prefsButton = document.getElementById('prefs-button');
+  prefsButton.onclick = _ => {
+var win = window.open('prefs.html', {
+width:400,
+height:300
+});
+win.focus();
+console.log(win);
+  };
   const helpButton = document.getElementById('help-button');
   helpButton.onclick = _ => {
     alert('r2app - by pancake@nopcode.org\n\n'
@@ -533,18 +543,18 @@ if (f.type === 'CCu') {
   const labelGphButton = document.getElementById('label-gph-button');
   const labelAddButton = document.getElementById('label-add-button');
   const labelDelButton = document.getElementById('label-del-button');
+
   const consoleTab = document.getElementById('console-tab');
   const scriptingTab = document.getElementById('scripting-tab');
-  const scriptingWindow = document.getElementById('scripting-window');
   const dashboardTab = document.getElementById('dashboard-tab');
-  const dashboardWindow = document.getElementById('dashboard-window');
-
   const notesTab = document.getElementById('notes-tab');
-  const notesWindow = document.getElementById('notes-window');
-
   const searchTab = document.getElementById('search-tab');
-  const searchWindow = document.getElementById('search-window');
+
   const consoleWindow = document.getElementById('console-window');
+  const scriptingWindow = document.getElementById('scripting-window');
+  const dashboardWindow = document.getElementById('dashboard-window');
+  const notesWindow = document.getElementById('notes-window');
+  const searchWindow = document.getElementById('search-window');
 
   labelRefreshButton.onclick = _ => {
     filterWord = undefined;

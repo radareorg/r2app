@@ -1,0 +1,66 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<style>
+td,th {
+  font-family:Courier New;
+}
+font {
+  user-select:text;
+}
+</style>
+<link rel="stylesheet" href="dist/css/photon.css"></link>
+<script src="util.js"></script>
+<script src="prefs.js"></script>
+<body>
+<div class="window" style="overflow:hidden">
+<header class="toolbar toolbar-header">
+  <div class="tab-group">
+    <div class="tab-item active" id="general-tab">
+      <span class="icon icon-cancel icon-close-tab"></span>
+      General
+    </div>
+    <div class="tab-item" id="colors-tab">
+      <span class="icon icon-cancel icon-close-tab"></span>
+      Colors
+    </div>
+    <div class="tab-item" id="analysis-tab">
+      <span class="icon icon-cancel icon-close-tab"></span>
+      Analysis
+    </div>
+    <div class="tab-item" id="project-tab">
+      <span class="icon icon-cancel icon-close-tab"></span>
+      Project
+    </div>
+ </div>
+</header>
+<!-- ------------- -->
+<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="colors-window">
+<div id="colors-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
+TODO
+</div>
+</div>
+<!-- ------------- -->
+<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="scripting-window">
+<div id="scripting-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
+TODO
+</div>
+</div>
+
+<!-- ------------- -->
+<div class="window-content" id="wtf-window" style="overflow:hidden; position:absolute;top:60px;bottom:0px;width:100%">
+
+<div class="pane" style="overflow:hidden">
+<!-- <div class="window-content" id="console-div" style="white-space:pre;overflow:scroll;padding:10px;font-family:Courier New"> -->
+<div id="general-div">
+jiji
+</div>
+
+<footer class="toolbar toolbar-footer" style="position:absolute;bottom:0px;width:100%;text-align:right">
+<button id="check-button">
+<span class="icon icon-check"></span>
+</button>
+</footer>
+</div>
+</div>
+</body>
+</html>
