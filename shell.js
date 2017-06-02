@@ -78,6 +78,9 @@ function createPanelMenu () {
 function createMenu () {
   const menu = new Menu();
   const text = window.getSelection().toString();
+  if (!hasClass($('console-tab'), 'active')) {
+    return;
+  }
   if (text !== false) {
     const shortText = text.substring(0, 16) + ((text.length > 16) ? '...' : '');
     menu.append(new MenuItem({label: 'Set flag',
