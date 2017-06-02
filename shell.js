@@ -5,6 +5,8 @@ const electron = require('electron');
 const dialogs = require('dialogs');
 const {Menu, MenuItem, getCurrentWindow} = electron.remote;
 
+const $ = document.getElementById.bind(document);
+
 electron.webFrame.setVisualZoomLevelLimits(1, 1);
 electron.webFrame.setLayoutZoomLevelLimits(0, 0);
 
@@ -466,7 +468,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   onclick('heart-button', () => {
-    alert('If you love this app, Purchase the full version at:\n' +
+    alert('Purchase the full version at:\n\n' +
 'https://www.locklabs.com');
   });
   onclick('pencil-button', () => {
@@ -474,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (name) {
         if (name[0] === '"') {
           electron.ipcRenderer.send('run-command', 'w ' +
-   name.substring(1, name.length - 1) + ';' + printCommand);
+            name.substring(1, name.length - 1) + ';' + printCommand);
         } else {
           electron.ipcRenderer.send('run-command', 'wx ' + name + ';' + printCommand);
         }
@@ -487,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (name) {
         if (name[0] === '"') {
           electron.ipcRenderer.send('run-command', 'w ' +
-   name.substring(1, name.length - 1) + ';' + printCommand);
+            name.substring(1, name.length - 1) + ';' + printCommand);
         } else {
           electron.ipcRenderer.send('run-command', 'wx ' + name + ';' + printCommand);
         }

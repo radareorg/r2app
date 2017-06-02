@@ -152,12 +152,10 @@ electron.ipcRenderer.on('focus', (event) => {
   fileInput.focus();
 });
 
-function check () {
-}
-
 function openShell () {
    document.location.href = 'shell.html';
 return;
+/*
   //  electron.shell.openExternal('shell.html');
   document.body.style.cursor = 'wait';
   const shellIframe = document.getElementById('shell-iframe');
@@ -201,4 +199,5 @@ return;
       }
     });
   }
+*/
 }
