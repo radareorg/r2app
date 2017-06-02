@@ -18,6 +18,10 @@ var listCommand = 'fcns';
 var filterWord = '';
 const openDevTools = false;
 
+function searchtap(pos) {
+  electron.ipcRenderer.send('run-command', 'pd @' + pos + '|H');
+}
+
 function analyze () {
   clearScreen = true;
   electron.ipcRenderer.send('run-command', 'af;' + printCommand);
@@ -192,6 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const searchInput = document.getElementById('search-input');
   const consoleDiv = document.getElementById('console-div');
   const searchConsole = document.getElementById('search-console');
+  const searchViewer = document.getElementById('search-viewer');
   const labelsTable = document.getElementById('labels');
   const notesText = document.getElementById('notes-text');
 
@@ -350,6 +355,10 @@ document.addEventListener('DOMContentLoaded', function () {
       labelsTable.style.backgroundColor = 'white';
       notesText.style.color = 'black';
       notesText.style.backgroundColor = 'white';
+      searchInput.style.color = 'black';
+      searchInput.style.backgroundColor = 'white';
+      searchConsole.style.color = 'black';
+      searchConsole.style.backgroundColor = 'white';
     } else {
       electron.ipcRenderer.send('run-command', 'eco tango;' + printCommand);
       consoleDiv.style.color = 'white';
@@ -360,6 +369,10 @@ document.addEventListener('DOMContentLoaded', function () {
       labelsTable.style.backgroundColor = 'black';
       notesText.style.color = 'white';
       notesText.style.backgroundColor = 'black';
+      searchInput.style.color = 'white';
+      searchInput.style.backgroundColor = 'black';
+      searchConsole.style.color = 'white';
+      searchConsole.style.backgroundColor = 'black';
     }
   }
   toggleTheme();
@@ -435,7 +448,12 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
     if (hasClass(searchTab, 'active')) {
-      searchConsole.innerHTML = '<pre>' + arg.result + '</pre>';
+      if (arg.command.startsWith('/')) {
+        const res = escapeHtml(arg.result).split(/\n/g).map(_ => _.replace(/0x([^\s]*)/, '<a href="javascript:searchtap(0x$1)">0x$1</a>')).join('\n');
+        searchConsole.innerHTML = '<pre>' + res + '</pre>';
+      } else {
+        searchViewer.innerHTML = '<pre>' + arg.result + '</pre>';
+      }
     } else if (clearScreen) {
       consoleDiv.innerHTML = '<a href="javascript:up()">[^]</a><b>&gt; ' + arg.command + '</b>\n' + arg.result;
     //  clearScreen = false;
