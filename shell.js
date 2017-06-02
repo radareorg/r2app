@@ -14,8 +14,8 @@ var hexCommand = 'pxc';
 var printCommand = 'pd|H';
 var listCommand = 'fcns';
 var filterWord = '';
+const openDevTools = false;
 
-  getCurrentWindow().webContents.openDevTools();
 function analyze () {
   clearScreen = true;
   electron.ipcRenderer.send('run-command', 'af;' + printCommand);
@@ -131,7 +131,7 @@ function createMenu () {
   menu.append(new MenuItem({label: 'Undefine',
     click () {
       clearScreen = true;
-      electron.ipcRenderer.send('run-command', 'af-;f-;'+printCommand);
+      electron.ipcRenderer.send('run-command', 'af-;f-;' + printCommand);
     }}));
   menu.append(new MenuItem({label: 'Analyze Function',
     click () {
@@ -141,11 +141,11 @@ function createMenu () {
   menu.append(new MenuItem({label: 'Rename Function',
     click () {
       clearScreen = true;
-          dialogs().prompt('New function name', '', (name) => {
-            if (name) {
-      electron.ipcRenderer.send('run-command', 'afn ' + name + ';fr ' + name + ';' + printCommand);
-            }
-   });
+      dialogs().prompt('New function name', '', (name) => {
+        if (name) {
+          electron.ipcRenderer.send('run-command', 'afn ' + name + ';fr ' + name + ';' + printCommand);
+        }
+      });
     }}));
 
   menu.append(new MenuItem({type: 'separator'}));
@@ -153,11 +153,11 @@ function createMenu () {
   menu.append(new MenuItem({label: 'Change blocksize',
     click () {
       clearScreen = true;
-          dialogs().prompt('Block size', '', (name) => {
-            if (name) {
-      electron.ipcRenderer.send('run-command', 'b ' + name + ';' + printCommand);
-            }
-});
+      dialogs().prompt('Block size', '', (name) => {
+        if (name) {
+          electron.ipcRenderer.send('run-command', 'b ' + name + ';' + printCommand);
+        }
+      });
     }}));
   menu.append(new MenuItem({label: 'Toggle bytes',
     click () {
@@ -225,11 +225,11 @@ document.addEventListener('DOMContentLoaded', function () {
   electron.ipcRenderer.send('run-command', '?E Welcome to r2app 0.1');
 
   function labelNew (name, addr) {
-if (filterWord) {
-  if (name.indexOf(filterWord) === -1) {
-  return '';
-  }
-}
+    if (filterWord) {
+      if (name.indexOf(filterWord) === -1) {
+        return '';
+      }
+    }
     addr = decimalToHexString(addr);
     return `
     <tr class="clickableLabel">
@@ -268,7 +268,7 @@ if (filterWord) {
       case 'imports':
         if (arg.data instanceof Array) {
           for (let f of arg.data) {
-            str += labelNew(f.name, f.ordinal); //f.type + ' ' + f.bind);
+            str += labelNew(f.name, f.ordinal); // f.type + ' ' + f.bind);
           }
         } else {
           if (Object.keys(arg.data).length !== 0) {
@@ -298,9 +298,9 @@ if (filterWord) {
       case 'comments':
         if (arg.data instanceof Array) {
           for (let f of arg.data) {
-if (f.type === 'CCu') {
-            str += labelNew('sym.' + f.name, f.offset || f.vaddr);
-}
+            if (f.type === 'CCu') {
+              str += labelNew('sym.' + f.name, f.offset || f.vaddr);
+            }
           }
         }
         break;
@@ -460,64 +460,66 @@ if (f.type === 'CCu') {
     }
   });
 
-  function onclick(name, cb) {
+  function onclick (name, cb) {
     const x = document.getElementById(name);
     x.onclick = cb;
   }
 
-  onclick ('pencil-button', () => {
+  onclick('heart-button', () => {
+    alert('If you love this app, Purchase the full version at:\n' +
+'https://www.locklabs.com');
+  });
+  onclick('pencil-button', () => {
     dialogs().prompt('Write "text" or hexpairs', (name) => {
       if (name) {
         if (name[0] === '"') {
-    electron.ipcRenderer.send('run-command', 'w ' + 
-   name.substring(1,name.length-1) + ';' + printCommand);
+          electron.ipcRenderer.send('run-command', 'w ' +
+   name.substring(1, name.length - 1) + ';' + printCommand);
         } else {
-    electron.ipcRenderer.send('run-command', 'wx ' + name + ';' + printCommand);
+          electron.ipcRenderer.send('run-command', 'wx ' + name + ';' + printCommand);
         }
       }
     });
   });
 
-  onclick ('feather-button', () => {
+  onclick('feather-button', () => {
     dialogs().prompt('Write "text" or hexpairs', (name) => {
       if (name) {
         if (name[0] === '"') {
-    electron.ipcRenderer.send('run-command', 'w ' + 
-   name.substring(1,name.length-1) + ';' + printCommand);
+          electron.ipcRenderer.send('run-command', 'w ' +
+   name.substring(1, name.length - 1) + ';' + printCommand);
         } else {
-    electron.ipcRenderer.send('run-command', 'wx ' + name + ';' + printCommand);
+          electron.ipcRenderer.send('run-command', 'wx ' + name + ';' + printCommand);
         }
       }
     });
   });
 
-  onclick ('copy-button', () => {
+  onclick('copy-button', () => {
     dialogs().prompt('How many bytes to copy?', (name) => {
       if (name) {
         electron.ipcRenderer.send('run-command', 'y ' + name + ';' + printCommand);
       }
     });
   });
-  onclick ('paste-button', () => {
-    electron.ipcRenderer.send('run-command', 'yy;'+printCommand);
+  onclick('paste-button', () => {
+    electron.ipcRenderer.send('run-command', 'yy;' + printCommand);
   });
 
-  const prefsButton = document.getElementById('prefs-button');
-  prefsButton.onclick = _ => {
-var win = window.open('prefs.html', {
-width:400,
-height:300
-});
-win.focus();
-console.log(win);
-  };
+if (openDevTools) {
+    getCurrentWindow().webContents.openDevTools();
+}
+  onclick('prefs-button', _ => {
+    electron.ipcRenderer.send('open-settings');
+  });
+
   const helpButton = document.getElementById('help-button');
   helpButton.onclick = _ => {
-    alert('r2app - by pancake@nopcode.org\n\n'
-    + 'Cmd + [1-9] - change tab\n'
-    + 'Cmd + G     - goto address/symbol\n'
-    + 'Cmd + N     - new window\n'
-    + 'Cmd + W     - close window\n');
+    alert('r2app - by pancake@nopcode.org\n\n' +
+    'Cmd + [1-9] - change tab\n' +
+    'Cmd + G     - goto address/symbol\n' +
+    'Cmd + N     - new window\n' +
+    'Cmd + W     - close window\n');
   };
   const lightButton = document.getElementById('light-button');
   lightButton.onclick = _ => {
@@ -577,17 +579,17 @@ console.log(win);
   };
 
   labelSearchButton.onclick = _ => {
-const x = labelSearchButton;
+    const x = labelSearchButton;
     dialogs().prompt('Filter list', (name) => {
       if (name) {
         filterWord = name;
         labelLoadFunctions();
-      if (!hasClass(x, 'active')) {
-        addClass(x, 'active');
-      }
+        if (!hasClass(x, 'active')) {
+          addClass(x, 'active');
+        }
       } else {
         removeClass(x, 'active');
-labelRefreshButton.onclick();
+        labelRefreshButton.onclick();
       }
     });
   };

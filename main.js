@@ -45,6 +45,8 @@ function openFile (targetFile, event) {
         console.error(err);
         return;
       }
+      // :D
+      windows[0].hide();
       if (event && event.sender && event.sender.send) {
         event.sender.send('open-page', 'shell');
       } else {
@@ -60,6 +62,32 @@ function openFile (targetFile, event) {
   });
 }
 
+function openSettings() {
+  let win = new BrowserWindow({
+    title: 'Settings',
+    icon: path.join(__dirname, 'img/icon64.png'),
+    backgroundColor: 'white',
+    width: 400,
+    height: 300,
+    minWidth: 400,
+    minHeight: 0,
+    show: false
+  });
+  // win.once
+  if (devConsole) {
+    win.webContents.openDevTools();
+  }
+  win.on('ready-to-show', () => {
+    win.show()
+  })
+  win.loadURL(url.format({
+    pathname: path.join(__dirname, 'prefs.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+  windows.push(win);
+}
+
 function createWindow () {
   // Create the browser window.
   let win = new BrowserWindow({
@@ -69,8 +97,13 @@ function createWindow () {
     width: 800,
     height: 500,
     minWidth: 500,
-    minHeight: 200
+    minHeight: 200,
+    show: false
   });
+  // win.once
+  win.on('ready-to-show', () => {
+    win.show()
+  })
   windows.push(win);
 
   localShortcut.register(win, 'CommandOrControl+1', () => {
@@ -163,6 +196,10 @@ app.on('activate', () => {
 */
 ipcMain.on('open-file', function (event, arg) {
   openFile(arg || '/bin/ls', event);
+});
+
+ipcMain.on('open-settings', function (event, arg) {
+  openSettings();
 });
 
 ipcMain.on('list', function (event, arg) {
