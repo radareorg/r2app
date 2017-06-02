@@ -450,8 +450,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (hasClass(searchTab, 'active')) {
       if (arg.command.startsWith('/')) {
         const res = escapeHtml(arg.result).split(/\n/g).map(_ => _.replace(/0x([^\s]*)/, '<a href="javascript:searchtap(0x$1)">0x$1</a>')).join('\n');
-        searchConsole.innerHTML = '<pre>' + res + '</pre>';
+        searchConsole.innerHTML = res;
       } else {
+        searchViewer.scrollLeft = 0;
+        searchViewer.scrollTop = 0;
         searchViewer.innerHTML = '<pre>' + arg.result + '</pre>';
       }
     } else if (clearScreen) {
@@ -484,6 +486,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const x = document.getElementById(name);
     x.onclick = cb;
   }
+
+  onclick('af-button', _ => {
+    clearScreen = true;
+    electron.ipcRenderer.send('run-command', 'af;' + printCommand);
+  });
+  onclick('uf-button', _ => {
+    clearScreen = true;
+    electron.ipcRenderer.send('run-command', 'af-;f-;' + printCommand);
+  });
+  onclick('cm-button', _ => {
+    clearScreen = true;
+    dialogs().prompt('Comment', '', (name) => {
+      if (name) {
+        electron.ipcRenderer.send('run-command', 'CC ' + name + ';' + printCommand);
+      }
+    });
+  });
+  onclick('dt-button', _ => {
+    clearScreen = true;
+    dialogs().prompt('Data Size', '', (sz) => {
+      if (name) {
+        electron.ipcRenderer.send('run-command', 'Cd ' + sz + '@ ' + shortText + ';' + printCommand);
+      }
+    });
+  });
 
   onclick('heart-button', () => {
     alert('Purchase the full version at:\n\n' +
