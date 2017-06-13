@@ -62,7 +62,7 @@ function openFile (targetFile, event) {
   });
 }
 
-function openSettings() {
+function openSettings () {
   let win = new BrowserWindow({
     title: 'Settings',
     icon: path.join(__dirname, 'img/icon64.png'),
@@ -78,8 +78,8 @@ function openSettings() {
     win.webContents.openDevTools();
   }
   win.on('ready-to-show', () => {
-    win.show()
-  })
+    win.show();
+  });
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'prefs.html'),
     protocol: 'file:',
@@ -102,8 +102,8 @@ function createWindow () {
   });
   // win.once
   win.on('ready-to-show', () => {
-    win.show()
-  })
+    win.show();
+  });
   windows.push(win);
 
   localShortcut.register(win, 'CommandOrControl+1', () => {

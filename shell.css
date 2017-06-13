@@ -1,0 +1,51 @@
+a {
+	color: #a0a0f0;
+}
+
+td, th {
+  font-family: Courier New;
+}
+
+.pre {
+  display:inline-block;
+  font-family: Courier New;
+  word-wrap: break-word;
+  line-height:1em;
+  white-space: pre-wrap;
+}
+
+font {
+  user-select:text;
+}
+pre {
+  overflow:hidden;
+}
+textarea:hover {
+  cursor: text;
+}
+input:hover {
+  cursor: text;
+}
+button:hover {
+  cursor: pointer;
+}
+span:hover {
+  cursor: pointer;
+}
+
+.label {
+  background-color: #e0e0e0;
+  border: 1px solid #c0c0c0;
+  border-radius: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 2px;
+}
+
+.label:hover {
+  background-color: white;
+}
+
+.history {
+  display: flex;
+}

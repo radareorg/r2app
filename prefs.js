@@ -50,8 +50,13 @@ document.addEventListener('DOMContentLoaded', function () {
     removeClass($('colors-tab'), 'active');
     removeClass($('analysis-tab'), 'active');
     removeClass($('project-tab'), 'active');
+    $('general-div').style.visibility = 'hidden';
+    $('colors-div').style.visibility = 'hidden';
+    $('analysis-div').style.visibility = 'hidden';
+    $('project-div').style.visibility = 'hidden';
     if (but) {
       addClass($(but), 'active');
+      $(but.replace('-tab', '-div')).style.visibility = 'visible';
     }
   }
   onclick('check-button', _ => {

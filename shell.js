@@ -18,7 +18,7 @@ var listCommand = 'fcns';
 var filterWord = '';
 const openDevTools = false;
 
-function searchtap(pos) {
+function searchtap (pos) {
   electron.ipcRenderer.send('run-command', 'pd @' + pos + '|H');
 }
 
@@ -195,8 +195,8 @@ window.addEventListener('contextmenu', (e) => {
 }, false);
 
 document.addEventListener('DOMContentLoaded', function () {
-  const entryInput = document.getElementById('entry-input');
-  const searchInput = document.getElementById('search-input');
+  const entryInput = $('entry-input');
+  const searchInput = $('search-input');
   const consoleDiv = document.getElementById('console-div');
   const searchConsole = document.getElementById('search-console');
   const searchViewer = document.getElementById('search-viewer');
@@ -556,9 +556,9 @@ document.addEventListener('DOMContentLoaded', function () {
     electron.ipcRenderer.send('run-command', 'yy;' + printCommand);
   });
 
-if (openDevTools) {
+  if (openDevTools) {
     getCurrentWindow().webContents.openDevTools();
-}
+  }
   onclick('prefs-button', _ => {
     electron.ipcRenderer.send('open-settings');
   });

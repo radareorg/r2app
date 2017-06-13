@@ -2,7 +2,7 @@
   "name": "RadareApp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "files": [
     "img",
     "dist"
@@ -19,7 +19,6 @@
     "semistandard": "*",
     "photonkit": "*"
   },
-  "main"    : "main.js",
   "author": "",
   "license": "MIT"
 }
