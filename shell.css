@@ -1,5 +1,5 @@
 a {
-	color: #a0a0f0;
+  color: #a0a0f0;
 }
 
 td, th {
@@ -17,18 +17,23 @@ td, th {
 font {
   user-select:text;
 }
+
 pre {
   overflow:hidden;
 }
+
 textarea:hover {
   cursor: text;
 }
+
 input:hover {
   cursor: text;
 }
+
 button:hover {
   cursor: pointer;
 }
+
 span:hover {
   cursor: pointer;
 }
@@ -44,8 +49,9 @@ span:hover {
 
 .label:hover {
   background-color: white;
+  display:inline-flex;
 }
 
 .history {
-  display: flex;
+  display:inline-flex;
 }

@@ -1,0 +1,43 @@
+* {
+  -webkit-app-region: no-drag !important;
+}
+input:hover {
+  cursor: text;
+}
+button:hover {
+  cursor: pointer;
+}
+span:hover {
+  cursor: pointer;
+}
+label {
+  font-size: 1.1em;
+}
+.hover {
+  font-size:2em;
+  color:#f0f0f0;
+}
+.hover:hover {
+  font-size:2em;
+  color:#505050;
+}
+.hlhover:hover {
+  background-color:#f0f0f0;
+}
+.green {
+  list-style: none;
+  line-height: 16px;
+  padding-left:16px;
+}
+.green:before {
+   content: '';
+   display: inline-block;
+   height: 16px;
+   width: 16px;
+   background-image: url('img/green.png');
+   background-size: 16px auto
+}
+.my-group-item {
+   padding-top:8px;
+   height:32px;
+}

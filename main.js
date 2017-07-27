@@ -202,6 +202,41 @@ ipcMain.on('open-settings', function (event, arg) {
   openSettings();
 });
 
+ipcMain.on('packages', function (event, arg) {
+  windows[0].setTitle('Package Manager');
+  var exec = require('child_process').exec;
+  function execute(command, callback){
+    exec(command, function(error, stdout, stderr){ callback(erstdout); });
+  };
+  exec('r2pm -s', (err, out) => {
+    if (err) {
+      console.error(err);
+    }
+    exec('r2pm -l', (err, inst) => {
+      if (err) {
+        console.error(err);
+      }
+      let installed = {};
+      for (let pkg of inst.split('\n')) {
+        if (pkg) installed[pkg] = true;
+      }
+      let pkgs = [];
+      for (let line of out.split('\n')) {
+        const ns = line.indexOf(' ');
+        const ts = line.indexOf(']');
+        const pkgName = line.substring(0, ns).trim();
+        pkgs.push({
+          installed: installed[pkgName],
+          name: pkgName,
+          type: line.substring(ns + 1, ts + 1).trim(),
+          desc: line.substring(ts + 1).trim()
+        });
+      }
+      event.sender.send('packages', pkgs);
+    });
+  });
+});
+
 ipcMain.on('list', function (event, arg) {
   function cb (err, res) {
     if (err) {

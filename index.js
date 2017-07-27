@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const rwButton = document.getElementById('rw-button');
   const binButton = document.getElementById('bin-button');
   const analButton = document.getElementById('anal-button');
+  const r2pmButton = document.getElementById('r2pm-button');
 
   function toggleable (x) {
     x.onclick = () => {
@@ -72,6 +73,9 @@ document.addEventListener('DOMContentLoaded', function () {
   toggleable(binButton);
   toggleable(analButton);
 
+  r2pmButton.onclick = () => {
+    document.location.href = 'r2pm.html';
+  };
   homeButton.onclick = () => {
     updateWindow.style.visibility = 'hidden';
   };
@@ -153,8 +157,8 @@ electron.ipcRenderer.on('focus', (event) => {
 });
 
 function openShell () {
-   document.location.href = 'shell.html';
-return;
+  document.location.href = 'shell.html';
+  return;
 /*
   //  electron.shell.openExternal('shell.html');
   document.body.style.cursor = 'wait';

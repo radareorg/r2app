@@ -16,6 +16,7 @@ var hexCommand = 'pxc';
 var printCommand = 'pd|H';
 var listCommand = 'fcns';
 var filterWord = '';
+var seekHistory = false;
 const openDevTools = false;
 
 function searchtap (pos) {
@@ -159,6 +160,14 @@ function createMenu () {
 
   menu.append(new MenuItem({type: 'separator'}));
 
+  menu.append(new MenuItem({label: 'Entropy bars',
+    click () {
+      clearScreen = true;
+      electron.ipcRenderer.send('run-command', 'p=e|H');
+    }}));
+
+  menu.append(new MenuItem({type: 'separator'}));
+
   menu.append(new MenuItem({label: 'Change blocksize',
     click () {
       clearScreen = true;
@@ -228,6 +237,16 @@ document.addEventListener('DOMContentLoaded', function () {
   function seekTo (addr) {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', 's ' + addr + ';' + printCommand);
+
+    seekHistory = true;
+    electron.ipcRenderer.send('run-command', 'sj|');
+/*
+<div class="label"> entry0 </div>
+&#8827;
+<div class="label"> main </div>
+&#8827;
+<div class="label"> sym.func.1000043f1 </div>
+*/
   }
 
   electron.ipcRenderer.send('run-command', 'b 1024;e scr.color=true;e scr.html=true');
@@ -442,6 +461,32 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
   electron.ipcRenderer.on('command-output', (event, arg) => {
+    if (seekHistory && arg.command === 'sj|') {
+      seekHistory = false;
+      const sh = $('seek-history');
+      try {
+        var hist = JSON.parse(arg.result.trim());
+      } catch (e) {
+        alert ('' + e);
+        alert (arg.result.trim());
+      }
+      let res = '';
+      for (let h of hist) {
+        if (!h.offset) {
+          continue;
+        }
+        const label = '0x' + h.offset.toString(16);
+        if (!h.name) {
+          h.name = label;
+        }
+        if (res.length !== 0) {
+          res += '&#8827;';
+        }
+        res += '<div title="' + label + '" class="label">' + h.symbol + '</div>';
+      }
+      sh.innerHTML = res;
+      return;
+    }
     if (arg.command.startsWith('e scr.html=true')) {
       arg.command = arg.command.substring(16);
     }
@@ -490,6 +535,14 @@ document.addEventListener('DOMContentLoaded', function () {
     x.onclick = cb;
   }
 
+  onclick('seek-back', _ => {
+    clearScreen = true;
+    electron.ipcRenderer.send('run-command', 's-;' + printCommand);
+  });
+  onclick('seek-fwd', _ => {
+    clearScreen = true;
+    electron.ipcRenderer.send('run-command', 's+;' + printCommand);
+  });
   onclick('af-button', _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', 'af;' + printCommand);
