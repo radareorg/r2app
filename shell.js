@@ -217,6 +217,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (text.startsWith('0x')) {
       clearScreen = true;
       electron.ipcRenderer.send('run-command', 's ' + text + ';' + printCommand);
+    seekHistory = true;
+    electron.ipcRenderer.send('run-command', 'sj|');
     }
   };
 
@@ -423,6 +425,8 @@ document.addEventListener('DOMContentLoaded', function () {
         dialogs().prompt('Goto address or flag...', (name) => {
           if (name) {
             electron.ipcRenderer.send('run-command', 's ' + name + ';' + printCommand);
+    seekHistory = true;
+    electron.ipcRenderer.send('run-command', 'sj|');
           }
         });
         break;
@@ -539,14 +543,20 @@ document.addEventListener('DOMContentLoaded', function () {
   onclick('seek-back', _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', 's-;' + printCommand);
+    seekHistory = true;
+    electron.ipcRenderer.send('run-command', 'sj|');
   });
   onclick('seek-reset', _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', 's-*;' + printCommand);
+    seekHistory = true;
+    electron.ipcRenderer.send('run-command', 'sj|');
   });
   onclick('seek-fwd', _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', 's+;' + printCommand);
+    seekHistory = true;
+    electron.ipcRenderer.send('run-command', 'sj|');
   });
   onclick('af-button', _ => {
     clearScreen = true;
