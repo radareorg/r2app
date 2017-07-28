@@ -485,6 +485,7 @@ document.addEventListener('DOMContentLoaded', function () {
         res += '<div title="' + label + '" class="label">' + h.symbol + '</div>';
       }
       sh.innerHTML = res;
+      sh.scrollLeft = sh.scrollWidth - sh.clientWidth;
       return;
     }
     if (arg.command.startsWith('e scr.html=true')) {
@@ -538,6 +539,10 @@ document.addEventListener('DOMContentLoaded', function () {
   onclick('seek-back', _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', 's-;' + printCommand);
+  });
+  onclick('seek-reset', _ => {
+    clearScreen = true;
+    electron.ipcRenderer.send('run-command', 's-*;' + printCommand);
   });
   onclick('seek-fwd', _ => {
     clearScreen = true;

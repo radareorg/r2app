@@ -55,3 +55,10 @@ span:hover {
 .history {
   display:inline-flex;
 }
+
+::-webkit-scrollbar {
+  width: 0px;  /* remove scrollbar space */
+  background: transparent;  /* optional: just make scrollbar invisible */
+  margin:0px;
+  height: 0;
+}
