@@ -1,4 +1,4 @@
-const {app, ipcMain, BrowserWindow, globalShortcut, clipboard} = require('electron');
+const {app, webView, ipcMain, BrowserWindow, globalShortcut, clipboard} = require('electron');
 const localShortcut = require('electron-localshortcut');
 const path = require('path');
 const url = require('url');
@@ -9,6 +9,11 @@ const devConsole = false;
 let windows = [];
 let globalR2 = null;
 let sessions = [];
+
+app.commandLine.appendSwitch('--enable-viewport-meta', 'true');
+app.commandLine.appendSwitch('--disable-pinch');
+// webView.setVisualZoomLevelLimits(1,1);
+// webView.setLayoutZoomLevelLimits(0,0);
 
 app.on('open-file', function (event, filePath) {
   event.preventDefault();
@@ -98,7 +103,10 @@ function createWindow () {
     height: 500,
     minWidth: 500,
     minHeight: 200,
-    show: false
+    show: false,
+    webPreferences: {
+      zoomFactor: 1.0
+    }
   });
   // win.once
   win.on('ready-to-show', () => {
@@ -202,12 +210,41 @@ ipcMain.on('open-settings', function (event, arg) {
   openSettings();
 });
 
-ipcMain.on('packages', function (event, arg) {
+var exec = require('child_process').exec;
+
+ipcMain.on('package-install', function (event, pkgName) {
+  exec('r2pm -i ' + pkgName, (err, out) => {
+    if (err) {
+      console.error(err);
+    }
+    event.sender.send('done');
+  });
+});
+
+ipcMain.on('package-update', function (event) {
+  exec('r2pm update', (err, out) => {
+    if (err) {
+      console.error(err);
+    }
+    event.sender.send('done');
+  });
+});
+
+ipcMain.on('package-uninstall', function (event, pkgName) {
+  exec('r2pm -u ' + pkgName, (err, out) => {
+    if (err) {
+      console.error(err);
+    }
+    event.sender.send('done');
+  });
+});
+
+ipcMain.on('package-list', function (event, arg) {
   windows[0].setTitle('Package Manager');
   var exec = require('child_process').exec;
-  function execute(command, callback){
-    exec(command, function(error, stdout, stderr){ callback(erstdout); });
-  };
+  function execute (command, callback) {
+    exec(command, function (error, stdout, stderr) { callback(erstdout); });
+  }
   exec('r2pm -s', (err, out) => {
     if (err) {
       console.error(err);

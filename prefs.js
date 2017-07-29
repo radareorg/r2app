@@ -5,7 +5,7 @@ const electron = require('electron');
 const dialogs = require('dialogs');
 const {Menu, MenuItem, getCurrentWindow} = electron.remote;
 
-//getCurrentWindow().setSize(400, 300, false);
+// getCurrentWindow().setSize(400, 300, false);
 electron.webFrame.setVisualZoomLevelLimits(1, 1);
 electron.webFrame.setLayoutZoomLevelLimits(0, 0);
 
@@ -26,19 +26,19 @@ document.addEventListener('DOMContentLoaded', function () {
   electron.ipcRenderer.on('command-output', (event, arg) => {
     const obj = JSON.parse(arg.result);
     switch (arg.command) {
-    case 'ej':
+      case 'ej':
   //    alert(obj['asm.arch']);
    //   alert(obj['asm.bits']);
-      break;
-    default:
-      alert(JSON.stringify(obj));
-      break;
+        break;
+      default:
+        alert(JSON.stringify(obj));
+        break;
     }
   });
 
   // boilerplate for tabs
   const $ = document.getElementById.bind(this);
-  function onclick(name, cb) {
+  function onclick (name, cb) {
     try {
       $(name).onclick = cb;
     } catch (e) {
@@ -62,16 +62,16 @@ document.addEventListener('DOMContentLoaded', function () {
   onclick('check-button', _ => {
     getCurrentWindow().close();
   });
-  onclick('general-tab', _=> {
+  onclick('general-tab', _ => {
     resetTabs('general-tab');
   });
-  onclick('colors-tab', _=> {
+  onclick('colors-tab', _ => {
     resetTabs('colors-tab');
   });
-  onclick('analysis-tab', _=> {
+  onclick('analysis-tab', _ => {
     resetTabs('analysis-tab');
   });
-  onclick('project-tab', _=> {
+  onclick('project-tab', _ => {
     resetTabs('project-tab');
   });
 });
