@@ -8,6 +8,7 @@ electron.webFrame.setLayoutZoomLevelLimits(0, 0);
 setInterval(_ => {
   electron.ipcRenderer.send('list', 'sessions');
 }, 1000);
+electron.ipcRenderer.send('list', 'sessions');
 
 electron.ipcRenderer.on('list', (event, arg) => {
   if (arg.type === 'sessions') {
