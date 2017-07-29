@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const homeButton = document.getElementById('home-button');
   const rwButton = document.getElementById('rw-button');
   const binButton = document.getElementById('bin-button');
+  const strButton = document.getElementById('str-button');
   const analButton = document.getElementById('anal-button');
   const r2pmButton = document.getElementById('r2pm-button');
 
@@ -71,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   toggleable(rwButton);
+  toggleable(strButton);
   toggleable(binButton);
   toggleable(analButton);
 
@@ -106,6 +108,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const opts = [];
     if (hasClass(rwButton, 'active')) {
       opts.push('-w');
+    }
+    if (!hasClass(strButton, 'active')) {
+      opts.push('-z');
     }
     if (!hasClass(binButton, 'active')) {
       opts.push('-n');
@@ -159,7 +164,7 @@ electron.ipcRenderer.on('focus', (event) => {
 
 function openShell () {
   document.location.href = 'shell.html';
-  return;
+
 /*
   //  electron.shell.openExternal('shell.html');
   document.body.style.cursor = 'wait';

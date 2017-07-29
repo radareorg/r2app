@@ -217,8 +217,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (text.startsWith('0x')) {
       clearScreen = true;
       electron.ipcRenderer.send('run-command', 's ' + text + ';' + printCommand);
-    seekHistory = true;
-    electron.ipcRenderer.send('run-command', 'sj|');
+      seekHistory = true;
+      electron.ipcRenderer.send('run-command', 'sj|');
     }
   };
 
@@ -425,8 +425,8 @@ document.addEventListener('DOMContentLoaded', function () {
         dialogs().prompt('Goto address or flag...', (name) => {
           if (name) {
             electron.ipcRenderer.send('run-command', 's ' + name + ';' + printCommand);
-    seekHistory = true;
-    electron.ipcRenderer.send('run-command', 'sj|');
+            seekHistory = true;
+            electron.ipcRenderer.send('run-command', 'sj|');
           }
         });
         break;
@@ -471,8 +471,8 @@ document.addEventListener('DOMContentLoaded', function () {
       try {
         var hist = JSON.parse(arg.result.trim());
       } catch (e) {
-        alert ('' + e);
-        alert (arg.result.trim());
+        alert('' + e);
+        alert(arg.result.trim());
       }
       let res = '';
       for (let h of hist) {
