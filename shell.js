@@ -580,6 +580,27 @@ const name = b64DecodeUnicode(f.string);
     }
   });
 
+var longtimer = null;
+
+  function onlongpress (name, cb) {
+    const x = document.getElementById(name);
+    x.onmouseup = function() {
+if (longtimer !== null) {
+  clearTimeout (longtimer);
+}
+}
+    
+    x.onmousedown = function() {
+if (longtimer !== null) {
+  clearTimeout (longtimer);
+}
+longtimer = setTimeout(function () {
+longtimer = null;
+        cb();
+      }, 1000);
+    };
+  }
+
   function onclick (name, cb) {
     const x = document.getElementById(name);
     x.onclick = cb;
@@ -603,6 +624,14 @@ const name = b64DecodeUnicode(f.string);
     seekHistory = true;
     electron.ipcRenderer.send('run-command', 'sj|');
   });
+  onlongpress('af-button', _ => {
+    dialogs().confirm('Analyze all the program?', '', so => {
+      if (so) {
+        clearScreen = true;
+        electron.ipcRenderer.send('run-command', 'aaa;' + printCommand);
+      }
+    });
+  });
   onclick('af-button', _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', 'af;' + printCommand);
@@ -610,6 +639,14 @@ const name = b64DecodeUnicode(f.string);
   onclick('uf-button', _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', 'af-;f-;' + printCommand);
+  });
+  onlongpress('uf-button', _ => {
+    dialogs().confirm('Undefine all analysis', '', so => {
+      if (so) {
+        clearScreen = true;
+        electron.ipcRenderer.send('run-command', 'af-*;f-hit*;' + printCommand);
+      }
+    });
   });
   onclick('cm-button', _ => {
     clearScreen = true;
