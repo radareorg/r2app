@@ -75,6 +75,11 @@ function createPanelMenu () {
       electron.ipcRenderer.send('list', listCommand = 'flags');
     }
   }));
+  menu.append(new MenuItem({label: 'Strings',
+    click () {
+      electron.ipcRenderer.send('list', listCommand = 'strings');
+    }
+  }));
   menu.append(new MenuItem({type: 'separator'}));
   return menu;
 }
@@ -296,6 +301,13 @@ document.addEventListener('DOMContentLoaded', function () {
     electron.ipcRenderer.send('list', listCommand = 'flags');
   }
 
+function b64DecodeUnicode(str) {
+    // Going backwards: from bytestream, to percent-encoding, to original string.
+    return decodeURIComponent(atob(str).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+}
+
   electron.ipcRenderer.on('list', (event, arg) => {
     let str = '';
     switch (arg.type) {
@@ -303,6 +315,18 @@ document.addEventListener('DOMContentLoaded', function () {
         if (arg.data instanceof Array) {
           for (let f of arg.data) {
             str += labelNew(f.name, f.ordinal); // f.type + ' ' + f.bind);
+          }
+        } else {
+          if (Object.keys(arg.data).length !== 0) {
+            alert('Unexpected type: ' + JSON.stringify(arg.data));
+          }
+        }
+        break;
+      case 'strings':
+        if (arg.data instanceof Array) {
+          for (let f of arg.data) {
+const name = b64DecodeUnicode(f.string);
+            str += labelNew(name, f.vaddr);
           }
         } else {
           if (Object.keys(arg.data).length !== 0) {
@@ -514,7 +538,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         searchViewer.scrollLeft = 0;
         searchViewer.scrollTop = 0;
-        searchViewer.innerHTML = '<pre>' + arg.result + '</pre>';
+        searchViewer.innerHTML = '<pre class="pre">' + arg.result + '</pre>';
       }
     } else if (clearScreen) {
       // consoleDiv.innerHTML = '<a href="javascript:up()">[^]</a><b>&gt; ' + arg.command + '</b>\n' + arg.result;

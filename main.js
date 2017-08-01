@@ -1,6 +1,7 @@
 const {app, webView, ipcMain, BrowserWindow, globalShortcut, clipboard} = require('electron');
 const localShortcut = require('electron-localshortcut');
 const path = require('path');
+
 const url = require('url');
 
 const r2pipe = require('r2pipe');
@@ -295,6 +296,9 @@ ipcMain.on('list', function (event, arg) {
       break;
     case 'imports':
       globalR2.cmdj('iij|', cb);
+      break;
+    case 'strings':
+      globalR2.cmdj('izj', cb);
       break;
     case 'regs':
       globalR2.cmdj('drj|', cb);
