@@ -5,6 +5,19 @@ const electron = require('electron');
 const dialogs = require('dialogs');
 const {Menu, MenuItem, getCurrentWindow} = electron.remote;
 
+/*
+var menu = Menu.buildFromTemplate([
+  {
+    label: 'RadareApp',
+    submenu: [
+      {label: 'About App', selector: 'orderFrontStandardAboutPanel:'},
+      {label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: function() {force_quit=true; app.quit();}}
+    ]
+  }]);
+Menu.setApplicationMenu(menu);
+*/
+
+
 var blackTheme = 'white';
 var whiteTheme = 'tango';
 
@@ -847,6 +860,7 @@ const name = b64DecodeUnicode(f.string);
 
   searchInput.addEventListener('keyup', e => {
     if (e.keyCode === 13) {
+      electron.ipcRenderer.send('run-command', 'e search.hits=false');
       electron.ipcRenderer.send('run-command', '/c ' + searchInput.value + '|');
       searchInput.value = '';
     }

@@ -2,15 +2,24 @@ a {
   color: #a0a0f0;
 }
 
+/* font used for listing items in tables */
 td, th {
-  font-family: Courier New;
+  /* font-family: Courier New; */
+  font-family: 'Ubuntu Mono' ;
+}
+
+@font-face {
+    font-family: ati8x8;
+    src: url(Px437_ATI_8x8.ttf)
 }
 
 .pre {
-  display:inline-block;
-  font-family: Courier New;
+  font-family: 'Ubuntu Mono', 'Courier New';
+  padding: 5px;
+  overflow: scroll;
   word-wrap: break-word;
-  line-height:1em;
+  display:inline-block;
+  line-height: 1em;
   white-space: pre-wrap;
 }
 
@@ -19,7 +28,7 @@ font {
 }
 
 pre {
-  overflow:hidden;
+  font-family: 'Ubuntu Mono', 'Courier New';
 }
 
 textarea:hover {
@@ -61,4 +70,8 @@ span:hover {
   background: transparent;  /* optional: just make scrollbar invisible */
   margin:0px;
   height: 0;
+}
+
+.pane {
+  font-family: Verdana;
 }
