@@ -122,9 +122,10 @@ TODO
 <div id="notes-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
 
 <header class="toolbar toolbar-header" style="padding:5px">
-  <input style="width:98%;margin:1px;height:18px;-webkit-box-shadow:none;outline-width:0" id="search-input" type="shell" class="form-control" placeholder="Search...">
+  <input style="width:99%;margin:1px;height:18px;-webkit-box-shadow:none;outline-width:0" id="search-input" type="shell" class="form-control" placeholder="Search...">
 what
 <select>
+<option>rop</option>
 <option>string</option>
 <option>hexpairs</option>
 <option>assembly</option>
@@ -135,15 +136,23 @@ what
 </select>
 where
 <select>
+<option>raw</option>
+<option>block</option>
 <option>file</option>
+<option>io.maps</option>
+<option>io.maprange</option>
 <option>io.section</option>
 <option>io.sections.write</option>
 <option>io.sections.exec</option>
 <option>dbg.stack</option>
 <option>dbg.map</option>
+<option>dbg.heap</option>
+<option>dbg.stack</option>
 <option>dbg.maps</option>
 <option>dbg.maps.exec</option>
 <option>dbg.maps.write</option>
+<option>anal.fcn</option>
+<option>anal.bb</option>
 </select>
 align
 <select>
@@ -161,7 +170,6 @@ align
 <div class="pre" style="background-color:white;color:black;width:50%;height:100%;overflow:scroll;user-select:text;-webkit-user-select:auto;padding:5px" id="search-console">
 </div>
 <div style="line-height:1em;position:absolute;right:0px;top:58px;background-color:#e0e0e0;color:black;width:50%;height:100%;overflow:scroll;user-select:text;-webkit-user-select:auto" id="search-viewer">
-hex/dis/.. of the hit after click
 </div>
 
 </div>

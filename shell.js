@@ -5,6 +5,9 @@ const electron = require('electron');
 const dialogs = require('dialogs');
 const {Menu, MenuItem, getCurrentWindow} = electron.remote;
 
+var blackTheme = 'white';
+var whiteTheme = 'tango';
+
 const $ = document.getElementById.bind(document);
 
 electron.webFrame.setVisualZoomLevelLimits(1, 1);
@@ -31,7 +34,7 @@ function analyze () {
 function up () {
   clearScreen = true;
   prependScreen = true;
-  electron.ipcRenderer.send('run-command', 's--;' + printCommand);
+  electron.ipcRenderer.send('run-command', 's--2;' + printCommand);
 }
 
 function createPanelMenu () {
@@ -370,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const isBlackTheme = (consoleDiv.style.backgroundColor === 'black');
     clearScreen = true;
     if (isBlackTheme) {
-      electron.ipcRenderer.send('run-command', 'eco white;' + printCommand);
+      electron.ipcRenderer.send('run-command', 'eco '+blackTheme+';' + printCommand);
       consoleDiv.style.color = 'black';
       consoleDiv.style.backgroundColor = 'white';
       entryInput.style.color = 'black';
@@ -383,8 +386,10 @@ document.addEventListener('DOMContentLoaded', function () {
       searchInput.style.backgroundColor = 'white';
       searchConsole.style.color = 'black';
       searchConsole.style.backgroundColor = 'white';
+      searchViewer.style.color = 'black';
+      searchViewer.style.backgroundColor = 'white';
     } else {
-      electron.ipcRenderer.send('run-command', 'eco tango;' + printCommand);
+      electron.ipcRenderer.send('run-command', 'eco '+whiteTheme+';' + printCommand);
       consoleDiv.style.color = 'white';
       consoleDiv.style.backgroundColor = 'black';
       entryInput.style.color = 'white';
@@ -397,6 +402,8 @@ document.addEventListener('DOMContentLoaded', function () {
       searchInput.style.backgroundColor = 'black';
       searchConsole.style.color = 'white';
       searchConsole.style.backgroundColor = 'black';
+      searchViewer.style.color = 'white';
+      searchViewer.style.backgroundColor = 'black';
     }
   }
   toggleTheme();
@@ -510,7 +517,8 @@ document.addEventListener('DOMContentLoaded', function () {
         searchViewer.innerHTML = '<pre>' + arg.result + '</pre>';
       }
     } else if (clearScreen) {
-      consoleDiv.innerHTML = '<a href="javascript:up()">[^]</a><b>&gt; ' + arg.command + '</b>\n' + arg.result;
+      // consoleDiv.innerHTML = '<a href="javascript:up()">[^]</a><b>&gt; ' + arg.command + '</b>\n' + arg.result;
+      consoleDiv.innerHTML = '<a href="javascript:up()">[^]</a>\n' + arg.result;
     //  clearScreen = false;
       if (prependScreen) {
         consoleDiv.scrollLeft = 0;
