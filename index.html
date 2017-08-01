@@ -21,25 +21,27 @@ v1.7.0-git
 </div>
       </center>
     </div>
-    <div class="pane" style="padding:16px;width:100%">
+    <div class="pane" style="padding:16px;width:100%;overflow-x:hidden">
 
-<div style="position:fixed;background-color:white;z-index:0;width:100%-120px;left:160px;top:0px;padding:15px;right:0px;">
+<div style="position:fixed;background-color:white;z-index:1990;width:100%-120px;left:160px;top:0px;padding:15px;right:0px;">
   <div class="form-group">
     <input type="filepath" id="file-input" class="form-control" style="height:30px;-webkit-box-shadow: none;outline-width:0;" placeholder="/bin/ls" autofocus>
     <button id='etc-button' style="position:absolute;right:14px;top:15px" class="btn btn-large btn-default">
-<span class="icon icon-dot-3"></span>
-
-</button>
+      <span class="icon icon-dot-3"></span>
+    </button>
   </div>
-   <button id='file-button' class="btn btn-large btn-default">Open</button>
-   <button id='debug-button' class="btn btn-large btn-default">Debug</button>
+  <button id='file-button' class="btn btn-large btn-default">Open</button>
+  <button id='debug-button' class="btn btn-large btn-default">Debug</button>
+
 <div class="btn-group" style="position:absolute;padding-top:3px;right:16px">
  <button class="btn btn-default" id="rw-button"> rw </button>
  <button class="btn btn-default active" id="bin-button"> bin </button>
  <button class="btn btn-default active" id="str-button"> str </button>
  <button class="btn btn-default" title="Perform analysis" id="anal-button"> analysis </button>
 </div>
+
 </div>
+
 <div style="position:absolute;top:120px;width:inherit">
 <div id="sessions" style="width:inherit"> </div>
 <label>Projects</label>

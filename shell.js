@@ -815,7 +815,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   searchInput.addEventListener('keyup', e => {
     if (e.keyCode === 13) {
-      electron.ipcRenderer.send('run-command', '/c ' + searchInput.value);
+      electron.ipcRenderer.send('run-command', '/c ' + searchInput.value + '|');
       searchInput.value = '';
     }
   });
