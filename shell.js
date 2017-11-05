@@ -234,6 +234,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const entryInput = $('entry-input');
   const searchInput = $('search-input');
   const consoleDiv = document.getElementById('console-div');
+  const dashboardDiv = document.getElementById('dashboard-div');
+  const scriptingDiv = document.getElementById('scripting-div');
   const searchConsole = document.getElementById('search-console');
   const searchViewer = document.getElementById('search-viewer');
   const labelsTable = document.getElementById('labels');
@@ -431,11 +433,10 @@ const name = b64DecodeUnicode(f.string);
       searchConsole.style.backgroundColor = 'white';
       searchViewer.style.color = 'black';
       searchViewer.style.backgroundColor = 'white';
-try {
-      $('updown').syle.backgroundColor = 'black';
-      $('updown').style.color = 'white';
-} catch (e) {
-}
+      dashboardDiv.style.color = 'black';
+      dashboardDiv.style.backgroundColor = 'white';
+      scriptingDiv.style.color = 'black';
+      scriptingDiv.style.backgroundColor = 'white';
     } else {
       electron.ipcRenderer.send('run-command', 'eco '+whiteTheme+';' + printCommand);
       consoleDiv.style.color = 'white';
@@ -452,11 +453,10 @@ try {
       searchConsole.style.backgroundColor = 'black';
       searchViewer.style.color = 'white';
       searchViewer.style.backgroundColor = 'black';
-try {
-      $('updown').syle.backgroundColor = 'white';
-      $('updown').style.color = 'black';
-} catch (e) {
-}
+      dashboardDiv.style.color = 'white';
+      dashboardDiv.style.backgroundColor = 'black';
+      scriptingDiv.style.color = 'white';
+      scriptingDiv.style.backgroundColor = 'black';
     }
   }
   toggleTheme();
