@@ -840,6 +840,7 @@ longtimer = null;
     addClass(notesTab, 'active');
     if (notesWindow) {
       notesWindow.style.visibility = 'visible';
+      $('notes-text').focus();
     }
   };
   searchTab.onclick = () => {
