@@ -26,20 +26,20 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   electron.ipcRenderer.on('command-output', (event, arg) => {
-try {
-    const obj = JSON.parse(arg.result);
-    switch (arg.command) {
-      case 'ej|':
+    try {
+      const obj = JSON.parse(arg.result);
+      switch (arg.command) {
+        case 'ej|':
       //   alert(obj['asm.arch']);
    //   alert(obj['asm.bits']);
-        break;
-      default:
-        alert(JSON.stringify(obj));
-        break;
+          break;
+        default:
+          alert(JSON.stringify(obj));
+          break;
+      }
+    } catch (e) {
+      alert(arg.result);
     }
-} catch (e) {
-alert (arg.result);
-}
   });
 
   // boilerplate for tabs

@@ -1,3 +1,5 @@
+const openDevTools = false;
+
 if (typeof require === 'undefined') {
   alert('Cannot require electron in webview');
 }
@@ -16,7 +18,7 @@ var menu = Menu.buildFromTemplate([
   }]);
 Menu.setApplicationMenu(menu);
 */
-function clearHits() {
+function clearHits () {
   electron.ipcRenderer.send('run-command', 'f-hit*');
 }
 
@@ -36,7 +38,6 @@ var listCommand = 'fcns';
 var filterWord = '';
 var seekHistory = false;
 var dashboardMode = false;
-const openDevTools = false;
 
 function searchtap (pos) {
   electron.ipcRenderer.send('run-command', 'pd @' + pos + '|H');
@@ -329,12 +330,12 @@ document.addEventListener('DOMContentLoaded', function () {
     electron.ipcRenderer.send('list', listCommand = 'flags');
   }
 
-function b64DecodeUnicode(str) {
+  function b64DecodeUnicode (str) {
     // Going backwards: from bytestream, to percent-encoding, to original string.
-    return decodeURIComponent(atob(str).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    return decodeURIComponent(atob(str).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
-}
+  }
 
   electron.ipcRenderer.on('list', (event, arg) => {
     let str = '';
@@ -353,7 +354,7 @@ function b64DecodeUnicode(str) {
       case 'strings':
         if (arg.data instanceof Array) {
           for (let f of arg.data) {
-const name = b64DecodeUnicode(f.string);
+            const name = b64DecodeUnicode(f.string);
             str += labelNew(name, f.vaddr);
           }
         } else {
@@ -425,7 +426,7 @@ const name = b64DecodeUnicode(f.string);
     const isBlackTheme = (consoleDiv.style.backgroundColor === 'black');
     clearScreen = true;
     if (isBlackTheme) {
-      electron.ipcRenderer.send('run-command', 'eco '+blackTheme+';' + printCommand);
+      electron.ipcRenderer.send('run-command', 'eco ' + blackTheme + ';' + printCommand);
       consoleDiv.style.color = 'black';
       consoleDiv.style.backgroundColor = 'white';
       entryInput.style.color = 'black';
@@ -445,7 +446,7 @@ const name = b64DecodeUnicode(f.string);
       scriptingDiv.style.color = 'black';
       scriptingDiv.style.backgroundColor = 'white';
     } else {
-      electron.ipcRenderer.send('run-command', 'eco '+whiteTheme+';' + printCommand);
+      electron.ipcRenderer.send('run-command', 'eco ' + whiteTheme + ';' + printCommand);
       consoleDiv.style.color = 'white';
       consoleDiv.style.backgroundColor = 'black';
       entryInput.style.color = 'white';
@@ -582,10 +583,10 @@ const name = b64DecodeUnicode(f.string);
       }
     } else if (clearScreen) {
       // consoleDiv.innerHTML = '<a href="javascript:up()">[^]</a><b>&gt; ' + arg.command + '</b>\n' + arg.result;
-      consoleDiv.innerHTML = '<div id="updown" style="position:fixed;z-index:1000;top:90px;right:5px">'
-        + '<button onclick="javascript:up()" id="label-up" class="btn btn-default"><span class="icon icon-up"></span></button>'
-        + '<button onclick="javascript:down()" id="label-up" class="btn btn-default"><span class="icon icon-down"></span></button>'
-        + '</div>\n' + arg.result;
+      consoleDiv.innerHTML = '<div id="updown" style="position:fixed;z-index:1000;top:90px;right:5px">' +
+        '<button onclick="javascript:up()" id="label-up" class="btn btn-default"><span class="icon icon-up"></span></button>' +
+        '<button onclick="javascript:down()" id="label-up" class="btn btn-default"><span class="icon icon-down"></span></button>' +
+        '</div>\n' + arg.result;
     //  clearScreen = false;
       if (prependScreen) {
         consoleDiv.scrollLeft = 0;
@@ -610,22 +611,22 @@ const name = b64DecodeUnicode(f.string);
     }
   });
 
-var longtimer = null;
+  var longtimer = null;
 
   function onlongpress (name, cb) {
     const x = document.getElementById(name);
-    x.onmouseup = function() {
-if (longtimer !== null) {
-  clearTimeout (longtimer);
-}
-}
-    
-    x.onmousedown = function() {
-if (longtimer !== null) {
-  clearTimeout (longtimer);
-}
-longtimer = setTimeout(function () {
-longtimer = null;
+    x.onmouseup = function () {
+      if (longtimer !== null) {
+        clearTimeout(longtimer);
+      }
+    };
+
+    x.onmousedown = function () {
+      if (longtimer !== null) {
+        clearTimeout(longtimer);
+      }
+      longtimer = setTimeout(function () {
+        longtimer = null;
         cb();
       }, 1000);
     };

@@ -349,3 +349,20 @@ ipcMain.on('run-command', (event, arg) => {
     });
   }
 });
+
+ipcMain.on('version', (event, arg) => {
+console.log("one");
+  r2pipe.syscmd('r2 -v', (err, res) => {
+    console.error(err, res);
+    try {
+      if (err) {
+        throw err;
+      }
+      const version = res.split(' ')[1].trim();
+      event.sender.send('version', {command: arg, result: version});
+    } catch (e) {
+      event.sender.send('version', {command: arg, result: e.toString()});
+    }
+  });
+});
+console.log("ok");

@@ -1,6 +1,8 @@
 
-var openButton = document.querySelector('.button');
-var electron = require('electron');
+const openButton = document.querySelector('.button');
+const electron = require('electron');
+
+const openDevTools = false;
 
 electron.webFrame.setVisualZoomLevelLimits(1, 1);
 electron.webFrame.setLayoutZoomLevelLimits(0, 0);
@@ -42,6 +44,15 @@ electron.ipcRenderer.on('open-tab', (event, arg) => {
 
 document.addEventListener('DOMContentLoaded', function () {
   const fileInput = document.getElementById('file-input');
+  electron.ipcRenderer.on('version', (event, arg) => {
+    try {
+      const r2version = document.getElementById('r2version');
+      r2version.innerHTML = arg.result;
+    } catch (e) {
+      alert(e);
+    }
+  });
+  electron.ipcRenderer.send('version');
 
   fileInput.addEventListener('keyup', e => {
     if (e.keyCode === 13) {
@@ -161,6 +172,10 @@ electron.ipcRenderer.on('focus', (event) => {
   const fileInput = document.getElementById('file-input');
   fileInput.focus();
 });
+
+  if (openDevTools) {
+    electron.remote.getCurrentWindow().webContents.openDevTools();
+  }
 
 function openShell () {
   document.location.href = 'shell.html';
