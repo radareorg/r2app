@@ -33,6 +33,7 @@ var printCommand = 'pd|H';
 var listCommand = 'fcns';
 var filterWord = '';
 var seekHistory = false;
+var dashboardMode = false;
 const openDevTools = false;
 
 function searchtap (pos) {
@@ -240,6 +241,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const searchViewer = document.getElementById('search-viewer');
   const labelsTable = document.getElementById('labels');
   const notesText = document.getElementById('notes-text');
+
+  // render dashboard
+  dashboardMode = true;
+  electron.ipcRenderer.send('run-command', 'i;S=|H;p=|H');
 
   consoleDiv.onmouseup = function () {
     const text = window.getSelection().toString();
@@ -525,6 +530,10 @@ const name = b64DecodeUnicode(f.string);
     }
   });
   electron.ipcRenderer.on('command-output', (event, arg) => {
+    if (dashboardMode) {
+      dashboardDiv.innerHTML = arg.result.trim();
+      dashboardMode = false;
+    }
     if (seekHistory && arg.command === 'sj|') {
       seekHistory = false;
       const sh = $('seek-history');
