@@ -285,8 +285,8 @@ document.addEventListener('DOMContentLoaded', function () {
     addr = decimalToHexString(addr);
     return `
     <tr class="clickableLabel">
-      <td>${addr}</td>
-      <td>${name}</td>
+      <td class="row">${addr}</td>
+      <td class="row">${name}</td>
     </tr>
 `;
   }

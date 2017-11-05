@@ -14,7 +14,7 @@ osx mac rls release:
 		--overwrite --platform=darwin --arch=x64 \
 		--icon=img/icon64.png --prune=true --out=release-builds
 
-linux:
+_linux:
 	$(shell npm bin)/electron-packager . \
 		--overwrite --platform=linux --arch=x64 \
 		--icon=img/icon64.png --prune=true --out=release-builds
