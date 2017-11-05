@@ -50,6 +50,12 @@ function up () {
   electron.ipcRenderer.send('run-command', 's--2;' + printCommand);
 }
 
+function down () {
+  clearScreen = true;
+  prependScreen = true;
+  electron.ipcRenderer.send('run-command', 's++2;' + printCommand);
+}
+
 function createPanelMenu () {
   const menu = new Menu();
   menu.append(new MenuItem({
@@ -425,6 +431,11 @@ const name = b64DecodeUnicode(f.string);
       searchConsole.style.backgroundColor = 'white';
       searchViewer.style.color = 'black';
       searchViewer.style.backgroundColor = 'white';
+try {
+      $('updown').syle.backgroundColor = 'black';
+      $('updown').style.color = 'white';
+} catch (e) {
+}
     } else {
       electron.ipcRenderer.send('run-command', 'eco '+whiteTheme+';' + printCommand);
       consoleDiv.style.color = 'white';
@@ -441,6 +452,11 @@ const name = b64DecodeUnicode(f.string);
       searchConsole.style.backgroundColor = 'black';
       searchViewer.style.color = 'white';
       searchViewer.style.backgroundColor = 'black';
+try {
+      $('updown').syle.backgroundColor = 'white';
+      $('updown').style.color = 'black';
+} catch (e) {
+}
     }
   }
   toggleTheme();
@@ -555,7 +571,10 @@ const name = b64DecodeUnicode(f.string);
       }
     } else if (clearScreen) {
       // consoleDiv.innerHTML = '<a href="javascript:up()">[^]</a><b>&gt; ' + arg.command + '</b>\n' + arg.result;
-      consoleDiv.innerHTML = '<a href="javascript:up()">[^]</a>\n' + arg.result;
+      consoleDiv.innerHTML = '<div id="updown" style="position:fixed;z-index:1000;top:90px;right:5px">'
+        + '<button onclick="javascript:up()" id="label-up" class="btn btn-default"><span class="icon icon-up"></span></button>'
+        + '<button onclick="javascript:down()" id="label-up" class="btn btn-default"><span class="icon icon-down"></span></button>'
+        + '</div>\n' + arg.result;
     //  clearScreen = false;
       if (prependScreen) {
         consoleDiv.scrollLeft = 0;
