@@ -14,9 +14,9 @@ td, th {
 }
 
 .pre {
-  font-family: 'Ubuntu Mono', 'Courier New';
+  font-family: 'Ubuntu Mono', 'Courier New', 'Courier';
   padding: 5px;
-  overflow: scroll;
+  overflow: scroll !important;
   word-wrap: break-word;
   display:inline-block;
   line-height: 1em;
