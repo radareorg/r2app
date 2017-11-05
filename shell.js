@@ -16,7 +16,9 @@ var menu = Menu.buildFromTemplate([
   }]);
 Menu.setApplicationMenu(menu);
 */
-
+function clearHits() {
+  electron.ipcRenderer.send('run-command', 'f-hit*');
+}
 
 var blackTheme = 'white';
 var whiteTheme = 'tango';

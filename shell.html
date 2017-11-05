@@ -119,10 +119,10 @@ TODO
 </div>
 <!-- ------------- -->
 <div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="search-window">
-<div id="notes-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
+<div id="search-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
 
 <header class="toolbar toolbar-header" style="padding:5px">
-  <input style="width:99%;margin:1px;height:18px;-webkit-box-shadow:none;outline-width:0" id="search-input" type="shell" class="form-control" placeholder="Search...">
+  <input style="width:99%;margin:1px;height:28px;-webkit-box-shadow:none;outline-width:0" id="search-input" type="shell" class="form-control" placeholder="Search...">
 what
 <select>
 <option>rop</option>
@@ -130,6 +130,7 @@ what
 <option>hexpairs</option>
 <option>assembly</option>
 <option>code</option>
+<option>magic</option>
 <option>word</option>
 <option>dword</option>
 <option>qword</option>
@@ -165,11 +166,14 @@ align
 <option>2048</option>
 <option>4096</option>
 </select>
+      <button class="btn btn-default" onclick="javascript:clearHits()">
+clear hits
+</button>
 </header>
 
-<div class="pre" style="background-color:white;color:black;width:30%;height:100%;user-select:text;-webkit-user-select:auto;" id="search-console">
+<div class="pre" style="background-color:white;color:black;width:50%;height:100%;user-select:text;-webkit-user-select:auto;overflow:scroll" id="search-console">
 </div>
-<div class="pre" style="line-height:1em;position:absolute;right:0px;top:58px;background-color:#e0e0e0;color:black;width:70%;height:100%;user-select:text;-webkit-user-select:auto" id="search-viewer">
+<div class="pre" style="line-height:1em;position:absolute;right:0px;top:78px;background-color:#e0e0e0;color:black;width:60%;height:100%;user-select:text;-webkit-user-select:auto" id="search-viewer">
 </div>
 
 </div>
