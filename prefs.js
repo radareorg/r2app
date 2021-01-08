@@ -8,8 +8,8 @@ const {Menu, MenuItem, getCurrentWindow} = electron.remote;
 // getCurrentWindow().webContents.openDevTools();
 
 // getCurrentWindow().setSize(400, 300, false);
-electron.webFrame.setVisualZoomLevelLimits(1, 1);
-electron.webFrame.setLayoutZoomLevelLimits(0, 0);
+// electron.webFrame.setVisualZoomLevelLimits(1, 1);
+// electron.webFrame.setLayoutZoomLevelLimits(0, 0);
 
 var clearScreen = false;
 var prependScreen = false;

@@ -12,13 +12,13 @@
     "indent": "semistandard --fix *.js"
   },
   "dependencies": {
-    "r2pipe": "^2.5.1",
     "dialogs": "*",
-    "electron": "*",
-    "electron-packager": "^8.7.2",
+    "electron": "^11.1.1",
     "electron-localshortcut": "^3.0.1",
-    "semistandard": "^11.0.0",
-    "photonkit": "^0.1.2"
+    "electron-packager": "^15.2.0",
+    "photonkit": "^0.1.2",
+    "r2pipe": "^2.5.1",
+    "semistandard": "^16.0.0"
   },
   "author": "",
   "license": "MIT"

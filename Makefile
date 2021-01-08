@@ -1,5 +1,6 @@
 all: dist
-	node_modules/.bin/electron .
+	node_modules/.bin/electron --unhandled-rejections=strict .
+
 file:
 	node_modules/.bin/electron . /bin/ls
 
@@ -9,7 +10,7 @@ node_modules:
 dist: node_modules
 	cp -rf node_modules/photonkit/dist dist
 
-osx mac rls release:
+osx mac macos rls release:
 	$(shell npm bin)/electron-packager . \
 		--overwrite --platform=darwin --arch=x64 \
 		--icon=img/icon64.png --prune=true --out=release-builds
@@ -29,7 +30,7 @@ w64 win64:
 		--overwrite --platform=win32 --arch=x64 \
 		--icon=img/icon64.png --prune=true --out=release-builds
 
-linux:
+linux lin:
 	$(shell npm bin)/electron-packager . \
 		--overwrite --platform=linux --arch=x64 \
 		--icon=img/icon64.png --prune=true --out=release-builds

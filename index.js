@@ -4,8 +4,8 @@ const electron = require('electron');
 
 const openDevTools = false;
 
-electron.webFrame.setVisualZoomLevelLimits(1, 1);
-electron.webFrame.setLayoutZoomLevelLimits(0, 0);
+// electron.webFrame.setVisualZoomLevelLimits(1, 1);
+// electron.webFrame.setLayoutZoomLevelLimits(0, 0);
 
 setInterval(_ => {
   electron.ipcRenderer.send('list', 'sessions');
@@ -99,7 +99,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
   function openFile (opts) {
-    electron.ipcRenderer.send('open-file', {path: fileInput.value || '/bin/ls', options: opts});
+    electron.ipcRenderer.send('open-file', {
+      path: fileInput.value || '/bin/ls', options: opts
+    });
   }
   updateButton.onclick = () => {
     updateWindow.style.visibility = 'visible';
@@ -168,7 +170,6 @@ electron.ipcRenderer.on('open-page', (event, arg) => {
 });
 
 electron.ipcRenderer.on('focus', (event) => {
-  // event.sender.send('back-at-cha');   // doesn't seem to arrive back at window that send the msg
   const fileInput = document.getElementById('file-input');
   fileInput.focus();
 });

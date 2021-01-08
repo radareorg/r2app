@@ -18,7 +18,7 @@ app.commandLine.appendSwitch('--disable-pinch');
 
 app.on('open-file', function (event, filePath) {
   event.preventDefault();
-  console.log(filePath);
+  console.log('app.on("open-file", ' + filePath + ')');
   openFile(filePath); //, event);
 });
 
@@ -52,7 +52,7 @@ function openFile (targetFile, event) {
         return;
       }
       // :D
-      windows[0].hide();
+      // windows[0].hide();
       if (event && event.sender && event.sender.send) {
         event.sender.send('open-page', 'shell');
       } else {
@@ -77,6 +77,10 @@ function openSettings () {
     height: 300,
     minWidth: 400,
     minHeight: 0,
+    webPreferences: {
+      nodeIntegration: true,
+      zoomFactor: 1.0
+    },
     show: false
   });
   // win.once
@@ -104,15 +108,17 @@ function createWindow () {
     height: 500,
     minWidth: 500,
     minHeight: 200,
-    show: false,
     webPreferences: {
+      nodeIntegration: true,
       zoomFactor: 1.0
     }
   });
+/*
   // win.once
   win.on('ready-to-show', () => {
     win.show();
   });
+*/
   windows.push(win);
 
   localShortcut.register(win, 'CommandOrControl+1', () => {

@@ -4,8 +4,6 @@ if (typeof require === 'undefined') {
 const dialogs = require('dialogs');
 const electron = require('electron');
 const {Menu, MenuItem, getCurrentWindow} = electron.remote;
-electron.webFrame.setVisualZoomLevelLimits(1, 1);
-electron.webFrame.setLayoutZoomLevelLimits(0, 0);
 // getCurrentWindow().webContents.openDevTools();
 
 const $ = document.getElementById.bind(document);

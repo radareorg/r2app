@@ -5,7 +5,7 @@ if (typeof require === 'undefined') {
 }
 const electron = require('electron');
 const dialogs = require('dialogs');
-const {Menu, MenuItem, getCurrentWindow} = electron.remote;
+const  {Menu, MenuItem, getCurrentWindow} = electron;
 
 /*
 var menu = Menu.buildFromTemplate([
@@ -27,8 +27,8 @@ var whiteTheme = 'tango';
 
 const $ = document.getElementById.bind(document);
 
-electron.webFrame.setVisualZoomLevelLimits(1, 1);
-electron.webFrame.setLayoutZoomLevelLimits(0, 0);
+// electron.webFrame.setVisualZoomLevelLimits(1, 1);
+// electron.webFrame.setLayoutZoomLevelLimits(0, 0);
 
 var clearScreen = false;
 var prependScreen = false;
