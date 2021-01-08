@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // render dashboard
   dashboardMode = true;
-  electron.ipcRenderer.send('run-command', 'i;S=|H;p=|H');
+  electron.ipcRenderer.send('run-command', 'i;o;om;p=');
 
   consoleDiv.onmouseup = function () {
     const text = window.getSelection().toString();
@@ -966,7 +966,7 @@ document.addEventListener('DOMContentLoaded', function () {
   searchInput.addEventListener('keyup', e => {
     if (e.keyCode === 13) {
       electron.ipcRenderer.send('run-command', 'e search.hits=false');
-      electron.ipcRenderer.send('run-command', '/c ' + searchInput.value + '|');
+      electron.ipcRenderer.send('run-command', '/ ' + searchInput.value + '|');
       searchInput.value = '';
     }
   });

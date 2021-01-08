@@ -3,7 +3,7 @@ if (typeof require === 'undefined') {
 }
 const electron = require('electron');
 const dialogs = require('dialogs');
-const { Menu, MenuItem, getCurrentWindow } = electron.remote;
+const { Menu, MenuItem, getCurrentWindow } = electron;
 
 // getCurrentWindow().webContents.openDevTools();
 

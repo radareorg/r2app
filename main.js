@@ -174,6 +174,7 @@ function createWindow () {
 */
   // Open the DevTools.
   if (devConsole) {
+    // process.env['R2APP_DEBUG']
     win.webContents.openDevTools();
   }
 
