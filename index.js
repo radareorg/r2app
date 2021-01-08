@@ -1,6 +1,7 @@
 
 const openButton = document.querySelector('.button');
 const electron = require('electron');
+const packageJson = require('./package.json');
 
 const openDevTools = false;
 
@@ -68,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const homeButton = document.getElementById('home-button');
   const rwButton = document.getElementById('rw-button');
   const binButton = document.getElementById('bin-button');
+  const r2appVersion = document.getElementById('r2app-version');
   const strButton = document.getElementById('str-button');
   const analButton = document.getElementById('anal-button');
   const r2pmButton = document.getElementById('r2pm-button');
@@ -87,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
   toggleable(binButton);
   toggleable(analButton);
 
+  r2appVersion.innerHTML = packageJson.version;
   r2pmButton.onclick = () => {
     document.location.href = 'r2pm.html';
   };
@@ -105,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   updateButton.onclick = () => {
     updateWindow.style.visibility = 'visible';
-    updateWindow.style.zIndex = 100;
+    updateWindow.style.zIndex = 1000;
   };
   etcButton.onclick = () => {
     const path = electron.remote.dialog.showOpenDialog({
