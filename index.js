@@ -2,7 +2,7 @@
 const openButton = document.querySelector('.button');
 const electron = require('electron');
 
-const openDevTools = false;
+const openDevTools = true;
 
 electron.webFrame.setVisualZoomLevelLimits(1, 1);
 electron.webFrame.setLayoutZoomLevelLimits(0, 0);
@@ -21,7 +21,7 @@ electron.ipcRenderer.on('list', (event, arg) => {
         openShell();
       };
       s.style.visibility = 'visible';
-      s.style['z-index'] = 1000;
+      // s.style['z-index'] = 1000;
       let str = '<label>Sessions</label>\n';
       str += '<ul class="list-group">';
       for (let ses of list) {
@@ -103,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   updateButton.onclick = () => {
     updateWindow.style.visibility = 'visible';
-    updateWindow.style.zIndex = 100;
   };
   etcButton.onclick = () => {
     const path = electron.remote.dialog.showOpenDialog({
