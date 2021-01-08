@@ -3,7 +3,7 @@ if (typeof require === 'undefined') {
 }
 const electron = require('electron');
 const dialogs = require('dialogs');
-const {Menu, MenuItem, getCurrentWindow} = electron.remote;
+const { Menu, MenuItem, getCurrentWindow } = electron.remote;
 
 // getCurrentWindow().webContents.openDevTools();
 
@@ -11,9 +11,9 @@ const {Menu, MenuItem, getCurrentWindow} = electron.remote;
 // electron.webFrame.setVisualZoomLevelLimits(1, 1);
 // electron.webFrame.setLayoutZoomLevelLimits(0, 0);
 
-var clearScreen = false;
-var prependScreen = false;
-var filterWord = '';
+const clearScreen = false;
+const prependScreen = false;
+const filterWord = '';
 
 document.addEventListener('DOMContentLoaded', function () {
   electron.ipcRenderer.send('run-command', 'ej|');
@@ -30,8 +30,8 @@ document.addEventListener('DOMContentLoaded', function () {
       const obj = JSON.parse(arg.result);
       switch (arg.command) {
         case 'ej|':
-      //   alert(obj['asm.arch']);
-   //   alert(obj['asm.bits']);
+          //   alert(obj['asm.arch']);
+          //   alert(obj['asm.bits']);
           break;
         default:
           alert(JSON.stringify(obj));
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
     removeClass($('analysis-tab'), 'active');
     removeClass($('debugger-tab'), 'active');
     removeClass($('disasm-tab'), 'active');
- //   removeClass($('project-tab'), 'active');
+    //   removeClass($('project-tab'), 'active');
     $('general-div').style.visibility = 'hidden';
     // $('colors-div').style.visibility = 'hidden';
     $('analysis-div').style.visibility = 'hidden';
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
       $(but.replace('-tab', '-div')).style.visibility = 'visible';
     }
   }
-/*
+  /*
   onclick('check-button', _ => {
     getCurrentWindow().close();
   });
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
   onclick('general-tab', _ => {
     resetTabs('general-tab');
   });
-/*
+  /*
   onclick('colors-tab', _ => {
     resetTabs('colors-tab');
   });
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
   onclick('disasm-tab', _ => {
     resetTabs('disasm-tab');
   });
-/*
+  /*
   onclick('project-tab', _ => {
     resetTabs('project-tab');
   });

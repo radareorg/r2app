@@ -1,4 +1,4 @@
-const {app, webView, ipcMain, BrowserWindow, globalShortcut, clipboard} = require('electron');
+const { app, webView, ipcMain, BrowserWindow, globalShortcut, clipboard } = require('electron');
 const localShortcut = require('electron-localshortcut');
 const path = require('path');
 
@@ -7,7 +7,7 @@ const url = require('url');
 const r2pipe = require('r2pipe');
 const devConsole = false;
 
-let windows = [];
+const windows = [];
 let globalR2 = null;
 let sessions = [];
 
@@ -69,7 +69,7 @@ function openFile (targetFile, event) {
 }
 
 function openSettings () {
-  let win = new BrowserWindow({
+  const win = new BrowserWindow({
     title: 'Settings',
     icon: path.join(__dirname, 'img/icon64.png'),
     backgroundColor: 'white',
@@ -113,7 +113,7 @@ function createWindow () {
       zoomFactor: 1.0
     }
   });
-/*
+  /*
   // win.once
   win.on('ready-to-show', () => {
     win.show();
@@ -122,22 +122,22 @@ function createWindow () {
   windows.push(win);
 
   localShortcut.register(win, 'CommandOrControl+1', () => {
-    win.webContents.send('open-tab', {name: 1});
+    win.webContents.send('open-tab', { name: 1 });
   });
   localShortcut.register(win, 'CommandOrControl+2', () => {
-    win.webContents.send('open-tab', {name: 2});
+    win.webContents.send('open-tab', { name: 2 });
   });
   localShortcut.register(win, 'CommandOrControl+3', () => {
-    win.webContents.send('open-tab', {name: 3});
+    win.webContents.send('open-tab', { name: 3 });
   });
   localShortcut.register(win, 'CommandOrControl+4', () => {
-    win.webContents.send('open-tab', {name: 4});
+    win.webContents.send('open-tab', { name: 4 });
   });
   localShortcut.register(win, 'CommandOrControl+5', () => {
-    win.webContents.send('open-tab', {name: 5});
+    win.webContents.send('open-tab', { name: 5 });
   });
   localShortcut.register(win, 'CommandOrControl+G', () => {
-    win.webContents.send('open-tab', {name: 'goto'});
+    win.webContents.send('open-tab', { name: 'goto' });
   });
 
   // globalShortcut.register('CommandOrControl+N', () => {
@@ -169,7 +169,7 @@ function createWindow () {
   }
 
   // and load the index.html of the app.
-/*
+  /*
   console.log("1");
   win.send("open-page", 'nothing');
   console.log("2");
@@ -217,7 +217,7 @@ ipcMain.on('open-settings', function (event, arg) {
   openSettings();
 });
 
-var exec = require('child_process').exec;
+const exec = require('child_process').exec;
 
 ipcMain.on('package-install', function (event, pkgName) {
   exec('r2pm -i ' + pkgName, (err, out) => {
@@ -248,7 +248,7 @@ ipcMain.on('package-uninstall', function (event, pkgName) {
 
 ipcMain.on('package-list', function (event, arg) {
   windows[0].setTitle('Package Manager');
-  var exec = require('child_process').exec;
+  const exec = require('child_process').exec;
   function execute (command, callback) {
     exec(command, function (error, stdout, stderr) { callback(erstdout); });
   }
@@ -260,12 +260,12 @@ ipcMain.on('package-list', function (event, arg) {
       if (err) {
         console.error(err);
       }
-      let installed = {};
-      for (let pkg of inst.split('\n')) {
+      const installed = {};
+      for (const pkg of inst.split('\n')) {
         if (pkg) installed[pkg] = true;
       }
-      let pkgs = [];
-      for (let line of out.split('\n')) {
+      const pkgs = [];
+      for (const line of out.split('\n')) {
         const ns = line.indexOf(' ');
         const ts = line.indexOf(']');
         const pkgName = line.substring(0, ns).trim();
@@ -287,7 +287,7 @@ ipcMain.on('list', function (event, arg) {
       console.error(err);
       event.sender.send('show-error', err.toString());
     } else {
-      event.sender.send('list', {type: arg, data: res});
+      event.sender.send('list', { type: arg, data: res });
     }
   }
   switch (arg) {
@@ -316,7 +316,7 @@ ipcMain.on('list', function (event, arg) {
       globalR2.cmdj('iSj|', cb);
       break;
     case 'sessions':
-      cb(null, {type: arg, data: { data: sessions }});
+      cb(null, { type: arg, data: { data: sessions } });
       break;
     default:
       globalR2.cmdj('e scr.html=0;fj|', (err, res) => {
@@ -328,7 +328,7 @@ ipcMain.on('list', function (event, arg) {
 });
 
 ipcMain.on('kill-session', (event, id) => {
-  let i = Math.min(id, sessions.length);
+  const i = Math.min(id, sessions.length);
   try {
     sessions[i].r2.quit(_ => {
       console.error('session closed');
@@ -349,15 +349,15 @@ ipcMain.on('run-command', (event, arg) => {
   if (globalR2 !== null) {
     globalR2.cmd(arg, (err, res) => {
       if (err) {
-        return event.sender.send('command-output', {command: arg, result: err.toString()});
+        return event.sender.send('command-output', { command: arg, result: err.toString() });
       }
-      event.sender.send('command-output', {command: arg, result: res});
+      event.sender.send('command-output', { command: arg, result: res });
     });
   }
 });
 
 ipcMain.on('version', (event, arg) => {
-console.log("one");
+  console.log('one');
   r2pipe.syscmd('r2 -v', (err, res) => {
     console.error(err, res);
     try {
@@ -365,10 +365,10 @@ console.log("one");
         throw err;
       }
       const version = res.split(' ')[1].trim();
-      event.sender.send('version', {command: arg, result: version});
+      event.sender.send('version', { command: arg, result: version });
     } catch (e) {
-      event.sender.send('version', {command: arg, result: e.toString()});
+      event.sender.send('version', { command: arg, result: e.toString() });
     }
   });
 });
-console.log("ok");
+console.log('ok');

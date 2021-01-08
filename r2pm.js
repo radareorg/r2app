@@ -3,7 +3,7 @@ if (typeof require === 'undefined') {
 }
 const dialogs = require('dialogs');
 const electron = require('electron');
-const {Menu, MenuItem, getCurrentWindow} = electron.remote;
+const { Menu, MenuItem, getCurrentWindow } = electron.remote;
 // getCurrentWindow().webContents.openDevTools();
 
 const $ = document.getElementById.bind(document);
@@ -31,7 +31,7 @@ try {
     let msg = '';
     // msg += '<hr><td>one</td><td>two</td><td style="width:100%">tri</td></hr>';
     let n = 0;
-    for (let pkg of res) {
+    for (const pkg of res) {
       let trAttr = '';
       if (pkg.installed) {
         trAttr = 'style="background-color:#c0e0c0"';
@@ -41,7 +41,7 @@ try {
     }
     $('pkgs-table').innerHTML = msg;
     n = 0;
-    for (let pkg of res) {
+    for (const pkg of res) {
       const row = 'pkg' + n;
       $(row).onclick = function () {
         if (pkg.installed) {

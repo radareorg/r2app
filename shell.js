@@ -5,7 +5,7 @@ if (typeof require === 'undefined') {
 }
 const electron = require('electron');
 const dialogs = require('dialogs');
-const  {Menu, MenuItem, getCurrentWindow} = electron;
+const { Menu, MenuItem, getCurrentWindow } = electron;
 
 /*
 var menu = Menu.buildFromTemplate([
@@ -22,22 +22,22 @@ function clearHits () {
   electron.ipcRenderer.send('run-command', 'f-hit*');
 }
 
-var blackTheme = 'white';
-var whiteTheme = 'tango';
+const blackTheme = 'white';
+const whiteTheme = 'tango';
 
 const $ = document.getElementById.bind(document);
 
 // electron.webFrame.setVisualZoomLevelLimits(1, 1);
 // electron.webFrame.setLayoutZoomLevelLimits(0, 0);
 
-var clearScreen = false;
-var prependScreen = false;
-var hexCommand = 'pxc';
-var printCommand = 'pd|H';
-var listCommand = 'fcns';
-var filterWord = '';
-var seekHistory = false;
-var dashboardMode = false;
+let clearScreen = false;
+let prependScreen = false;
+const hexCommand = 'pxc';
+let printCommand = 'pd|H';
+let listCommand = 'fcns';
+let filterWord = '';
+let seekHistory = false;
+let dashboardMode = false;
 
 function searchtap (pos) {
   electron.ipcRenderer.send('run-command', 'pd @' + pos + '|H');
@@ -68,42 +68,49 @@ function createPanelMenu () {
       electron.ipcRenderer.send('list', listCommand = 'fcns');
     }
   }));
-  menu.append(new MenuItem({label: 'Symbols',
+  menu.append(new MenuItem({
+    label: 'Symbols',
     click () {
       electron.ipcRenderer.send('list', listCommand = 'symbols');
     }
   }));
-  menu.append(new MenuItem({label: 'Imports',
+  menu.append(new MenuItem({
+    label: 'Imports',
     click () {
       electron.ipcRenderer.send('list', listCommand = 'imports');
     }
   }));
-  menu.append(new MenuItem({label: 'Sections',
+  menu.append(new MenuItem({
+    label: 'Sections',
     click () {
       electron.ipcRenderer.send('list', listCommand = 'sections');
     }
   }));
-  menu.append(new MenuItem({label: 'Registers',
+  menu.append(new MenuItem({
+    label: 'Registers',
     click () {
       electron.ipcRenderer.send('list', listCommand = 'regs');
     }
   }));
-  menu.append(new MenuItem({label: 'Comments',
+  menu.append(new MenuItem({
+    label: 'Comments',
     click () {
       electron.ipcRenderer.send('list', listCommand = 'comments');
     }
   }));
-  menu.append(new MenuItem({label: 'Flags',
+  menu.append(new MenuItem({
+    label: 'Flags',
     click () {
       electron.ipcRenderer.send('list', listCommand = 'flags');
     }
   }));
-  menu.append(new MenuItem({label: 'Strings',
+  menu.append(new MenuItem({
+    label: 'Strings',
     click () {
       electron.ipcRenderer.send('list', listCommand = 'strings');
     }
   }));
-  menu.append(new MenuItem({type: 'separator'}));
+  menu.append(new MenuItem({ type: 'separator' }));
   return menu;
 }
 
@@ -115,7 +122,8 @@ function createMenu () {
   }
   if (text !== false) {
     const shortText = text.substring(0, 16) + ((text.length > 16) ? '...' : '');
-    menu.append(new MenuItem({label: 'Set flag',
+    menu.append(new MenuItem({
+      label: 'Set flag',
       click () {
         clearScreen = true;
         dialogs().prompt('Set flag at ' + shortText, '', (name) => {
@@ -123,8 +131,10 @@ function createMenu () {
             electron.ipcRenderer.send('run-command', 'f ' + name + '=' + text + ';' + printCommand);
           }
         });
-      }}));
-    menu.append(new MenuItem({label: 'Add Comment',
+      }
+    }));
+    menu.append(new MenuItem({
+      label: 'Add Comment',
       click () {
         clearScreen = true;
         dialogs().prompt('Comment', '', (name) => {
@@ -132,17 +142,21 @@ function createMenu () {
             electron.ipcRenderer.send('run-command', 'CC ' + name + '@ ' + shortText + ';' + printCommand);
           }
         });
-      }}));
-// in hexdump
-// if (hasClass(labelHexButton, 'active')) {
-    menu.append(new MenuItem({label: 'Show flags',
+      }
+    }));
+    // in hexdump
+    // if (hasClass(labelHexButton, 'active')) {
+    menu.append(new MenuItem({
+      label: 'Show flags',
       click () {
         clearScreen = true;
         electron.ipcRenderer.send('run-command', printCommand = 'pxa|H');
-      }}));
-// }
+      }
+    }));
+    // }
     if (text.length > 1) {
-      menu.append(new MenuItem({label: 'Add comment',
+      menu.append(new MenuItem({
+        label: 'Add comment',
         click () {
           clearScreen = true;
           dialogs().prompt('Comment at ' + shortText, '', (name) => {
@@ -150,36 +164,48 @@ function createMenu () {
               electron.ipcRenderer.send('run-command', 'CC ' + name + '=' + text + ';' + printCommand);
             }
           });
-        }}));
-      menu.append(new MenuItem({label: 'Seek to ' + shortText,
+        }
+      }));
+      menu.append(new MenuItem({
+        label: 'Seek to ' + shortText,
         click () {
           clearScreen = true;
           electron.ipcRenderer.send('run-command', 's ' + text + ';' + printCommand);
-        }}));
-      menu.append(new MenuItem({label: 'Analyze at ' + shortText,
+        }
+      }));
+      menu.append(new MenuItem({
+        label: 'Analyze at ' + shortText,
         click () {
           clearScreen = true;
           electron.ipcRenderer.send('run-command', 's ' + text + ';af;' + printCommand);
-        }}));
-      menu.append(new MenuItem({label: 'Find references',
+        }
+      }));
+      menu.append(new MenuItem({
+        label: 'Find references',
         click () {
           clearScreen = true;
           electron.ipcRenderer.send('run-command', '/r ' + text + ';pd|H');
-        }}));
-      menu.append(new MenuItem({type: 'separator'}));
+        }
+      }));
+      menu.append(new MenuItem({ type: 'separator' }));
     }
   }
-  menu.append(new MenuItem({label: 'Undefine',
+  menu.append(new MenuItem({
+    label: 'Undefine',
     click () {
       clearScreen = true;
       electron.ipcRenderer.send('run-command', 'af-;f-;' + printCommand);
-    }}));
-  menu.append(new MenuItem({label: 'Analyze Function',
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Analyze Function',
     click () {
       clearScreen = true;
       electron.ipcRenderer.send('run-command', 'af;' + printCommand);
-    }}));
-  menu.append(new MenuItem({label: 'Rename Function',
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Rename Function',
     click () {
       clearScreen = true;
       dialogs().prompt('New function name', '', (name) => {
@@ -187,19 +213,23 @@ function createMenu () {
           electron.ipcRenderer.send('run-command', 'afn ' + name + ';fr ' + name + ';' + printCommand);
         }
       });
-    }}));
+    }
+  }));
 
-  menu.append(new MenuItem({type: 'separator'}));
+  menu.append(new MenuItem({ type: 'separator' }));
 
-  menu.append(new MenuItem({label: 'Entropy bars',
+  menu.append(new MenuItem({
+    label: 'Entropy bars',
     click () {
       clearScreen = true;
       electron.ipcRenderer.send('run-command', 'p=e|H');
-    }}));
+    }
+  }));
 
-  menu.append(new MenuItem({type: 'separator'}));
+  menu.append(new MenuItem({ type: 'separator' }));
 
-  menu.append(new MenuItem({label: 'Change blocksize',
+  menu.append(new MenuItem({
+    label: 'Change blocksize',
     click () {
       clearScreen = true;
       dialogs().prompt('Block size', '', (name) => {
@@ -207,24 +237,31 @@ function createMenu () {
           electron.ipcRenderer.send('run-command', 'b ' + name + ';' + printCommand);
         }
       });
-    }}));
-  menu.append(new MenuItem({label: 'Toggle bytes',
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Toggle bytes',
     click () {
       clearScreen = true;
       electron.ipcRenderer.send('run-command', 'e!asm.bytes;pd|H');
-    }}));
-  menu.append(new MenuItem({label: 'Toggle color',
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Toggle color',
     click () {
       clearScreen = true;
       electron.ipcRenderer.send('run-command', 'e!scr.color;pd|H');
-    }}));
-  menu.append(new MenuItem({type: 'separator'}));
-// debugger
-  menu.append(new MenuItem({label: 'Add breakpoint',
+    }
+  }));
+  menu.append(new MenuItem({ type: 'separator' }));
+  // debugger
+  menu.append(new MenuItem({
+    label: 'Add breakpoint',
     click () {
       clearScreen = true;
       electron.ipcRenderer.send('run-command', 'e!scr.color;pd|H');
-    }}));
+    }
+  }));
   return menu;
 }
 
@@ -279,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     seekHistory = true;
     electron.ipcRenderer.send('run-command', 'sj|');
-/*
+    /*
 <div class="label"> entry0 </div>
 &#8827;
 <div class="label"> main </div>
@@ -308,9 +345,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateLinks () {
-    var anchors = document.getElementsByClassName('clickableLabel');
-    for (var i = 0; i < anchors.length; i++) {
-      var anchor = anchors[i];
+    const anchors = document.getElementsByClassName('clickableLabel');
+    for (let i = 0; i < anchors.length; i++) {
+      const anchor = anchors[i];
       anchor.onclick = function (ev) {
         ev.target.style.backgroundColor = '#909090';
         seekTo(ev.target.innerHTML);
@@ -342,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function () {
     switch (arg.type) {
       case 'imports':
         if (arg.data instanceof Array) {
-          for (let f of arg.data) {
+          for (const f of arg.data) {
             str += labelNew(f.name, f.ordinal); // f.type + ' ' + f.bind);
           }
         } else {
@@ -353,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function () {
         break;
       case 'strings':
         if (arg.data instanceof Array) {
-          for (let f of arg.data) {
+          for (const f of arg.data) {
             const name = b64DecodeUnicode(f.string);
             str += labelNew(name, f.vaddr);
           }
@@ -366,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function () {
       case 'flags':
       case 'fcns':
         if (arg.data instanceof Array) {
-          for (let f of arg.data) {
+          for (const f of arg.data) {
             str += labelNew(f.name, f.offset);
           }
         } else {
@@ -377,14 +414,14 @@ document.addEventListener('DOMContentLoaded', function () {
         break;
       case 'symbols':
         if (arg.data instanceof Array) {
-          for (let f of arg.data) {
+          for (const f of arg.data) {
             str += labelNew('sym.' + f.name, f.offset || f.vaddr);
           }
         }
         break;
       case 'comments':
         if (arg.data instanceof Array) {
-          for (let f of arg.data) {
+          for (const f of arg.data) {
             if (f.type === 'CCu') {
               str += labelNew('sym.' + f.name, f.offset || f.vaddr);
             }
@@ -396,11 +433,11 @@ document.addEventListener('DOMContentLoaded', function () {
       case 'regs':
       case 'sections':
         if (arg.data instanceof Array) {
-          for (let f of arg.data) {
+          for (const f of arg.data) {
             str += labelNew(f.name, f.offset || f.vaddr);
           }
         } else {
-          for (let f of Object.keys(arg.data)) {
+          for (const f of Object.keys(arg.data)) {
             str += labelNew(f, arg.data[f]);
           }
         }
@@ -547,7 +584,7 @@ document.addEventListener('DOMContentLoaded', function () {
         alert(arg.result.trim());
       }
       let res = '';
-      for (let h of hist) {
+      for (const h of hist) {
         if (!h.offset) {
           continue;
         }
@@ -587,7 +624,7 @@ document.addEventListener('DOMContentLoaded', function () {
         '<button onclick="javascript:up()" id="label-up" class="btn btn-default"><span class="icon icon-up"></span></button>' +
         '<button onclick="javascript:down()" id="label-up" class="btn btn-default"><span class="icon icon-down"></span></button>' +
         '</div>\n' + arg.result;
-    //  clearScreen = false;
+      //  clearScreen = false;
       if (prependScreen) {
         consoleDiv.scrollLeft = 0;
         consoleDiv.scrollTop = consoleDiv.scrollHeight;
@@ -611,7 +648,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  var longtimer = null;
+  let longtimer = null;
 
   function onlongpress (name, cb) {
     const x = document.getElementById(name);
@@ -766,7 +803,7 @@ document.addEventListener('DOMContentLoaded', function () {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', 'dso;' + printCommand);
   };
-/// // labels buttons ////
+  /// // labels buttons ////
   const labelRefreshButton = document.getElementById('label-refresh-button');
   const labelMenuButton = document.getElementById('label-menu-button');
   const labelSearchButton = document.getElementById('label-search-button');

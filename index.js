@@ -24,7 +24,7 @@ electron.ipcRenderer.on('list', (event, arg) => {
       s.style['z-index'] = 1000;
       let str = '<label>Sessions</label>\n';
       str += '<ul class="list-group">';
-      for (let ses of list) {
+      for (const ses of list) {
         str += '<li class="my-group-item hlhover green"> &nbsp;&nbsp; r2 ' + ses.file + '</li>\n';
       }
       str += '</ul>';
@@ -174,9 +174,9 @@ electron.ipcRenderer.on('focus', (event) => {
   fileInput.focus();
 });
 
-  if (openDevTools) {
-    electron.remote.getCurrentWindow().webContents.openDevTools();
-  }
+if (openDevTools) {
+  electron.remote.getCurrentWindow().webContents.openDevTools();
+}
 
 function openShell () {
   document.location.href = 'shell.html';
