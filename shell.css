@@ -15,6 +15,7 @@ td, th {
 
 .pre {
   font-family: 'Ubuntu Mono', 'Courier New', 'Courier';
+  font-weight:bold;
   padding: 5px;
   overflow: scroll !important;
   word-wrap: break-word;

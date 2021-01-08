@@ -734,8 +734,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   onclick('heart-button', () => {
-    alert('Purchase the full version at:\n\n' +
-'https://www.locklabs.com');
+    alert('Visit https://www.radare.org/ for more details');
   });
   onclick('pencil-button', () => {
     dialogs().prompt('Write "text" or hexpairs', (name) => {

@@ -13,8 +13,6 @@ let sessions = [];
 
 app.commandLine.appendSwitch('--enable-viewport-meta', 'true');
 app.commandLine.appendSwitch('--disable-pinch');
-// webView.setVisualZoomLevelLimits(1,1);
-// webView.setLayoutZoomLevelLimits(0,0);
 
 app.on('open-file', function (event, filePath) {
   event.preventDefault();
@@ -43,7 +41,7 @@ function openFile (targetFile, event) {
     });
     globalR2 = r2;
     // TODO: register into the sessions manager
-    r2.cmd('b 1024;e asm.bytes=false;e scr.color=true;e scr.html=true', (err, res) => {
+    r2.cmd('b 1024;e scr.utf8=true;e asm.bytes=false;e scr.color=true;e scr.html=true', (err, res) => {
       if (err) {
         if (event && event.sender && event.sender.send) {
           event.sender.send('show-error', err.toString());
