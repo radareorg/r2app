@@ -36,3 +36,6 @@ linux lin:
 		--icon=img/icon64.png --prune=true --out=release-builds
 	rm -f release-builds/RadareApp-linux-x64.zip
 	cd release-builds && zip -r RadareApp-linux-x64.zip RadareApp-linux-x64
+
+indent:
+	npm run indent

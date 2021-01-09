@@ -1,12 +1,9 @@
+// web/agent
 
 const openButton = document.querySelector('.button');
 const electron = require('electron');
 const packageJson = require('./package.json');
 
-const openDevTools = false;
-
-// electron.webFrame.setVisualZoomLevelLimits(1, 1);
-// electron.webFrame.setLayoutZoomLevelLimits(0, 0);
 
 setInterval(_ => {
   electron.ipcRenderer.send('list', 'sessions');
@@ -43,7 +40,15 @@ electron.ipcRenderer.on('open-tab', (event, arg) => {
   webview.send('open-tab', arg);
 });
 
+function toggleTheme() {
+  const bg = $('bg');
+  bg.style['background-color'] = 'black !important';
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+  const logoImage = document.getElementById('logo-image');
+  logoImage.onclick = toggleTheme;
+
   const fileInput = document.getElementById('file-input');
   electron.ipcRenderer.on('version', (event, arg) => {
     try {
@@ -176,10 +181,6 @@ electron.ipcRenderer.on('focus', (event) => {
   const fileInput = document.getElementById('file-input');
   fileInput.focus();
 });
-
-if (openDevTools) {
-  electron.remote.getCurrentWindow().webContents.openDevTools();
-}
 
 function openShell () {
   document.location.href = 'shell.html';

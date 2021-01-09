@@ -20,6 +20,9 @@
     "r2pipe": "^2.5.1",
     "semistandard": "^16.0.0"
   },
+  "devDependencies": {
+    "electron-icon-builder": "*"
+  },
   "author": "",
   "license": "MIT"
 }

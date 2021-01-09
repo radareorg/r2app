@@ -41,3 +41,16 @@ label {
    padding-top:8px;
    height:32px;
 }
+
+.btn-default:hover {
+  background-color: red;
+}
+
+body {
+  transition: background-color 0.5s ease;
+}
+
+// button << btn;
+.sidebar {
+	background-color: #f0f0f0 !important;
+}

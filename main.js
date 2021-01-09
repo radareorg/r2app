@@ -1,11 +1,18 @@
+// host/nodejs
 const { app, webView, ipcMain, BrowserWindow, globalShortcut, clipboard } = require('electron');
 const localShortcut = require('electron-localshortcut');
 const path = require('path');
 
+function jso2jsonstr (o) {
+	const r = JSON.parse(JSON.stringify(o));
+	console.error(r);
+	return r;
+}
+
 const url = require('url');
 
 const r2pipe = require('r2pipe');
-const devConsole = false;
+const devConsole = process.env['R2APP_DEBUG'] === '1';
 
 const windows = [];
 let globalR2 = null;
@@ -28,6 +35,9 @@ function openFile (targetFile, event) {
   }
   console.log('openFile', targetFile);
   process.env.PATH = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:.';
+if (targetFile == '.') {
+return '';
+}
   r2pipe.open(targetFile, options, (err, r2) => {
     if (err) {
       if (event && event.sender && event.sender.send) {
@@ -41,7 +51,7 @@ function openFile (targetFile, event) {
     });
     globalR2 = r2;
     // TODO: register into the sessions manager
-    r2.cmd('b 1024;e scr.utf8=true;e asm.bytes=false;e scr.color=true;e scr.html=true', (err, res) => {
+    r2.cmd('b 1024;e scr.utf8=false;e asm.bytes=false;e scr.color=true;e scr.html=true', (err, res) => {
       if (err) {
         if (event && event.sender && event.sender.send) {
           event.sender.send('show-error', err.toString());
@@ -66,10 +76,13 @@ function openFile (targetFile, event) {
   });
 }
 
+const isMac = process.platform === "darwin";
+const r2appIconPath = path.join(__dirname, isMac? 'img/icon64.icns': 'img/icon64.png');
+
 function openSettings () {
   const win = new BrowserWindow({
     title: 'Settings',
-    icon: path.join(__dirname, 'img/icon64.png'),
+    icon: r2appIconPath,
     backgroundColor: 'white',
     width: 400,
     height: 300,
@@ -100,7 +113,7 @@ function createWindow () {
   // Create the browser window.
   let win = new BrowserWindow({
     title: 'RadareApp',
-    icon: path.join(__dirname, 'img/icon64.png'),
+    icon: r2appIconPath,
     backgroundColor: 'white',
     width: 800,
     height: 500,
@@ -286,7 +299,8 @@ ipcMain.on('list', function (event, arg) {
       console.error(err);
       event.sender.send('show-error', err.toString());
     } else {
-      event.sender.send('list', { type: arg, data: res });
+      event.sender.send('list', { type: arg, data: jso2jsonstr (res) });
+      // event.sender.send('list', { type: arg, data: res });
     }
   }
   switch (arg) {
@@ -315,7 +329,7 @@ ipcMain.on('list', function (event, arg) {
       globalR2.cmdj('iSj|', cb);
       break;
     case 'sessions':
-      cb(null, { type: arg, data: { data: sessions } });
+      cb(null, { type: arg, data: { data: jso2jsonstr (sessions) } });
       break;
     default:
       globalR2.cmdj('e scr.html=0;fj|', (err, res) => {

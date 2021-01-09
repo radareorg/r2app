@@ -25,7 +25,7 @@ function clearHits () {
 const blackTheme = 'white';
 const whiteTheme = 'tango';
 
-const $ = document.getElementById.bind(document);
+// const $ = document.getElementById.bind(document);
 
 // electron.webFrame.setVisualZoomLevelLimits(1, 1);
 // electron.webFrame.setLayoutZoomLevelLimits(0, 0);
@@ -274,13 +274,13 @@ window.addEventListener('contextmenu', (e) => {
 document.addEventListener('DOMContentLoaded', function () {
   const entryInput = $('entry-input');
   const searchInput = $('search-input');
-  const consoleDiv = document.getElementById('console-div');
-  const dashboardDiv = document.getElementById('dashboard-div');
-  const scriptingDiv = document.getElementById('scripting-div');
-  const searchConsole = document.getElementById('search-console');
-  const searchViewer = document.getElementById('search-viewer');
-  const labelsTable = document.getElementById('labels');
-  const notesText = document.getElementById('notes-text');
+  const consoleDiv = $('console-div');
+  const dashboardDiv = $('dashboard-div');
+  const scriptingDiv = $('scripting-div');
+  const searchConsole = $('search-console');
+  const searchViewer = $('search-viewer');
+  const labelsTable = $('labels');
+  const notesText = $('notes-text');
 
   // render dashboard
   dashboardMode = true;

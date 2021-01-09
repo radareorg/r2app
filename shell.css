@@ -5,16 +5,27 @@ a {
 /* font used for listing items in tables */
 td, th {
   /* font-family: Courier New; */
-  font-family: 'Ubuntu Mono' ;
+  font-family: 'agave', 'Ubuntu Mono' ;
 }
 
 @font-face {
-    font-family: ati8x8;
-    src: url(Px437_ATI_8x8.ttf)
+  font-family: agave;
+  src: url(agave.ttf)
+}
+
+textarea {
+	font-family: 'agave', 'Ubuntu Mono', 'Courier New', 'Courier';
+	padding:1em;
+}
+
+select {
+	background-color: #e0e0e0;
+	border: 1px solid #5050ff;
+	border-radius: 5px;
 }
 
 .pre {
-  font-family: 'Ubuntu Mono', 'Courier New', 'Courier';
+  font-family: 'agave', 'Ubuntu Mono', 'Courier New', 'Courier';
   font-weight:bold;
   padding: 5px;
   overflow: scroll !important;
@@ -29,7 +40,7 @@ font {
 }
 
 pre {
-  font-family: 'Ubuntu Mono', 'Courier New';
+  font-family: 'agave', 'Ubuntu Mono', 'Courier New';
 }
 
 textarea:hover {
@@ -42,6 +53,7 @@ input:hover {
 
 button:hover {
   cursor: pointer;
+  background-color: red;
 }
 
 span:hover {
@@ -62,6 +74,9 @@ span:hover {
   display:inline-flex;
 }
 
+.sidebar {
+  background-color: '#f0f0f0';
+}
 .history {
   display:inline-flex;
 }
