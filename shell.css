@@ -16,6 +16,7 @@ td, th {
 textarea {
 	font-family: 'agave', 'Ubuntu Mono', 'Courier New', 'Courier';
 	padding:1em;
+	resize:false;
 }
 
 select {

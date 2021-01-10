@@ -23,11 +23,19 @@ label {
 }
 .hlhover:hover {
   background-color:#f0f0f0;
+  cursor: hand;
+}
+li {
+  font-family: 'agave';
+}
+p {
+  font-family: 'Verdana';
 }
 .green {
   list-style: none;
   line-height: 16px;
   padding-left:16px;
+  cursor: hand;
 }
 .green:before {
    content: '';

@@ -1,10 +1,17 @@
- const $ = document.getElementById.bind(document);
+const $ = document.getElementById.bind(document);
+
+function forceDefaultZoom () {
+  const webFrame = electron.webFrame;
+  webFrame.setZoomFactor(1);
+  webFrame.setVisualZoomLevelLimits(1, 1);
+}
+
 function hasClass (el, className) {
   if (el.classList) { return el.classList.contains(className); } else { return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)')); }
 }
 
 function jso2jsonstr (o) {
-	return JSON.parse(JSON.stringify(o));
+  return JSON.parse(JSON.stringify(o));
 }
 
 function addClass (el, className) {

@@ -4,6 +4,7 @@ const openButton = document.querySelector('.button');
 const electron = require('electron');
 const packageJson = require('./package.json');
 
+forceDefaultZoom();
 
 setInterval(_ => {
   electron.ipcRenderer.send('list', 'sessions');
@@ -40,7 +41,7 @@ electron.ipcRenderer.on('open-tab', (event, arg) => {
   webview.send('open-tab', arg);
 });
 
-function toggleTheme() {
+function toggleTheme () {
   const bg = $('bg');
   bg.style['background-color'] = 'black !important';
 }
@@ -48,7 +49,59 @@ function toggleTheme() {
 document.addEventListener('DOMContentLoaded', function () {
   const logoImage = document.getElementById('logo-image');
   logoImage.onclick = toggleTheme;
+  function projectColor(p) {
+    function colorseed(p) {
+      let s = 0xa00020;
+      for (let c of p) {
+        s <<= 4;
+        s ^= c.charCodeAt(0);
+      }
+      return s;
+    }
+    const seed = colorseed(p);
+    function colorchar(n) {
+      let ch = (seed>>n) &0xf;
+      if (ch < 8) {
+         ch = 8;
+      }
+      return '0123456789abcdef'[ch];
+    }
+    const colors = [];
+    colors.push(colorchar(0));
+    colors.push(colorchar(3));
 
+    colors.push(colorchar(6));
+    colors.push(colorchar(9));
+
+    colors.push(colorchar(12));
+    colors.push(colorchar(15));
+
+    colors.push(colorchar(18));
+    colors.push(colorchar(21));
+    return '#' + colors.join('');
+  };
+
+  r2.projects().then((projects) => {
+    let s = '';
+    for (const prj of projects) {
+      c = projectColor(prj);
+      s += `
+<a onclick=alert("TODO")>
+  <li class="list-group-item hlhover">
+    <img class="img-circle media-object pull-left" style="background-color:`+c+`;padding:20" width="32" height="32">
+    <div class="media-body">
+      <strong>` + prj + `</strong>
+      <p>Analyzing the most opened file in r2land</p>
+    </div>
+<div id=removeP0 style="position:absolute;margin-top:-32px;right:32px;color:red">
+<span class="icon icon-cancel hover"></span>
+</div>
+  </li>
+</a>
+`;
+    }
+    $('projects-list').innerHTML = s;
+  });
   const fileInput = document.getElementById('file-input');
   electron.ipcRenderer.on('version', (event, arg) => {
     try {
@@ -66,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
   const fileButton = document.getElementById('file-button');
+  const helpButton = $('help-button');
   const etcButton = document.getElementById('etc-button');
   const updateButton = document.getElementById('update-button');
   const updateWindow = document.getElementById('update-window');
@@ -124,7 +178,12 @@ document.addEventListener('DOMContentLoaded', function () {
         fileInput.value = path;
       }
     }).catch((e) => {
-      alert('error: '+e);
+      alert('error: ' + e);
+    });
+  };
+  $('help-button').onclick = () => {
+    r2.plugins('io').then((res) => {
+      alert(res.join('\n'));
     });
   };
   fileButton.onclick = () => {

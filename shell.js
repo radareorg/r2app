@@ -1,34 +1,16 @@
 const openDevTools = false;
 
-if (typeof require === 'undefined') {
-  alert('Cannot require electron in webview');
-}
 const electron = require('electron');
 const dialogs = require('dialogs');
-const { Menu, MenuItem, getCurrentWindow } = electron;
+const { Menu, MenuItem } = electron;
 
-/*
-var menu = Menu.buildFromTemplate([
-  {
-    label: 'RadareApp',
-    submenu: [
-      {label: 'About App', selector: 'orderFrontStandardAboutPanel:'},
-      {label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: function() {force_quit=true; app.quit();}}
-    ]
-  }]);
-Menu.setApplicationMenu(menu);
-*/
+forceDefaultZoom();
 function clearHits () {
   electron.ipcRenderer.send('run-command', 'f-hit*');
 }
 
 const blackTheme = 'white';
 const whiteTheme = 'tango';
-
-// const $ = document.getElementById.bind(document);
-
-// electron.webFrame.setVisualZoomLevelLimits(1, 1);
-// electron.webFrame.setLayoutZoomLevelLimits(0, 0);
 
 let clearScreen = false;
 let prependScreen = false;
@@ -45,13 +27,13 @@ function searchtap (pos) {
 
 function analyze () {
   clearScreen = true;
-  electron.ipcRenderer.send('run-command', 'af;' + printCommand);
+  desync(r2.cmd('af;' + printCommand));
 }
 
 function up () {
   clearScreen = true;
   prependScreen = true;
-  electron.ipcRenderer.send('run-command', 's--2;' + printCommand);
+  desync(r2.cmd('s--2;' + printCommand));
 }
 
 function down () {
@@ -60,60 +42,7 @@ function down () {
   electron.ipcRenderer.send('run-command', 's++2;' + printCommand);
 }
 
-function createPanelMenu () {
-  const menu = new Menu();
-  menu.append(new MenuItem({
-    label: 'Functions',
-    click () {
-      electron.ipcRenderer.send('list', listCommand = 'fcns');
-    }
-  }));
-  menu.append(new MenuItem({
-    label: 'Symbols',
-    click () {
-      electron.ipcRenderer.send('list', listCommand = 'symbols');
-    }
-  }));
-  menu.append(new MenuItem({
-    label: 'Imports',
-    click () {
-      electron.ipcRenderer.send('list', listCommand = 'imports');
-    }
-  }));
-  menu.append(new MenuItem({
-    label: 'Sections',
-    click () {
-      electron.ipcRenderer.send('list', listCommand = 'sections');
-    }
-  }));
-  menu.append(new MenuItem({
-    label: 'Registers',
-    click () {
-      electron.ipcRenderer.send('list', listCommand = 'regs');
-    }
-  }));
-  menu.append(new MenuItem({
-    label: 'Comments',
-    click () {
-      electron.ipcRenderer.send('list', listCommand = 'comments');
-    }
-  }));
-  menu.append(new MenuItem({
-    label: 'Flags',
-    click () {
-      electron.ipcRenderer.send('list', listCommand = 'flags');
-    }
-  }));
-  menu.append(new MenuItem({
-    label: 'Strings',
-    click () {
-      electron.ipcRenderer.send('list', listCommand = 'strings');
-    }
-  }));
-  menu.append(new MenuItem({ type: 'separator' }));
-  return menu;
-}
-
+/*
 function createMenu () {
   const menu = new Menu();
   const text = window.getSelection().toString();
@@ -264,12 +193,16 @@ function createMenu () {
   }));
   return menu;
 }
+*/
 
+/*
 window.addEventListener('contextmenu', (e) => {
   e.preventDefault();
-  const menu = createMenu();
-  menu.popup(electron.remote.getCurrentWindow());
+  electron.ipcRenderer.send('create-panel-menu');
+  // const menu = createMenu();
+  // menu.popup(electron.remote.getCurrentWindow());
 }, false);
+*/
 
 document.addEventListener('DOMContentLoaded', function () {
   const entryInput = $('entry-input');
@@ -325,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
 */
   }
 
-  electron.ipcRenderer.send('run-command', 'b 1024;e scr.color=true;e scr.html=true');
+  electron.ipcRenderer.send('run-command', 'b 1024;e scr.color=3;e scr.html=true');
   electron.ipcRenderer.send('run-command', 'o;i');
   electron.ipcRenderer.send('run-command', '?E Welcome to r2app 0.1');
 
@@ -364,7 +297,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function labelLoadFlags () {
-    electron.ipcRenderer.send('list', listCommand = 'flags');
+    electron.ipcRenderer.send('list', listCommand = 'fcns');
   }
 
   function b64DecodeUnicode (str) {
@@ -376,6 +309,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   electron.ipcRenderer.on('list', (event, arg) => {
     let str = '';
+// arg = JSON.parse(jso2jsonstr(arg));
     switch (arg.type) {
       case 'imports':
         if (arg.data instanceof Array) {
@@ -773,9 +707,6 @@ document.addEventListener('DOMContentLoaded', function () {
     electron.ipcRenderer.send('run-command', 'yy;' + printCommand);
   });
 
-  if (openDevTools) {
-    getCurrentWindow().webContents.openDevTools();
-  }
   onclick('prefs-button', _ => {
     electron.ipcRenderer.send('open-settings');
   });
@@ -841,8 +772,7 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   labelMenuButton.onclick = _ => {
-    const menu = createPanelMenu();
-    menu.popup(electron.remote.getCurrentWindow());
+    electron.ipcRenderer.send('create-panel-menu');
   };
 
   labelSearchButton.onclick = _ => {

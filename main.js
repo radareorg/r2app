@@ -1,18 +1,82 @@
 // host/nodejs
-const { app, dialog, webView, ipcMain, BrowserWindow, globalShortcut, clipboard } = require('electron');
+const { nativeTheme, ipcRenderer, app, dialog, webView, ipcMain, BrowserWindow, globalShortcut, clipboard } = require('electron');
 const localShortcut = require('electron-localshortcut');
 const path = require('path');
+const { Menu, MenuItem } = require('electron');
+
+nativeTheme.themeSource = 'light';
+
+let mainWindow = null;
+
+const menu = Menu.buildFromTemplate([
+  {
+    label: 'r2app',
+    submenu: [
+      { role: 'close' },
+      { role: 'quit' }
+      // {label: 'About Me', selector: 'orderFrontStandardAboutPanel:'},
+      // {label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: function() {force_quit=true; app.quit();}}
+    ]
+  }, {
+    label: 'Tools',
+    submenu: [
+     { label: 'rax2' },
+     { label: 'rasm2' },
+     { label: 'r2pm' },
+     { label: 'rabin2' },
+    ]
+  }, {
+    label: 'Help',
+    submenu: [
+      { role: 'about' }
+      // {label: 'About App', selector: 'orderFrontStandardAboutPanel:'},
+      // {label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: function() {force_quit=true; app.quit();}}
+    ]
+  }]);
+Menu.setApplicationMenu(menu);
+
+ipcMain.handle('r2cmd', async (ev, cmd) => {
+  return globalR2.cmd(cmd);
+});
+ipcMain.handle('projects', async (ev, cmd) => {
+  return new Promise(function (resolve, reject) {
+    r2pipe.syscmd('r2 -p', {}, (err, res) => {
+      if (err) return reject(err);
+      resolve(res.trim().split('\n'));
+    });
+  });
+});
+ipcMain.handle('plugins', async (ev, type) => {
+  return new Promise(function (resolve, reject) {
+    let cmd = 'r2 -L';
+    switch (type) {
+      case 'bin':
+        cmd = 'rabin2 -L';
+        break;
+      case 'asm':
+        cmd = 'rasm2 -L';
+        break;
+      case 'io':
+        cmd = 'r2 -L';
+        break;
+    }
+    r2pipe.syscmd(cmd, {}, (err, res) => {
+      if (err) return reject(err);
+      resolve(res.trim().split('\n'));
+    });
+  });
+});
 
 function jso2jsonstr (o) {
-	const r = JSON.parse(JSON.stringify(o));
-	console.error(r);
-	return r;
+  const r = JSON.parse(JSON.stringify(o));
+  console.error(r);
+  return r;
 }
 
 const url = require('url');
 
 const r2pipe = require('r2pipe');
-const devConsole = process.env['R2APP_DEBUG'] === '1';
+const devConsole = process.env.R2APP_DEBUG === '1';
 
 const windows = [];
 let globalR2 = null;
@@ -40,9 +104,9 @@ function openFile (targetFile, event) {
   }
   console.log('openFile', targetFile);
   process.env.PATH = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:.';
-if (targetFile == '.') {
-return '';
-}
+  if (targetFile == '.') {
+    return '';
+  }
   r2pipe.open(targetFile, options, (err, r2) => {
     if (err) {
       if (event && event.sender && event.sender.send) {
@@ -56,7 +120,7 @@ return '';
     });
     globalR2 = r2;
     // TODO: register into the sessions manager
-    r2.cmd('b 1024;e scr.utf8=false;e asm.bytes=false;e scr.color=true;e scr.html=true', (err, res) => {
+    r2.cmd('b 1024;e scr.utf8=true;e asm.bytes=false;e scr.color=3;e scr.html=true', (err, res) => {
       if (err) {
         if (event && event.sender && event.sender.send) {
           event.sender.send('show-error', err.toString());
@@ -81,8 +145,8 @@ return '';
   });
 }
 
-const isMac = process.platform === "darwin";
-const r2appIconPath = path.join(__dirname, isMac? 'img/icon64.icns': 'img/icon64.png');
+const isMac = process.platform === 'darwin';
+const r2appIconPath = path.join(__dirname, isMac ? 'img/icon64.icns' : 'img/icon64.png');
 
 function openSettings () {
   const win = new BrowserWindow({
@@ -95,9 +159,9 @@ function openSettings () {
     minHeight: 0,
     webPreferences: {
       nodeIntegration: true,
-      zoomFactor: 1.0
+      zoomFactor: 0.5
     },
-    show: false
+    // show: false
   });
   // win.once
   if (devConsole) {
@@ -124,17 +188,25 @@ function createWindow () {
     height: 500,
     minWidth: 500,
     minHeight: 200,
+    // show: false,
+    // frame: false,
+    titleBarStyle: 'hidden-inset',
+    // transparent: true,
     webPreferences: {
       nodeIntegration: true,
       zoomFactor: 1.0
     }
   });
-  /*
+  mainWindow = win;
+
   // win.once
   win.on('ready-to-show', () => {
+// consider 1s enough time to be ready
+setTimeout(function() {
+    unset win.titleBarStyle;
     win.show();
+}, 1000);
   });
-*/
   windows.push(win);
 
   localShortcut.register(win, 'CommandOrControl+1', () => {
@@ -199,8 +271,13 @@ function createWindow () {
   // Emitted when the window is closed.
   win.on('closed', () => {
     win = windows.pop();
+if (sessions.length > 0) {
+      alert('There are running sessions, close them first');
+}
     if (windows.length === 0) {
       app.quit();
+    } else {
+      alert('There are many windows open');
     }
   });
 }
@@ -226,6 +303,67 @@ app.on('activate', () => {
   // createWindow();
 });
 */
+
+function createPanelMenu (event) {
+  const electron = require('electron');
+  const menu = new Menu();
+  menu.append(new MenuItem({
+    label: 'Functions',
+    click () {
+      shell_list(event, 'fcns');
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Symbols',
+    click () {
+      shell_list(event, 'symbols');
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Imports',
+    click () {
+      shell_list(event, 'imports');
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Sections',
+    click () {
+      shell_list(event, 'sections');
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Registers',
+    click () {
+      shell_list(event, 'regs');
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Comments',
+    click () {
+      event.sender.send('list', listCommand = 'comments');
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Flags',
+    click () {
+      shell_list(event, 'flags');
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Strings',
+    click () {
+      event.sender.send('list', listCommand = 'strings');
+    }
+  }));
+  menu.append(new MenuItem({ type: 'separator' }));
+  return menu;
+}
+
+ipcMain.on('create-panel-menu', function (event, arg) {
+  const menu = createPanelMenu(event);
+  menu.popup(mainWindow);
+});
+
 ipcMain.on('open-file', function (event, arg) {
   openFile(arg || '/bin/ls', event);
 });
@@ -299,16 +437,20 @@ ipcMain.on('package-list', function (event, arg) {
 });
 
 ipcMain.on('list', function (event, arg) {
+   return shell_list(event, arg);
+});
+
+function shell_list(event, type) {
   function cb (err, res) {
     if (err) {
       console.error(err);
       event.sender.send('show-error', err.toString());
     } else {
-      event.sender.send('list', { type: arg, data: jso2jsonstr (res) });
+      event.sender.send('list', { type: type, data: res }); // jso2jsonstr(res) });
       // event.sender.send('list', { type: arg, data: res });
     }
   }
-  switch (arg) {
+  switch (type) {
     case 'regs':
       globalR2.cmdj('drj|', cb);
       break;
@@ -334,7 +476,7 @@ ipcMain.on('list', function (event, arg) {
       globalR2.cmdj('iSj|', cb);
       break;
     case 'sessions':
-      cb(null, { type: arg, data: { data: jso2jsonstr (sessions) } });
+      cb(null, { type: type, data: { data: jso2jsonstr(sessions) } });
       break;
     default:
       globalR2.cmdj('e scr.html=0;fj|', (err, res) => {
@@ -343,7 +485,7 @@ ipcMain.on('list', function (event, arg) {
       });
       break;
   }
-});
+}
 
 ipcMain.on('kill-session', (event, id) => {
   const i = Math.min(id, sessions.length);
