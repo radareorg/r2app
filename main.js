@@ -129,18 +129,14 @@ function openFile (targetFile, event) {
         return;
       }
       // :D
-      // windows[0].hide();
-      if (event && event.sender && event.sender.send) {
-        event.sender.send('open-page', 'shell');
-      } else {
-        if (windows.length > 0) {
-          windows[0].loadURL(url.format({
-            pathname: path.join(__dirname, 'shell.html'),
-            protocol: 'file:',
-            slashes: true
-          }));
-        }
-      }
+      windows[0].hide();
+      windows.shift();
+      createWindow(true);
+      windows[0].loadURL(url.format({
+        pathname: path.join(__dirname, 'shell.html'),
+        protocol: 'file:',
+        slashes: true
+      }));
     });
   });
 }
@@ -156,12 +152,12 @@ function openSettings () {
     width: 400,
     height: 300,
     minWidth: 400,
+    show: false,
     minHeight: 0,
     webPreferences: {
       nodeIntegration: true,
       zoomFactor: 0.5
     },
-    // show: false
   });
   // win.once
   if (devConsole) {
@@ -171,41 +167,42 @@ function openSettings () {
     win.show();
   });
   win.loadURL(url.format({
-    pathname: path.join(__dirname, 'prefs.html'),
+    pathname: path.join(__dirname, 'ui-settings.html'),
     protocol: 'file:',
     slashes: true
   }));
   windows.push(win);
 }
 
-function createWindow () {
+function createWindow (withFrame) {
   // Create the browser window.
-  let win = new BrowserWindow({
-    title: 'RadareApp',
+  const windowOptions = {
+    title: 'r2app',
     icon: r2appIconPath,
     backgroundColor: 'white',
     width: 800,
     height: 500,
     minWidth: 500,
     minHeight: 200,
-    // show: false,
-    // frame: false,
-    titleBarStyle: 'hidden-inset',
-    // transparent: true,
+    show: false,
     webPreferences: {
       nodeIntegration: true,
       zoomFactor: 1.0
     }
-  });
+  };
+  if (!withFrame) {
+    windowOptions.frame = false;
+    windowOptions.titleBarStyle = 'hiddenInset';
+  }
+  let win = new BrowserWindow(windowOptions);
   mainWindow = win;
 
   // win.once
   win.on('ready-to-show', () => {
-// consider 1s enough time to be ready
-setTimeout(function() {
-    unset win.titleBarStyle;
-    win.show();
-}, 1000);
+    // consider 1s enough time to be ready
+    setTimeout(function() {
+      win.show();
+    }, 1000);
   });
   windows.push(win);
 
@@ -230,7 +227,7 @@ setTimeout(function() {
 
   // globalShortcut.register('CommandOrControl+N', () => {
   localShortcut.register(win, 'CommandOrControl+N', () => {
-    createWindow();
+    createWindow(false);
     // open file ?
   });
 
@@ -285,7 +282,9 @@ if (sessions.length > 0) {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow(false);
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -295,14 +294,6 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
-/*
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  // createWindow();
-});
-*/
 
 function createPanelMenu (event) {
   const electron = require('electron');
