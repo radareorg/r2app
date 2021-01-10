@@ -1,5 +1,5 @@
 // host/nodejs
-const { app, webView, ipcMain, BrowserWindow, globalShortcut, clipboard } = require('electron');
+const { app, dialog, webView, ipcMain, BrowserWindow, globalShortcut, clipboard } = require('electron');
 const localShortcut = require('electron-localshortcut');
 const path = require('path');
 
@@ -20,6 +20,11 @@ let sessions = [];
 
 app.commandLine.appendSwitch('--enable-viewport-meta', 'true');
 app.commandLine.appendSwitch('--disable-pinch');
+
+ipcMain.handle('select-file', function (event, options) {
+  event.preventDefault();
+  return dialog.showOpenDialog(options);
+});
 
 app.on('open-file', function (event, filePath) {
   event.preventDefault();

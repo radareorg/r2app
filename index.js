@@ -116,12 +116,16 @@ document.addEventListener('DOMContentLoaded', function () {
     updateWindow.style.zIndex = 1000;
   };
   etcButton.onclick = () => {
-    const path = electron.remote.dialog.showOpenDialog({
+    electron.ipcRenderer.invoke('select-file', {
       properties: ['openFile']
+    }).then((res) => {
+      const path = res.filePaths[0];
+      if (typeof path !== 'undefined') {
+        fileInput.value = path;
+      }
+    }).catch((e) => {
+      alert('error: '+e);
     });
-    if (typeof path !== 'undefined') {
-      fileInput.value = path;
-    }
   };
   fileButton.onclick = () => {
     const bin = hasClass(binButton, 'active');
@@ -166,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function showError (msg) {
-  electron.remote.dialog.showErrorBox(msg, 'Error');
+  electron.dialog.showErrorBox(msg, 'Error');
 }
 
 electron.ipcRenderer.on('show-error', (event, arg) => {

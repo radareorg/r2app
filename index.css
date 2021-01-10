@@ -42,10 +42,6 @@ label {
    height:32px;
 }
 
-.btn-default:hover {
-  background-color: red;
-}
-
 body {
   transition: background-color 0.5s ease;
 }
