@@ -49,20 +49,20 @@ function toggleTheme () {
 document.addEventListener('DOMContentLoaded', function () {
   const logoImage = document.getElementById('logo-image');
   logoImage.onclick = toggleTheme;
-  function projectColor(p) {
-    function colorseed(p) {
+  function projectColor (p) {
+    function colorseed (p) {
       let s = 0xa00020;
-      for (let c of p) {
+      for (const c of p) {
         s <<= 4;
         s ^= c.charCodeAt(0);
       }
       return s;
     }
     const seed = colorseed(p);
-    function colorchar(n) {
-      let ch = (seed>>n) &0xf;
+    function colorchar (n) {
+      let ch = (seed >> n) & 0xf;
       if (ch < 8) {
-         ch = 8;
+        ch = 8;
       }
       return '0123456789abcdef'[ch];
     }
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
     colors.push(colorchar(18));
     colors.push(colorchar(21));
     return '#' + colors.join('');
-  };
+  }
 
   r2.projects().then((projects) => {
     let s = '';
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
       s += `
 <a onclick=alert("TODO")>
   <li class="list-group-item hlhover">
-    <img class="img-circle media-object pull-left" style="background-color:`+c+`;padding:20" width="32" height="32">
+    <img class="img-circle media-object pull-left" style="background-color:` + c + `;padding:20" width="32" height="32">
     <div class="media-body">
       <strong>` + prj + `</strong>
       <p>Analyzing the most opened file in r2land</p>

@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   electron.ipcRenderer.on('list', (event, arg) => {
     let str = '';
-// arg = JSON.parse(jso2jsonstr(arg));
+    // arg = JSON.parse(jso2jsonstr(arg));
     switch (arg.type) {
       case 'imports':
         if (arg.data instanceof Array) {

@@ -20,10 +20,10 @@ const menu = Menu.buildFromTemplate([
   }, {
     label: 'Tools',
     submenu: [
-     { label: 'rax2' },
-     { label: 'rasm2' },
-     { label: 'r2pm' },
-     { label: 'rabin2' },
+      { label: 'rax2' },
+      { label: 'rasm2' },
+      { label: 'r2pm' },
+      { label: 'rabin2' }
     ]
   }, {
     label: 'Help',
@@ -157,7 +157,7 @@ function openSettings () {
     webPreferences: {
       nodeIntegration: true,
       zoomFactor: 0.5
-    },
+    }
   });
   // win.once
   if (devConsole) {
@@ -200,7 +200,7 @@ function createWindow (withFrame) {
   // win.once
   win.on('ready-to-show', () => {
     // consider 1s enough time to be ready
-    setTimeout(function() {
+    setTimeout(function () {
       win.show();
     }, 1000);
   });
@@ -268,13 +268,10 @@ function createWindow (withFrame) {
   // Emitted when the window is closed.
   win.on('closed', () => {
     win = windows.pop();
-if (sessions.length > 0) {
-      alert('There are running sessions, close them first');
-}
     if (windows.length === 0) {
       app.quit();
     } else {
-      alert('There are many windows open');
+      console.error('There are running sessions, close them first');
     }
   });
 }
@@ -428,10 +425,10 @@ ipcMain.on('package-list', function (event, arg) {
 });
 
 ipcMain.on('list', function (event, arg) {
-   return shell_list(event, arg);
+  return shell_list(event, arg);
 });
 
-function shell_list(event, type) {
+function shell_list (event, type) {
   function cb (err, res) {
     if (err) {
       console.error(err);
