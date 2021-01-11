@@ -51,9 +51,9 @@ document.addEventListener('DOMContentLoaded', function () {
   logoImage.onclick = toggleTheme;
   function projectColor (p) {
     function colorseed (p) {
-      let s = 0xa00020;
+      let s = 0xa71320;
       for (const c of p) {
-        s <<= 4;
+        s <<= 3;
         s ^= c.charCodeAt(0);
       }
       return s;
@@ -84,11 +84,13 @@ document.addEventListener('DOMContentLoaded', function () {
   r2.projects().then((projects) => {
     let s = '';
     for (const prj of projects) {
-      c = projectColor(prj);
+      const c = projectColor(prj);
+      const d = projectColor(prj.split('').reverse().join(''));
       s += `
 <a onclick=alert("TODO")>
   <li class="list-group-item hlhover">
-    <img class="img-circle media-object pull-left" style="background-color:` + c + `;padding:20" width="32" height="32">
+    <!--img class="img-circle media-object pull-left" style="background-color:` + c + `;padding:20" width="32" height="32" -->
+    <img class="img-circle media-object pull-left" style="background-image:linear-gradient(` + c + ', ' + d + `);padding:20" width="32" height="32">
     <div class="media-body">
       <strong>` + prj + `</strong>
       <p>Analyzing the most opened file in r2land</p>
@@ -112,10 +114,28 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
   electron.ipcRenderer.send('version');
+  function filebutton_onclick () {
+    const bin = hasClass(binButton, 'active');
+    const anal = hasClass(analButton, 'active');
+    const opts = [];
+    if (hasClass(rwButton, 'active')) {
+      opts.push('-w');
+    }
+    if (!hasClass(strButton, 'active')) {
+      opts.push('-z');
+    }
+    if (!hasClass(binButton, 'active')) {
+      opts.push('-n');
+    }
+    if (hasClass(analButton, 'active')) {
+      opts.push('-AA');
+    }
+    openFile(opts);
+  }
 
   fileInput.addEventListener('keyup', e => {
     if (e.keyCode === 13) {
-      openFile([]);
+      filebutton_onclick();
     }
   });
   const fileButton = document.getElementById('file-button');
@@ -187,22 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
   fileButton.onclick = () => {
-    const bin = hasClass(binButton, 'active');
-    const anal = hasClass(analButton, 'active');
-    const opts = [];
-    if (hasClass(rwButton, 'active')) {
-      opts.push('-w');
-    }
-    if (!hasClass(strButton, 'active')) {
-      opts.push('-z');
-    }
-    if (!hasClass(binButton, 'active')) {
-      opts.push('-n');
-    }
-    if (hasClass(analButton, 'active')) {
-      opts.push('-AA');
-    }
-    openFile(opts);
+    filebutton_onclick();
   };
   debugButton.onclick = () => {
     openFile(['-d']);

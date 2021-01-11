@@ -7,8 +7,8 @@
 <script src="shell.js"></script>
 <body style="overflow:hidden">
 <div class="window" style="overflow:hidden">
-<header class="toolbar toolbar-header">
-  <div class="toolbar-actions">
+<header class="toolbar toolbar-header" style="">
+  <div class="toolbar-actions" style="height:24px">
     <div class="btn-group">
       <button id="home-button" class="btn btn-default" title="home">
         <span class="icon icon-home"></span>
@@ -78,7 +78,7 @@
       </button>
     </div>
   </div>
-  <div class="tab-group">
+  <div class="tab-group" id="tab-group">
     <div class="tab-item active" id="console-tab">
       <span class="icon icon-cancel icon-close-tab"></span>
       Console
@@ -102,24 +102,18 @@
  </div>
 </header>
 <!-- ------------- -->
-<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="dashboard-window">
-<div id="dashboard-div" class="pane" style="font-family:Courier;overflow:scroll;bottom:0px;top:0px;padding:0px;height:100%">
-TODO
-<ul>
-<li> Show file headers
-<li> Entropy bars
-<li> Strings
-</ul>
-</div>
+<div class="window-content" style="overflow:hidden;top:54px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="dashboard-window">
+  <div id="dashboard-div" class="pane" style="padding:1em;overflow:scroll;bottom:32px;top:0px;padding-bottom:8em;height:100%">
+  </div>
 </div>
 <!-- ------------- -->
-<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="scripting-window">
+<div class="window-content" style="overflow:hidden;top:54px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="scripting-window">
 <div id="scripting-div" class="pane" style="overflow:hidden;top:0px;right:0px;padding:0px;width:20%;height:100%;background-color:#d0d0d0">
 
-<textarea id="scripting-text" style="width:80%;height:90%;font-family:agave">
+<textarea id="scripting-text" style="width:80%;height:100%;font-family:agave">
 </textarea>
 
-<div id="scripting-div2" style="position:absolute;overflow:hidden;right:0px;top:0px;padding:0px;height:100%;width:20%;background-color:#e0e0e0">
+<div id="scripting-div2" style="text-align:center;position:absolute;overflow:hidden;right:0px;top:0px;padding:0px;height:100%;width:20%;background-color:#e0e0e0">
 <br />
 Language:
 <select id="scripting-lang">
@@ -140,10 +134,10 @@ Language:
 </div>
 </div>
 <!-- ------------- -->
-<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="search-window">
+<div class="window-content" style="overflow:hidden;top:54px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="search-window">
 <div id="search-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
 
-<header class="toolbar toolbar-header" style="padding:5px">
+<header class="toolbar toolbar-header" style="padding:8px">
   <input style="width:99%;margin:1px;height:28px;-webkit-box-shadow:none;outline-width:0" id="search-input" type="shell" class="form-control" placeholder="Search...">
 what
 <select>
@@ -207,28 +201,28 @@ clear hits
 
 <div class="pre" style="background-color:white;color:black;width:50%;height:100%;user-select:text;-webkit-user-select:auto;overflow:scroll" id="search-console">
 </div>
-<div class="pre" style="line-height:1em;position:absolute;right:0px;top:78px;background-color:#e0e0e0;color:black;width:60%;height:100%;user-select:text;-webkit-user-select:auto" id="search-viewer">
+<div class="pre" style="line-height:1em;position:absolute;right:0px;top:70px;background-color:#e0e0e0;color:black;width:54%;height:100%;user-select:text;-webkit-user-select:auto" id="search-viewer">
 </div>
 
 </div>
 </div>
 
 <!-- ------------- -->
-<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="notes-window">
+<div class="window-content" style="overflow:hidden;top:54px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="notes-window">
 
 <div id="notes-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
-<textarea class=pre id="notes-text" style="position:fixed;top:60px;bottom:0px;width:100%;height:auto;-webkit-box-shadow: none;border-color:white;border:0px;padding:10px;font-size:1em;outline-width:0" autofocus>
+<textarea class=pre id="notes-text" style="position:fixed;top:54px;bottom:0px;width:100%;height:auto;-webkit-box-shadow: none;border-color:white;border:0px;padding:10px;font-size:1em;outline-width:0" autofocus>
 </textarea>
 <!-- TODO: JSON indent, viewer, markdown, base64, ... -->
 </div>
 </div>
 
 <!-- ------------- -->
-<div class="window-content" id="wtf-window" style="overflow:hidden; position:absolute;top:60px;bottom:0px;width:100%">
+<div class="window-content" id="wtf-window" style="overflow:hidden; position:absolute;top:54px;bottom:0px;width:100%">
 
-<div class="pane-sm sidebar" style="width:500px;overflow:scroll">
-
-  <div class="toolbar toolbar-actions" style="position:fixed;margin-top:-1px;width:100%;padding:2px">
+<div id="sidebar" class="pane-sm sidebar" style="width:300px;overflow:scroll;top:0px;min-width:300px !important">
+  <div class="sidebar-handle" id="sidebar-handle"></div>
+  <div class="toolbar toolbar-actions" style="top:-5px;position:absolute;width:100%;padding-top:8px">
     <div class="btn-group">
       <button id="label-search-button" class="btn btn-default">
         <span class="icon icon-search"></span>
@@ -249,7 +243,7 @@ clear hits
     </div>
   </div>
 
-  <table class="table" style="padding-bottom:32px;padding-top:28px">
+  <table class="table" style="padding-bottom:3em;padding-top:3em">
     <tbody id="labels" style="background-color:black;color:white">
       <!-- ... -->
     </tbody>

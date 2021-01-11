@@ -90,10 +90,10 @@ ipcMain.handle('select-file', function (event, options) {
   return dialog.showOpenDialog(options);
 });
 
-app.on('open-file', function (event, filePath) {
+app.on('open-file', function (event, filePath, options) {
   event.preventDefault();
   console.log('app.on("open-file", ' + filePath + ')');
-  openFile(filePath); //, event);
+  openFile({ path: filePath, opts: options }, event);
 });
 
 function openFile (targetFile, event) {
@@ -102,12 +102,21 @@ function openFile (targetFile, event) {
     options = targetFile.options || [];
     targetFile = targetFile.path || '/bin/ls';
   }
-  console.log('openFile', targetFile);
+  console.log('openFile', targetFile, options);
   process.env.PATH = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:.';
   if (targetFile == '.') {
     return '';
   }
-  r2pipe.open(targetFile, options, (err, r2) => {
+  const opts = [];
+  let do_analysis = false;
+  for (const opt of options) {
+    if (opt === '-AA') {
+      do_analysis = true;
+    } else {
+      opts.push(opt);
+    }
+  }
+  r2pipe.open(targetFile, opts, (err, r2) => {
     if (err) {
       if (event && event.sender && event.sender.send) {
         event.sender.send('show-error', err.toString());
@@ -120,6 +129,11 @@ function openFile (targetFile, event) {
     });
     globalR2 = r2;
     // TODO: register into the sessions manager
+    if (do_analysis) {
+      r2.cmd('aaa', (err, res) => {
+        console.error('Analysis complete');
+      });
+    }
     r2.cmd('b 1024;e scr.utf8=true;e asm.bytes=false;e scr.color=3;e scr.html=true', (err, res) => {
       if (err) {
         if (event && event.sender && event.sender.send) {
@@ -149,11 +163,13 @@ function openSettings () {
     title: 'Settings',
     icon: r2appIconPath,
     backgroundColor: 'white',
-    width: 400,
-    height: 300,
+    width: 600,
+    height: 500,
     minWidth: 400,
+    minHeight: 300,
+    frame: false,
+    titleBarStyle: 'hiddenInset',
     show: false,
-    minHeight: 0,
     webPreferences: {
       nodeIntegration: true,
       zoomFactor: 0.5
@@ -164,6 +180,7 @@ function openSettings () {
     win.webContents.openDevTools();
   }
   win.on('ready-to-show', () => {
+    win.center();
     win.show();
   });
   win.loadURL(url.format({
@@ -180,8 +197,8 @@ function createWindow (withFrame) {
     title: 'r2app',
     icon: r2appIconPath,
     backgroundColor: 'white',
-    width: 800,
-    height: 500,
+    width: 1024,
+    height: 768,
     minWidth: 500,
     minHeight: 200,
     show: false,
@@ -201,6 +218,7 @@ function createWindow (withFrame) {
   win.on('ready-to-show', () => {
     // consider 1s enough time to be ready
     setTimeout(function () {
+      win.center();
       win.show();
     }, 1000);
   });
@@ -308,6 +326,12 @@ function createPanelMenu (event) {
     }
   }));
   menu.append(new MenuItem({
+    label: 'Class Methods',
+    click () {
+      shell_list(event, 'methods');
+    }
+  }));
+  menu.append(new MenuItem({
     label: 'Imports',
     click () {
       shell_list(event, 'imports');
@@ -328,7 +352,7 @@ function createPanelMenu (event) {
   menu.append(new MenuItem({
     label: 'Comments',
     click () {
-      event.sender.send('list', listCommand = 'comments');
+      shell_list(event, 'comments');
     }
   }));
   menu.append(new MenuItem({
@@ -340,7 +364,7 @@ function createPanelMenu (event) {
   menu.append(new MenuItem({
     label: 'Strings',
     click () {
-      event.sender.send('list', listCommand = 'strings');
+      shell_list(event, 'strings');
     }
   }));
   menu.append(new MenuItem({ type: 'separator' }));
@@ -452,10 +476,13 @@ function shell_list (event, type) {
       globalR2.cmdj('iij|', cb);
       break;
     case 'strings':
-      globalR2.cmdj('izj', cb);
+      globalR2.cmdj('izj|', cb);
       break;
     case 'regs':
       globalR2.cmdj('drj|', cb);
+      break;
+    case 'methods':
+      globalR2.cmdj('icj|', cb);
       break;
     case 'symbols':
       globalR2.cmdj('isj|', cb);

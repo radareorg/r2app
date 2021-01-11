@@ -2,6 +2,43 @@ a {
   color: #a0a0f0;
 }
 
+body {
+  line-height:1.4em;
+}
+
+.sidebar-handle {
+  position:absolute;
+  left:295px;
+  width:5px;
+  height:100%;
+  display:inline-block;
+  border:1px solid #ccc;
+  background-color:#ddd;
+  border-left-color:#eee;
+}
+
+input[type='checkbox'] {
+  cursor:pointer !important;
+}
+
+input:focus {
+  background-color:white !important;
+}
+
+.sidebar-handle-active {
+  border:1px solid #eee;
+  background-color:#ddd;
+  border-left-color:#ccc;
+  cursor:col-resize !important;
+}
+
+.sidebar-handle:hover {
+  border:1px solid #ccc;
+  background-color:#eee !important;
+  border-left-color:#eee;
+  cursor:col-resize !important;
+}
+
 /* font used for listing items in tables */
 td, th {
   /* font-family: Courier New; */
@@ -14,15 +51,16 @@ td, th {
 }
 
 textarea {
-	font-family: 'agave', 'Ubuntu Mono', 'Courier New', 'Courier';
-	padding:1em;
-	resize:false;
+  font-family: 'agave', 'Ubuntu Mono', 'Courier New', 'Courier';
+  border:0px;
+  padding:1em;
+  resize:none;
 }
 
 select {
-	background-color: #e0e0e0;
-	border: 1px solid #5050ff;
-	border-radius: 5px;
+  background-color: #e0e0e0;
+  border: 1px solid #505050;
+  border-radius: 5px;
 }
 
 .pre {
@@ -45,16 +83,20 @@ pre {
 }
 
 textarea:hover {
+  outline: none;
   cursor: text;
 }
 
+input {
+  outline: none;
+}
 input:hover {
+  outline: none;
   cursor: text;
 }
 
 button:hover {
   cursor: pointer;
-  background-color: red;
 }
 
 span:hover {
@@ -83,7 +125,7 @@ span:hover {
 }
 
 .row {
-  font-family:Courier;
+  font-family:'agave', 'Courier';
 }
 
 ::-webkit-scrollbar {
@@ -94,5 +136,12 @@ span:hover {
 }
 
 .pane {
-  font-family: Verdana;
+  font-family: agave;
+  line-height: 1em !important;
+  overflow:scroll;
+  border-bottom:2em;
+}
+
+.btn-group {
+  margin-bottom:4px;
 }

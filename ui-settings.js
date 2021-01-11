@@ -5,6 +5,7 @@ const electron = require('electron');
 const dialogs = require('dialogs');
 const { Menu, MenuItem, getCurrentWindow } = electron;
 
+forceDefaultZoom();
 // getCurrentWindow().webContents.openDevTools();
 
 // getCurrentWindow().setSize(400, 300, false);

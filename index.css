@@ -47,13 +47,6 @@ p {
    height:32px;
 }
 
-.draggable {
-  -webkit-app-region:drag;
-}
- div {
-    -webkit-user-select: none;
-}
-
 body {
   transition: background-color 0.5s ease;
   style="-webkit-app-region: drag";

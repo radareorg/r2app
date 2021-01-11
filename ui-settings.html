@@ -11,10 +11,12 @@ font {
 <link rel="stylesheet" href="dist/css/photon.css"></link>
 <link rel="stylesheet" href="shell.css"></link>
 <script src="util.js"></script>
-<script src="prefs.js"></script>
-<body>
-<div class="window" style="overflow:hidden">
+<script src="ui-settings.js"></script>
+<body id="draggable">
+<div class="window draggable" style="overflow:hidden" style="background-color:red">
+<br /><br />
 <header class="toolbar toolbar-header">
+<div style="position:absolute;top:0px;left:0px;height:3em;width:100%;background-image:linear-gradient(#f0f0f0, #d0d0d0);"></div>
   <div class="tab-group">
     <div class="tab-item active" id="general-tab">
       <span class="icon icon-cancel icon-close-tab"></span>
@@ -51,11 +53,12 @@ font {
  </div>
 </header>
 <!-- ------------- -->
-<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;padding:30px;padding-bottom:0px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="colors-window">
+<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;padding:60px;padding-bottom:0px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="colors-window">
 <div id="general-div" class="pane" style="overflow-x:hidden;overflow-y:scroll;padding:0px;bottom:0px;top:0px;height:100%">
-<h3>Colors</h3>
+<br /><br />
 Font Family
 <select id="colors-light">
+<option>agave</option>
 <option>Courier New</option>
 <option>IBM 8x8</option>
 <option>PT Mono</option>
@@ -66,6 +69,7 @@ Font Family
 <br /> <br />
 Light Theme:
 <select id="colors-light">
+<option>white</option>
 <option>basic</option>
 <option>behelit</option>
 <option>cga</option>
@@ -81,13 +85,13 @@ Light Theme:
 <option>solarized</option>
 <option>tango</option>
 <option>twilight</option>
-<option>white</option>
 <option>xvilka</option>
 <option>zenburn</option>
 </select>
 <br /><br />
 Dark Theme:
 <select id="colors-dark">
+<option>twilight</option>
 <option>basic</option>
 <option>behelit</option>
 <option>cga</option>
@@ -102,7 +106,6 @@ Dark Theme:
 <option>smyck</option>
 <option>solarized</option>
 <option>tango</option>
-<option>twilight</option>
 <option>white</option>
 <option>xvilka</option>
 <option>zenburn</option>
@@ -112,10 +115,11 @@ Dark Theme:
         <span class="icon icon-check"></span>
 Change Theme
       </button>
+<br /><br />
 </div>
 </div>
 <!-- ------------- -->
-<div class="window-content" style="overflow:hidden;top:30px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="analysis-window">
+<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="analysis-window">
 <div id="analysis-div" class="pane" style="overflow-x:hidden;overflow-y:scroll;bottom:0px;top:0px;padding:0px;height:100%">
 <div style="padding:15px">
  <div class="checkbox">
@@ -143,12 +147,13 @@ Change Theme
       <input type="checkbox" checked> Variables
     </label>
   </div>
+<br /><br />
 </div>
 </div>
 
 </div>
 
-<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:30px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="debugger-window">
+<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="debugger-window">
 <div id="debugger-div" class="pane" style="bottom:0px;top:0px;padding:0px;height:100%">
 
 <div style="padding:15px">
@@ -182,20 +187,21 @@ Change Theme
       <input type="checkbox"> Software Step
     </label>
   </div>
+<br /><br />
 </div>
 </div>
 
 </div>
 </div>
 <!-- ------------- -->
-<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:30px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="analysis-window">
+<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="analysis-window">
 <div id="project-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
 TODO
 </div>
 </div>
 
 <!-- ------------- -->
-<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:30px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="disasm-window">
+<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="disasm-window">
 <div id="disasm-div" class="pane" style="bottom:0px;top:0px;padding:0px;height:100%">
 
 <div style="padding:15px">

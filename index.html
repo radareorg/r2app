@@ -36,15 +36,20 @@
  <button class="btn btn-default" id="rw-button"> rw </button>
  <button class="btn btn-default active" id="bin-button"> bin </button>
  <button class="btn btn-default active" id="str-button"> str </button>
- <button class="btn btn-default" title="Perform analysis" id="anal-button"> aa </button>
+ <button class="btn btn-default active" title="Perform analysis" id="anal-button"> aa </button>
 </div>
 
 </div>
 
 <div style="position:absolute;top:120px;width:inherit">
 <div id="sessions" style="width:inherit"> </div>
+<label>Recent</label>
+<ul class="list-group" id="recent-list">
+</ul>
 <label>Projects</label>
 <ul class="list-group" id="projects-list">
+</ul>
+<!--
 <a onclick=alert("TODO")>
   <li class="list-group-item hlhover">
     <img class="img-circle media-object pull-left" style="background-color:#f0c0c0;padding:20" width="32" height="32">
@@ -82,7 +87,7 @@
   </li>
 </a>
 </ul>
-
+-->
 </div>
   </div>
 <!--
@@ -99,7 +104,7 @@
     </div>
   </div>
 -->
-<button id="home-button" class="btn btn-default" style="position:fixed;left:5px;top:5px;z-index:1000">
+<button id="home-button" class="btn btn-default" style="position:fixed;left:16px;top:40px;z-index:1000">
   <span class="icon icon-reply"></span>
 </button>
 

@@ -5,18 +5,19 @@ const dialogs = require('dialogs');
 const { Menu, MenuItem } = electron;
 
 forceDefaultZoom();
+
 function clearHits () {
   electron.ipcRenderer.send('run-command', 'f-hit*');
 }
 
 const blackTheme = 'white';
-const whiteTheme = 'tango';
+const whiteTheme = 'twilight';
 
 let clearScreen = false;
 let prependScreen = false;
 const hexCommand = 'pxc';
 let printCommand = 'pd|H';
-let listCommand = 'fcns';
+let listCommand = 'flags';
 let filterWord = '';
 let seekHistory = false;
 let dashboardMode = false;
@@ -151,7 +152,7 @@ function createMenu () {
     label: 'Entropy bars',
     click () {
       clearScreen = true;
-      electron.ipcRenderer.send('run-command', 'p=e|H');
+      electron.ipcRenderer.send('run-command', 'p==e|H');
     }
   }));
 
@@ -204,20 +205,73 @@ window.addEventListener('contextmenu', (e) => {
 }, false);
 */
 
+function loadPluginTabs () {
+  // WIP
+  const tg = $('tab-group');
+  const name = 'r2frida';
+  tg.innerHTML += `
+    <div class="tab-item" id="` + name + `-tab">
+      <span class="icon icon-cancel icon-close-tab"></span>
+      ` + name + `
+    </div>
+  `;
+}
+
+function seekTo (addr) {
+  clearScreen = true;
+  electron.ipcRenderer.send('run-command', 's ' + addr + ';' + printCommand);
+
+  seekHistory = true;
+  electron.ipcRenderer.send('run-command', 'sj|');
+  /*
+<div class="label"> entry0 </div>
+&#8827;
+<div class="label"> main </div>
+&#8827;
+<div class="label"> sym.func.1000043f1 </div>
+*/
+}
 document.addEventListener('DOMContentLoaded', function () {
   const entryInput = $('entry-input');
   const searchInput = $('search-input');
   const consoleDiv = $('console-div');
   const dashboardDiv = $('dashboard-div');
+  const scriptingWin = $('scripting-window');
   const scriptingDiv = $('scripting-div');
+  const scriptingDiv2 = $('scripting-div2');
   const searchConsole = $('search-console');
   const searchViewer = $('search-viewer');
   const labelsTable = $('labels');
   const notesText = $('notes-text');
 
+  loadPluginTabs();
+
+  $('sidebar-handle').onmousedown = handleDragStart;
+  function handleDragMove (e) {
+    e.preventDefault();
+    if (e.clientX > 32) {
+      $('sidebar-handle').style.left = e.clientX - 2;
+      $('sidebar').style['min-width'] = e.clientX + 3;
+      $('sidebar').style.width = e.clientX + 3;
+    }
+  }
+  function handleDragStop (e) {
+    $('sidebar-handle').style['background-color'] = '#ddd';
+    document.onmousemove = null;
+    document.onmouseup = null;
+  }
+  function handleDragStart (e) {
+    e.preventDefault();
+
+    document.onmousemove = handleDragMove;
+    document.onmouseup = handleDragStop;
+  }
+  function handleDragEnd () {
+  }
+
   // render dashboard
   dashboardMode = true;
-  electron.ipcRenderer.send('run-command', 'i;o;om;p=');
+  electron.ipcRenderer.send('run-command', 'o;?e Entropy:;p==e;om;i');
 
   consoleDiv.onmouseup = function () {
     const text = window.getSelection().toString();
@@ -243,24 +297,9 @@ document.addEventListener('DOMContentLoaded', function () {
     return '0x' + number.toString(16);
   }
 
-  function seekTo (addr) {
-    clearScreen = true;
-    electron.ipcRenderer.send('run-command', 's ' + addr + ';' + printCommand);
-
-    seekHistory = true;
-    electron.ipcRenderer.send('run-command', 'sj|');
-    /*
-<div class="label"> entry0 </div>
-&#8827;
-<div class="label"> main </div>
-&#8827;
-<div class="label"> sym.func.1000043f1 </div>
-*/
-  }
-
-  electron.ipcRenderer.send('run-command', 'b 1024;e scr.color=3;e scr.html=true');
+  electron.ipcRenderer.send('run-command', 'b 1024;e emu.str=true;e scr.color=3;e scr.html=true');
   electron.ipcRenderer.send('run-command', 'o;i');
-  electron.ipcRenderer.send('run-command', '?E Welcome to r2app 0.1');
+  electron.ipcRenderer.send('run-command', '?E Welcome to r2app');
 
   function labelNew (name, addr) {
     if (filterWord) {
@@ -281,8 +320,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const anchors = document.getElementsByClassName('clickableLabel');
     for (let i = 0; i < anchors.length; i++) {
       const anchor = anchors[i];
+      const isDarkTheme = (consoleDiv.style.backgroundColor !== 'white');
+      if (isDarkTheme) {
+        anchor.style.color = '#f0f0f0';
+        anchor.style.backgroundColor = '#101010';
+      } else {
+        anchor.style.color = '#101010';
+        anchor.style.backgroundColor = 'white';
+      }
+      anchor.style.transition = 'all 0.5s ease-in';
       anchor.onclick = function (ev) {
-        ev.target.style.backgroundColor = '#909090';
+        if (isDarkTheme) {
+          ev.target.style.backgroundColor = '#505050';
+        } else {
+          ev.target.style.backgroundColor = '#d0d0f0';
+        }
         seekTo(ev.target.innerHTML);
       };
     }
@@ -297,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function labelLoadFlags () {
-    electron.ipcRenderer.send('list', listCommand = 'fcns');
+    electron.ipcRenderer.send('list', listCommand = 'flags');
   }
 
   function b64DecodeUnicode (str) {
@@ -325,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function () {
       case 'strings':
         if (arg.data instanceof Array) {
           for (const f of arg.data) {
-            const name = b64DecodeUnicode(f.string);
+            const name = f.string;
             str += labelNew(name, f.vaddr);
           }
         } else {
@@ -343,6 +395,17 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
           if (Object.keys(arg.data).length !== 0) {
             alert('Unexpected type: ' + JSON.stringify(arg.data));
+          }
+        }
+        break;
+      case 'methods':
+        if (arg.data instanceof Array) {
+          for (const klass of arg.data) {
+            for (const method of klass.methods) {
+              const name = klass.classname + '.' + method.name;
+              const addr = method.addr;
+              str += labelNew(name, addr);
+            }
           }
         }
         break;
@@ -393,50 +456,55 @@ document.addEventListener('DOMContentLoaded', function () {
     electron.ipcRenderer.send('ondragstart', path);
   };
 
+  function lightify (e) {
+    e.style.transition = 'all 0.2s ease-in';
+    e.style.color = 'black';
+    e.style.backgroundColor = 'white';
+  }
+  function darkify (e) {
+    e.style.transition = 'all 0.2s ease-in';
+    e.style.color = '#f0f0f0';
+    e.style.backgroundColor = '#101010';
+  }
   function toggleTheme () {
-    const isBlackTheme = (consoleDiv.style.backgroundColor === 'black');
+    const isWhiteTheme = (consoleDiv.style.backgroundColor !== 'white');
     clearScreen = true;
-    if (isBlackTheme) {
+    if (isWhiteTheme) {
       electron.ipcRenderer.send('run-command', 'eco ' + blackTheme + ';' + printCommand);
-      consoleDiv.style.color = 'black';
-      consoleDiv.style.backgroundColor = 'white';
-      entryInput.style.color = 'black';
-      entryInput.style.backgroundColor = 'white';
-      labelsTable.style.color = 'black';
-      labelsTable.style.backgroundColor = 'white';
-      notesText.style.color = 'black';
-      notesText.style.backgroundColor = 'white';
-      searchInput.style.color = 'black';
-      searchInput.style.backgroundColor = 'white';
-      searchConsole.style.color = 'black';
-      searchConsole.style.backgroundColor = 'white';
-      searchViewer.style.color = 'black';
-      searchViewer.style.backgroundColor = 'white';
-      dashboardDiv.style.color = 'black';
-      dashboardDiv.style.backgroundColor = 'white';
-      scriptingDiv.style.color = 'black';
-      scriptingDiv.style.backgroundColor = 'white';
+      lightify(consoleDiv);
+      lightify(entryInput);
+      lightify(labelsTable);
+      lightify(searchInput);
+      lightify(dashboardDiv);
+      lightify(scriptingWin);
+      lightify(notesText);
+      lightify(searchConsole);
+      lightify(searchViewer);
+      lightify(scriptingDiv);
+      lightify($('scripting-text'));
+      scriptingDiv.style.color = '#303030';
+      scriptingDiv.style.backgroundColor = '#c0c0c0';
+      scriptingDiv2.style.color = 'black';
+      scriptingDiv2.style.backgroundColor = '#d0d0d0';
     } else {
       electron.ipcRenderer.send('run-command', 'eco ' + whiteTheme + ';' + printCommand);
-      consoleDiv.style.color = 'white';
-      consoleDiv.style.backgroundColor = 'black';
-      entryInput.style.color = 'white';
-      entryInput.style.backgroundColor = 'black';
-      labelsTable.style.color = 'white';
-      labelsTable.style.backgroundColor = 'black';
-      notesText.style.color = 'white';
-      notesText.style.backgroundColor = 'black';
-      searchInput.style.color = 'white';
-      searchInput.style.backgroundColor = 'black';
-      searchConsole.style.color = 'white';
-      searchConsole.style.backgroundColor = 'black';
-      searchViewer.style.color = 'white';
-      searchViewer.style.backgroundColor = 'black';
+      darkify(consoleDiv);
+      darkify(entryInput);
+      darkify(labelsTable);
+      darkify(notesText);
+      darkify(searchInput);
+      darkify(searchConsole);
+      darkify(searchViewer);
+      darkify(scriptingDiv);
+      darkify(scriptingDiv2);
+      darkify($('scripting-text'));
       dashboardDiv.style.color = 'white';
-      dashboardDiv.style.backgroundColor = 'black';
-      scriptingDiv.style.color = 'white';
-      scriptingDiv.style.backgroundColor = 'black';
+      dashboardDiv.style.backgroundColor = '#101010';
+      scriptingDiv2.style.backgroundColor = '#404040';
+      scriptingWin.style.color = 'white';
+      scriptingWin.style.backgroundColor = '#101010';
     }
+    updateLinks();
   }
   toggleTheme();
 
@@ -529,7 +597,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (res.length !== 0) {
           res += '&#8827;';
         }
-        res += '<div title="' + label + '" class="label">' + h.symbol + '</div>';
+        res += '<div onclick="seekTo(\'' + label + '\')" title="' + label + '" class="label">' + h.name + '</div>';
       }
       sh.innerHTML = res;
       sh.scrollLeft = sh.scrollWidth - sh.clientWidth;
