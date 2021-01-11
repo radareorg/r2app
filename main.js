@@ -242,11 +242,19 @@ function createWindow (withFrame) {
   localShortcut.register(win, 'CommandOrControl+G', () => {
     win.webContents.send('open-tab', { name: 'goto' });
   });
+  localShortcut.register(win, 'CommandOrControl+F', () => {
+    win.webContents.send('filter-list', { name: 'word' });
+  });
 
+  localShortcut.register(win, 'CommandOrControl+T', () => {
+    createWindow(false);
+  });
   // globalShortcut.register('CommandOrControl+N', () => {
   localShortcut.register(win, 'CommandOrControl+N', () => {
-    createWindow(false);
-    // open file ?
+    win.webContents.send('seek-next');
+  });
+  localShortcut.register(win, 'CommandOrControl+P', () => {
+    win.webContents.send('seek-prev');
   });
 
   // globalShortcut.register('CommandOrControl+O', () => {

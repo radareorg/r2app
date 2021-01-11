@@ -526,6 +526,15 @@ document.addEventListener('DOMContentLoaded', function () {
     entryInput.value = '';
   }
 
+  electron.ipcRenderer.on('seek-next', (event) => {
+    electron.ipcRenderer.send('run-command', 'sn;' + printCommand);
+  });
+  electron.ipcRenderer.on('seek-prev', (event) => {
+    electron.ipcRenderer.send('run-command', 'sp;' + printCommand);
+  });
+  electron.ipcRenderer.on('filter-list', (event, arg) => {
+    filterList();
+  });
   electron.ipcRenderer.on('open-tab', (event, arg) => {
     switch (arg.name) {
       case 'goto':
@@ -784,7 +793,11 @@ document.addEventListener('DOMContentLoaded', function () {
     alert('r2app - by pancake@nopcode.org\n\n' +
     'Cmd + [1-9] - change tab\n' +
     'Cmd + G     - goto address/symbol\n' +
-    'Cmd + N     - new window\n' +
+    'Cmd + F     - filter side panel list\n' +
+    'Cmd + N / P - seek to next or previous (e scr.nkey, sn, sp)\n' +
+    'Cmd + T     - tab a new window\n' +
+    'Cmd + L     - focus command input\n' +
+    // 'Cmd + O     - open file\n' +
     'Cmd + W     - close window\n');
   };
   const lightButton = document.getElementById('light-button');
@@ -844,6 +857,10 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   labelSearchButton.onclick = _ => {
+    filterList();
+  };
+
+function filterList() {
     const x = labelSearchButton;
     dialogs().prompt('Filter list', (name) => {
       if (name) {
@@ -857,8 +874,7 @@ document.addEventListener('DOMContentLoaded', function () {
         labelRefreshButton.onclick();
       }
     });
-  };
-
+}
   function resetTabs () {
     removeClass(consoleTab, 'active');
     removeClass(dashboardTab, 'active');
