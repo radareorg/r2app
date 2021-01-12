@@ -16,6 +16,7 @@ const whiteTheme = 'twilight';
 let clearScreen = false;
 let prependScreen = false;
 const hexCommand = 'pxc';
+const eyeCommand = 'prc 4096@e:hex.cols=32';
 let printCommand = 'pd|H';
 let listCommand = 'flags';
 let filterWord = '';
@@ -361,83 +362,61 @@ document.addEventListener('DOMContentLoaded', function () {
 
   electron.ipcRenderer.on('list', (event, arg) => {
     let str = '';
+    const data = arg.data.reverse();
     // arg = JSON.parse(jso2jsonstr(arg));
     switch (arg.type) {
       case 'imports':
-        if (arg.data instanceof Array) {
-          for (const f of arg.data) {
+        if (data instanceof Array) {
+          for (const f of data) {
             str += labelNew(f.name, f.ordinal); // f.type + ' ' + f.bind);
           }
         } else {
-          if (Object.keys(arg.data).length !== 0) {
-            alert('Unexpected type: ' + JSON.stringify(arg.data));
+          if (Object.keys(data).length !== 0) {
+            alert('Unexpected type: ' + JSON.stringify(data));
           }
         }
         break;
       case 'strings':
-        if (arg.data instanceof Array) {
-          for (const f of arg.data) {
-            const name = f.string;
-            str += labelNew(name, f.vaddr);
-          }
-        } else {
-          if (Object.keys(arg.data).length !== 0) {
-            alert('Unexpected type: ' + JSON.stringify(arg.data));
-          }
+        for (const f of data) {
+          const name = f.string;
+          str += labelNew(name, f.vaddr);
         }
         break;
       case 'flags':
       case 'fcns':
-        if (arg.data instanceof Array) {
-          for (const f of arg.data) {
-            str += labelNew(f.name, f.offset);
-          }
-        } else {
-          if (Object.keys(arg.data).length !== 0) {
-            alert('Unexpected type: ' + JSON.stringify(arg.data));
-          }
+        for (const f of data) {
+          str += labelNew(f.name, f.offset);
         }
         break;
       case 'methods':
-        if (arg.data instanceof Array) {
-          for (const klass of arg.data) {
-            for (const method of klass.methods) {
-              const name = klass.classname + '.' + method.name;
-              const addr = method.addr;
-              str += labelNew(name, addr);
-            }
+        for (const klass of data) {
+          for (const method of klass.methods) {
+            const name = klass.classname + '.' + method.name;
+            const addr = method.addr;
+            str += labelNew(name, addr);
           }
         }
         break;
       case 'symbols':
-        if (arg.data instanceof Array) {
-          for (const f of arg.data) {
+        for (const f of data) {
+          str += labelNew('sym.' + f.name, f.offset || f.vaddr);
+        }
+        break;
+      case 'comments':
+        for (const f of data) {
+          if (f.type === 'CCu') {
             str += labelNew('sym.' + f.name, f.offset || f.vaddr);
           }
         }
         break;
-      case 'comments':
-        if (arg.data instanceof Array) {
-          for (const f of arg.data) {
-            if (f.type === 'CCu') {
-              str += labelNew('sym.' + f.name, f.offset || f.vaddr);
-            }
-          }
+      case 'regs':
+      case 'sections':
+        for (const f of data) {
+          str += labelNew(f.name, f.offset || f.vaddr);
         }
         break;
       default:
-        alert(JSON.stringify(arg.type));
-      case 'regs':
-      case 'sections':
-        if (arg.data instanceof Array) {
-          for (const f of arg.data) {
-            str += labelNew(f.name, f.offset || f.vaddr);
-          }
-        } else {
-          for (const f of Object.keys(arg.data)) {
-            str += labelNew(f, arg.data[f]);
-          }
-        }
+        alert (JSON.stringify(arg.type));
         break;
     }
     labelsTable.innerHTML = str;
@@ -818,6 +797,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const labelRefreshButton = document.getElementById('label-refresh-button');
   const labelMenuButton = document.getElementById('label-menu-button');
   const labelSearchButton = document.getElementById('label-search-button');
+  const labelPicButton = document.getElementById('label-pic-button');
   const labelHexButton = document.getElementById('label-hex-button');
   const labelDisButton = document.getElementById('label-dis-button');
   const labelDecButton = document.getElementById('label-dec-button');
@@ -933,11 +913,18 @@ function filterList() {
     }
   };
   function reset () {
-    removeClass(labelDisButton, 'active');
+    removeClass(labelPicButton, 'active');
     removeClass(labelHexButton, 'active');
+    removeClass(labelDisButton, 'active');
     removeClass(labelDecButton, 'active');
     removeClass(labelGphButton, 'active');
   }
+  labelPicButton.onclick = _ => {
+    clearScreen = true;
+    electron.ipcRenderer.send('run-command', printCommand = eyeCommand + '|H');
+    reset();
+    addClass(labelPicButton, 'active');
+  };
   labelHexButton.onclick = _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', printCommand = hexCommand + '|H');

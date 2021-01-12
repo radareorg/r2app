@@ -466,8 +466,7 @@ function shell_list (event, type) {
       console.error(err);
       event.sender.send('show-error', err.toString());
     } else {
-      event.sender.send('list', { type: type, data: res }); // jso2jsonstr(res) });
-      // event.sender.send('list', { type: arg, data: res });
+      event.sender.send('list', { type: type, data: res });
     }
   }
   switch (type) {
