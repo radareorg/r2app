@@ -35,6 +35,14 @@ const menu = Menu.buildFromTemplate([
   }]);
 Menu.setApplicationMenu(menu);
 
+ipcMain.handle('r2rmProject', (ev, cmd) => {
+  return new Promise((resolve, reject) => {
+    r2pipe.syscmd('r2', (err, res) => {
+      (err?reject:resolve)(err);
+    })
+  });
+});
+
 ipcMain.handle('r2cmd', async (ev, cmd) => {
   return globalR2.cmd(cmd);
 });
@@ -87,7 +95,7 @@ app.commandLine.appendSwitch('--disable-pinch');
 
 ipcMain.handle('select-file', function (event, options) {
   event.preventDefault();
-  return dialog.showOpenDialog(options);
+  return dialog.showOpenDialog(mainWindow, options);
 });
 
 app.on('open-file', function (event, filePath, options) {

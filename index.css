@@ -18,6 +18,7 @@ label {
   font-size:2em;
   color:#505050;
 }
+
 .hlhover:hover {
   background-color:#f0f0f0;
   cursor: hand;

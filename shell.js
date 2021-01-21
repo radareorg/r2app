@@ -10,6 +10,14 @@ function clearHits () {
   electron.ipcRenderer.send('run-command', 'f-hit*');
 }
 
+const viewButtons = [
+  'label-pic-button',
+  'label-hex-button',
+  'label-dis-button',
+  'label-dec-button',
+  'label-gph-button'
+];
+
 const blackTheme = 'white';
 const whiteTheme = 'twilight';
 
@@ -207,15 +215,7 @@ window.addEventListener('contextmenu', (e) => {
 */
 
 function loadPluginTabs () {
-  // WIP
-  const tg = $('tab-group');
-  const name = 'r2frida';
-  tg.innerHTML += `
-    <div class="tab-item" id="` + name + `-tab">
-      <span class="icon icon-cancel icon-close-tab"></span>
-      ` + name + `
-    </div>
-  `;
+  r2app.tabAdd('r2frida');
 }
 
 function seekTo (addr) {
@@ -806,16 +806,16 @@ document.addEventListener('DOMContentLoaded', function () {
   const labelDelButton = document.getElementById('label-del-button');
 
   const consoleTab = document.getElementById('console-tab');
-  const scriptingTab = document.getElementById('scripting-tab');
   const dashboardTab = document.getElementById('dashboard-tab');
-  const notesTab = document.getElementById('notes-tab');
   const searchTab = document.getElementById('search-tab');
+  const scriptingTab = document.getElementById('scripting-tab');
+  const notesTab = document.getElementById('notes-tab');
 
   const consoleWindow = document.getElementById('console-window');
-  const scriptingWindow = document.getElementById('scripting-window');
   const dashboardWindow = document.getElementById('dashboard-window');
-  const notesWindow = document.getElementById('notes-window');
   const searchWindow = document.getElementById('search-window');
+  const scriptingWindow = document.getElementById('scripting-window');
+  const notesWindow = document.getElementById('notes-window');
 
   labelRefreshButton.onclick = _ => {
     filterWord = undefined;
@@ -855,12 +855,19 @@ function filterList() {
       }
     });
 }
+r2app.tabs = [
+'console',
+'dashboard',
+'scripting',
+'notes',
+'search',
+];
   function resetTabs () {
-    removeClass(consoleTab, 'active');
-    removeClass(dashboardTab, 'active');
-    removeClass(scriptingTab, 'active');
-    removeClass(notesTab, 'active');
-    removeClass(searchTab, 'active');
+    for (let tab of r2app.tabs) {
+      removeClass($(tab + '-tab'), 'active');
+      const tw = $(tab + '-window');
+      if (tw) tw.style.visibility = 'hidden';
+    }
     if (notesWindow) {
       notesWindow.style.visibility = 'hidden';
     }
@@ -889,12 +896,9 @@ function filterList() {
     }
   };
   dashboardTab.onclick = () => {
-    // TODO
     resetTabs();
     addClass(dashboardTab, 'active');
-    if (dashboardWindow) {
-      dashboardWindow.style.visibility = 'visible';
-    }
+    $('dashboard-window').style.visibility = 'visible';
   };
   notesTab.onclick = () => {
     resetTabs();
@@ -905,20 +909,20 @@ function filterList() {
     }
   };
   searchTab.onclick = () => {
-    // WIP
     resetTabs();
     addClass(searchTab, 'active');
+      $('search-input').focus();
     if (searchWindow) {
       searchWindow.style.visibility = 'visible';
     }
   };
+
   function reset () {
-    removeClass(labelPicButton, 'active');
-    removeClass(labelHexButton, 'active');
-    removeClass(labelDisButton, 'active');
-    removeClass(labelDecButton, 'active');
-    removeClass(labelGphButton, 'active');
+    for (let button of viewButtons) {
+      removeClass($(button), 'active');
+    }
   }
+
   labelPicButton.onclick = _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', printCommand = eyeCommand + '|H');

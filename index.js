@@ -21,7 +21,7 @@ electron.ipcRenderer.on('list', (event, arg) => {
       };
       s.style.visibility = 'visible';
       s.style['z-index'] = 1000;
-      let str = '<label>Sessions</label>\n';
+      let str = ''; //<label>Sessions</label>\n';
       str += '<ul class="list-group">';
       for (const ses of list) {
         str += '<li class="my-group-item hlhover green"> &nbsp;&nbsp; r2 ' + ses.file + '</li>\n';
@@ -41,70 +41,97 @@ electron.ipcRenderer.on('open-tab', (event, arg) => {
   webview.send('open-tab', arg);
 });
 
+// r2app api
+function openProject(prj) {
+  const opts = [];
+  opts.push('-p');
+  $('file-input').value = prj;
+  openFile(opts);
+}
+
+function removeProject(prj) {
+  ipcRenderer.invoke('r2rmProject', cmd);
+  refreshProjects();
+}
+
+// r2app api
+function openFile (opts) {
+  electron.ipcRenderer.send('open-file', {
+    path: $('file-input').value || '/bin/ls', options: opts
+  });
+}
+
 function toggleTheme () {
   const bg = $('bg');
   bg.style['background-color'] = 'black !important';
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  const logoImage = document.getElementById('logo-image');
-  logoImage.onclick = toggleTheme;
-  function projectColor (p) {
-    function colorseed (p) {
-      let s = 0xa71320;
-      for (const c of p) {
-        s <<= 3;
-        s ^= c.charCodeAt(0);
-      }
-      return s;
+function projectColor (p) {
+  function colorseed (p) {
+    let s = 0xa71320;
+    for (const c of p) {
+      s <<= 3;
+      s ^= c.charCodeAt(0);
     }
-    const seed = colorseed(p);
-    function colorchar (n) {
-      let ch = (seed >> n) & 0xf;
-      if (ch < 8) {
-        ch = 8;
-      }
-      return '0123456789abcdef'[ch];
-    }
-    const colors = [];
-    colors.push(colorchar(0));
-    colors.push(colorchar(3));
-
-    colors.push(colorchar(6));
-    colors.push(colorchar(9));
-
-    colors.push(colorchar(12));
-    colors.push(colorchar(15));
-
-    colors.push(colorchar(18));
-    colors.push(colorchar(21));
-    return '#' + colors.join('');
+    return s;
   }
+  const seed = colorseed(p);
+  function colorchar (n) {
+    let ch = (seed >> n) & 0xf;
+    if (ch < 8) {
+      ch = 8;
+    }
+    return '0123456789abcdef'[ch];
+  }
+  const colors = [];
+  colors.push(colorchar(0));
+  colors.push(colorchar(3));
 
+  colors.push(colorchar(6));
+  colors.push(colorchar(9));
+
+  colors.push(colorchar(12));
+  colors.push(colorchar(15));
+
+  colors.push(colorchar(18));
+  colors.push(colorchar(21));
+  return '#' + colors.join('');
+}
+
+function refreshProjects() {
   r2.projects().then((projects) => {
     let s = '';
     for (const prj of projects) {
       const c = projectColor(prj);
       const d = projectColor(prj.split('').reverse().join(''));
       s += `
-<a onclick=alert("TODO")>
+<a onclick=openProject('` + prj + `')>
   <li class="list-group-item hlhover">
     <!--img class="img-circle media-object pull-left" style="background-color:` + c + `;padding:20" width="32" height="32" -->
-    <img class="img-circle media-object pull-left" style="background-image:linear-gradient(` + c + ', ' + d + `);padding:20" width="32" height="32">
-    <div class="media-body">
-      <strong>` + prj + `</strong>
-      <p>Analyzing the most opened file in r2land</p>
+    <img class="img-circle hlhover media-object pull-left" style="background-image:linear-gradient(` + c + ', ' + d + `);padding:20" width="32" height="32">
+    <div class="media-body hlhover">
+      <strong class="hlhover">` + prj + `</strong>
+      <p class="hlhover">Description: </p>
     </div>
-<div id=removeP0 style="position:absolute;margin-top:-32px;right:32px;color:red">
+<a onclick=removeProject('` + prj + `')>
+<div id=removeP0 class="hlhover" style="position:absolute;margin-top:-32px;right:32px">
 <span class="icon icon-cancel hover"></span>
 </div>
+</a>
   </li>
 </a>
 `;
     }
     $('projects-list').innerHTML = s;
   });
-  const fileInput = document.getElementById('file-input');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const logoImage = document.getElementById('logo-image');
+  logoImage.onclick = toggleTheme;
+
+  refreshProjects();
+
   electron.ipcRenderer.on('version', (event, arg) => {
     try {
       const r2version = document.getElementById('r2version');
@@ -133,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
     openFile(opts);
   }
 
-  fileInput.addEventListener('keyup', e => {
+  $('file-input').addEventListener('keyup', e => {
     if (e.keyCode === 13) {
       filebutton_onclick();
     }
@@ -180,11 +207,6 @@ document.addEventListener('DOMContentLoaded', function () {
       updateWindow.style.visibility = 'hidden';
     }
   });
-  function openFile (opts) {
-    electron.ipcRenderer.send('open-file', {
-      path: fileInput.value || '/bin/ls', options: opts
-    });
-  }
   updateButton.onclick = () => {
     updateWindow.style.visibility = 'visible';
     updateWindow.style.zIndex = 1000;
@@ -195,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }).then((res) => {
       const path = res.filePaths[0];
       if (typeof path !== 'undefined') {
-        fileInput.value = path;
+        $('file-input').value = path;
       }
     }).catch((e) => {
       alert('error: ' + e);
@@ -246,8 +268,7 @@ electron.ipcRenderer.on('open-page', (event, arg) => {
 });
 
 electron.ipcRenderer.on('focus', (event) => {
-  const fileInput = document.getElementById('file-input');
-  fileInput.focus();
+  $('file-input').focus();
 });
 
 function openShell () {

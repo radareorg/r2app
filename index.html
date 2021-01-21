@@ -21,7 +21,7 @@
     </div>
     <div class="pane" style="padding:16px;width:100%;overflow-x:hidden">
 
-<div style="position:fixed;z-index:500;width:100%-120px;left:160px;top:0px;padding:15px;right:0px;background-color:white">
+<div style="height:100%;position:fixed;z-index:500;width:100%-120px;left:160px;top:0px;padding:15px;right:0px;background-color:white">
   <div class="form-group">
     <input type="filepath" id="file-input" class="form-control" style="height:30px;-webkit-box-shadow: none;outline-width:0;" placeholder="/bin/ls" autofocus>
     <button id='etc-button' style="position:absolute;right:14px;top:15px" class="btn btn-large btn-default">
@@ -39,56 +39,21 @@
  <button class="btn btn-default active" title="Perform analysis" id="anal-button"> aa </button>
 </div>
 
-</div>
-
-<div style="position:absolute;top:120px;width:inherit">
+<br/>
+<br/>
+<label>Sessions</label>
 <div id="sessions" style="width:inherit"> </div>
 <label>Recent</label>
 <ul class="list-group" id="recent-list">
 </ul>
 <label>Projects</label>
+<div style="overflow:auto;width:inherit;height:100%">
 <ul class="list-group" id="projects-list">
+ <!-- this ul is filled by r2app.refreshProjects() -->
 </ul>
-<!--
-<a onclick=alert("TODO")>
-  <li class="list-group-item hlhover">
-    <img class="img-circle media-object pull-left" style="background-color:#f0c0c0;padding:20" width="32" height="32">
-    <div class="media-body">
-      <strong>/bin/ls</strong>
-      <p>Analyzing the most opened file in r2land</p>
-    </div>
-<div id=removeP0 style="position:absolute;margin-top:-32px;right:32px;color:red">
-<span class="icon icon-cancel hover"></span>
 </div>
-  </li>
-</a>
-<a onclick=alert("TODO")>
-  <li class="list-group-item hlhover">
-    <img class="img-circle media-object pull-left" style='background-color:#c0c0c0;padding:20' width="32" height="32">
-    <div class="media-body">
-      <strong>crackme01</strong>
-      <p>Almost solved that crackme</p>
-    </div>
-<div id=removeP1 style="position:absolute;margin-top:-32px;right:32px;color:red">
-<span class="icon icon-cancel hover"></span>
 </div>
-  </li>
-</a>
-<a onclick=alert("TODO")>
-  <li class="list-group-item hlhover">
-    <img class="img-circle media-object pull-left" style='background-color:#c0f0c0;padding:20' width="32" height="32">
-    <div class="media-body">
-      <strong>test-arm</strong>
-      <p>Checking different assembly constructions</p>
-    </div>
-<div id=removeP2 style="position:absolute;margin-top:-32px;right:32px;color:red">
-<span class="icon icon-cancel hover"></span>
-</div>
-  </li>
-</a>
-</ul>
--->
-</div>
+
   </div>
 <!--
 <footer class="toolbar toolbar-footer">
@@ -131,7 +96,7 @@ This app has been developed by <b>pancake</b>@nopcode.org
 </div>
 
 <!-- -->
-<div style="background-color:white;visibility:hidden;position:absolute;top:0px;left:0px;height:100%;width:100%;bottom:0px;right:0px;transition:opacity 1s ease-in-out;" id="shell-window">
+<div style="background-color:white;visibility:hidden;position:absolute;top:0px;left:0px;height:100%;width:100%;bottom:0px;right:0px;transition:opacity 1s ease-in-out;" id="console-window">
 <!-- onclick close this div -->
 <webview id="shell-iframe" src="" style="display:inline-flex;width:100%;height:100%;border:0px;left:0px;top:0px;bottom:0px;right:0px" plugins>
 </webview>
