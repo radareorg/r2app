@@ -18,12 +18,32 @@ const menu = Menu.buildFromTemplate([
       // {label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: function() {force_quit=true; app.quit();}}
     ]
   }, {
+    label: 'Edit',
+    submenu: [
+      { label: 'Preferences' },
+    ]
+  }, {
+    label: 'View',
+    submenu: [
+      { label: 'Landscape' },
+    ]
+  }, {
     label: 'Tools',
     submenu: [
       { label: 'rax2' },
-      { label: 'rasm2' },
       { label: 'r2pm' },
-      { label: 'rabin2' }
+      { label: 'ragg2' },
+      { label: 'rasm2' },
+      { label: 'rabin2' },
+      { label: 'rahash2' },
+      { label: 'rasign2' },
+      { label: 'rafind2' },
+      { label: 'r2agent' }
+    ]
+  }, {
+    label: 'Window',
+    submenu: [
+      { label: 'Close' },
     ]
   }, {
     label: 'Help',
