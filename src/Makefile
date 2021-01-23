@@ -39,3 +39,6 @@ linux lin:
 
 indent:
 	npm run indent
+
+.PHONY: all file osx mac macos rls release _linux w32 win32 w64 win64 linux lin indent
+	npm run indent
