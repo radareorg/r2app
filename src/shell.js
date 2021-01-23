@@ -219,10 +219,20 @@ function loadPluginTabs () {
 hello world
 `);
 }
-function clickrow(name) {
+
+function linkify (a) {
+  return a.split(/\n/g)
+    .map(_ => _.replace(/0x([^\s]*)/, '<a href="javascript:searchtap(0x$1)">0x$1</a>'))
+    .map(_ => _.replace(/sym\.([^\s]*)/, '<a href="javascript:searchtap(\'sym.$1\')">sym.$1</a>'))
+    .map(_ => _.replace(/fcn\.([^\s]*)/, '<a href="javascript:searchtap(\'fcn.$1\')">fcn.$1</a>'))
+    .map(_ => _.replace(/str\.([^\s]*)/, '<a href="javascript:searchtap(\'fcn.$1\')">str.$1</a>'))
+    .join('\n');
+}
+
+function clickrow (name) {
   const isDarkTheme = ($('console-div').style.backgroundColor !== 'white');
-  const k = (isDarkTheme)?  '#505050': '#d0d0f0';
-  $('row-'+name).style.backgroundColor = k;
+  const k = (isDarkTheme) ? '#505050' : '#d0d0f0';
+  $('row-' + name).style.backgroundColor = k;
 }
 
 function seekTo (addr) {
@@ -343,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
           ev.target.style.backgroundColor = '#d0d0f0';
         }
-	clickrow(ev.target.id.split('-')[2].replace('row-', ''));
+        clickrow(ev.target.id.split('-')[2].replace('row-', ''));
         seekTo(ev.target.innerHTML);
       };
     }
@@ -533,6 +543,7 @@ document.addEventListener('DOMContentLoaded', function () {
     filterList();
   });
   electron.ipcRenderer.on('open-tab', (event, arg) => {
+    // TODO . use r2app.tabs array
     switch (arg.name) {
       case 'goto':
         dialogs().prompt('Goto address or flag...', (name) => {
@@ -615,11 +626,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (arg.command.indexOf('agf') != -1 || arg.command.indexOf('pdc') != -1) {
       if (arg.result.trim() === '') {
         arg.result = '<br />No function found.<br /><br/>Click <a href="javascript:analyze()">here</a> to analyze.';
+      } else {
+        arg.result = linkify(arg.result);
       }
     }
     if (hasClass(searchTab, 'active')) {
       if (arg.command.startsWith('/')) {
-        const res = escapeHtml(arg.result).split(/\n/g).map(_ => _.replace(/0x([^\s]*)/, '<a href="javascript:searchtap(0x$1)">0x$1</a>')).join('\n');
+        const res = linkify(arg.result);
+        // ;escapeHtml(arg.result).split(/\n/g).map(_ => _.replace(/0x([^\s]*)/, '<a href="javascript:searchtap(0x$1)">0x$1</a>')).join('\n');
         searchConsole.innerHTML = res;
       } else {
         searchViewer.scrollLeft = 0;
@@ -953,7 +967,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   labelGphButton.onclick = _ => {
     clearScreen = true;
-    electron.ipcRenderer.send('run-command', printCommand = 'agf|H');
+    electron.ipcRenderer.send('run-command', printCommand = 'agf|'); // No colors, but working links
+    // electron.ipcRenderer.send('run-command', printCommand = 'agf|H'); COLOR
     resetViewButtons();
     addClass(labelGphButton, 'active');
   };
