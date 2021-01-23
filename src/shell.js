@@ -428,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         break;
       default:
-        alert (JSON.stringify(arg.type));
+        alert(JSON.stringify(arg.type));
         break;
     }
     labelsTable.innerHTML = str;
@@ -852,7 +852,7 @@ document.addEventListener('DOMContentLoaded', function () {
     filterList();
   };
 
-function filterList() {
+  function filterList () {
     const x = labelSearchButton;
     dialogs().prompt('Filter list', (name) => {
       if (name) {
@@ -866,16 +866,16 @@ function filterList() {
         labelRefreshButton.onclick();
       }
     });
-}
-//when all tabs are geneated with r2app.tabAdd() we can remove this hardcoding
-r2app.tabs = [
-'console',
-'dashboard',
-'scripting',
-'notes',
-'search',
-'r2frida'
-];
+  }
+  // when all tabs are geneated with r2app.tabAdd() we can remove this hardcoding
+  r2app.tabs = [
+    'console',
+    'dashboard',
+    'scripting',
+    'notes',
+    'search',
+    'r2frida'
+  ];
   scriptingTab.onclick = () => {
     r2app.resetTabs();
     addClass(scriptingTab, 'active');
@@ -906,14 +906,14 @@ r2app.tabs = [
   searchTab.onclick = () => {
     r2app.resetTabs();
     addClass(searchTab, 'active');
-      $('search-input').focus();
+    $('search-input').focus();
     if (searchWindow) {
       searchWindow.style.visibility = 'visible';
     }
   };
 
   function resetViewButtons () {
-    for (let button of viewButtons) {
+    for (const button of viewButtons) {
       removeClass($(button), 'active');
     }
   }

@@ -30,12 +30,12 @@ const menu = Menu.buildFromTemplate([
       { label: 'Copy' },
       { label: 'Paste' },
       { type: 'separator' },
-      { label: 'Preferences' },
+      { label: 'Preferences' }
     ]
   }, {
     label: 'View',
     submenu: [
-      { label: 'Landscape' },
+      { label: 'Landscape' }
     ]
   }, {
     label: 'Tools',
@@ -54,7 +54,7 @@ const menu = Menu.buildFromTemplate([
     label: 'Window',
     submenu: [
       { label: 'Developer Tools' },
-      { label: 'Close' },
+      { label: 'Close' }
     ]
   }, {
     label: 'Help',
@@ -69,8 +69,8 @@ Menu.setApplicationMenu(menu);
 ipcMain.handle('r2rmProject', (ev, cmd) => {
   return new Promise((resolve, reject) => {
     r2pipe.syscmd('r2', (err, res) => {
-      (err?reject:resolve)(err);
-    })
+      (err ? reject : resolve)(err);
+    });
   });
 });
 

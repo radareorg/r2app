@@ -21,7 +21,7 @@ electron.ipcRenderer.on('list', (event, arg) => {
       };
       s.style.visibility = 'visible';
       s.style['z-index'] = 1000;
-      let str = ''; //<label>Sessions</label>\n';
+      let str = ''; // <label>Sessions</label>\n';
       str += '<ul class="list-group">';
       for (const ses of list) {
         str += '<li class="my-group-item hlhover green"> &nbsp;&nbsp; r2 ' + ses.file + '</li>\n';
@@ -42,14 +42,14 @@ electron.ipcRenderer.on('open-tab', (event, arg) => {
 });
 
 // r2app api
-function openProject(prj) {
+function openProject (prj) {
   const opts = [];
   opts.push('-p');
   $('file-input').value = prj;
   openFile(opts);
 }
 
-function removeProject(prj) {
+function removeProject (prj) {
   ipcRenderer.invoke('r2rmProject', cmd);
   refreshProjects();
 }
@@ -98,7 +98,7 @@ function projectColor (p) {
   return '#' + colors.join('');
 }
 
-function refreshProjects() {
+function refreshProjects () {
   r2.projects().then((projects) => {
     let s = '';
     for (const prj of projects) {

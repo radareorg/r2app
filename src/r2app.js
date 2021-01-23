@@ -3,16 +3,16 @@ r2app = {};
 r2app.tabs = [];
 
 r2app.buttonBarRemove = function (name) {
-  let a = $(name + '-button');
+  const a = $(name + '-button');
   if (a) a.parentNode.removeChild(a);
-}
-r2app.resetTabs = function() {
-  for (let tab of r2app.tabs) {
+};
+r2app.resetTabs = function () {
+  for (const tab of r2app.tabs) {
     removeClass($(tab + '-tab'), 'active');
     const tw = $(tab + '-window');
     if (tw) tw.style.visibility = 'hidden';
   }
-}
+};
 
 r2app.tabAdd = function (name, html) {
   r2app.tabs.push(name);
@@ -23,7 +23,7 @@ r2app.tabAdd = function (name, html) {
     </div>
   `;
   $('window-group').innerHTML += `
-<div class="window-content" style="overflow:hidden;top:54px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="`+name+`-window">
+<div class="window-content" style="overflow:hidden;top:54px;width:100%;height:100%;background-color:white;visibility:hidden;position:absolute;z-index:10000" id="` + name + `-window">
 ` + html + `
 </div>
   `;
@@ -33,7 +33,7 @@ r2app.tabAdd = function (name, html) {
     const dw = $(name + '-window');
     if (dw) dw.style.visibility = 'visible';
   };
-}
+};
 
 r2app.buttonBarAdd = function (name, icon) {
   $('btn-group').innerHTML += `
@@ -41,5 +41,4 @@ r2app.buttonBarAdd = function (name, icon) {
       <span class="icon icon-` + icon + `"></span>
     </button>
   `;
-}
-
+};
