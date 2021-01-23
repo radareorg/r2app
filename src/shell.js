@@ -219,6 +219,11 @@ function loadPluginTabs () {
 hello world
 `);
 }
+function clickrow(name) {
+  const isDarkTheme = ($('console-div').style.backgroundColor !== 'white');
+  const k = (isDarkTheme)?  '#505050': '#d0d0f0';
+  $('row-'+name).style.backgroundColor = k;
+}
 
 function seekTo (addr) {
   clearScreen = true;
@@ -313,8 +318,8 @@ document.addEventListener('DOMContentLoaded', function () {
     addr = decimalToHexString(addr);
     return `
     <tr class="clickableLabel">
-      <td class="row">${addr}</td>
-      <td class="row">${name}</td>
+      <td id="row-${addr}" class="row">${addr}</td>
+      <td id="row-${name}-${addr}" class="row">${name}</td>
     </tr>
 `;
   }
@@ -338,6 +343,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
           ev.target.style.backgroundColor = '#d0d0f0';
         }
+	clickrow(ev.target.id.split('-')[2].replace('row-', ''));
         seekTo(ev.target.innerHTML);
       };
     }
