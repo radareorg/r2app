@@ -43,13 +43,13 @@ function analyze () {
 function up () {
   clearScreen = true;
   prependScreen = true;
-  desync(r2.cmd('s--2;' + printCommand));
+  electron.ipcRenderer.send('run-command', 's--;' + printCommand);
 }
 
 function down () {
   clearScreen = true;
   prependScreen = true;
-  electron.ipcRenderer.send('run-command', 's++2;' + printCommand);
+  electron.ipcRenderer.send('run-command', 's++;' + printCommand);
 }
 
 /*
