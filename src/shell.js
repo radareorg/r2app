@@ -390,6 +390,16 @@ document.addEventListener('DOMContentLoaded', function () {
           str += labelNew(f.name, f.offset);
         }
         break;
+      case 'maps':
+        for (const f of data) {
+          str += labelNew(f.name + ' (' + f.perm + ')', f.from);
+        }
+        break;
+      case 'files':
+        for (const f of data) {
+          str += labelNew(f.uri, f.size);
+        }
+        break;
       case 'methods':
         for (const klass of data) {
           for (const method of klass.methods) {

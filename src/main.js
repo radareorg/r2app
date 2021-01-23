@@ -12,6 +12,12 @@ const menu = Menu.buildFromTemplate([
   {
     label: 'r2app',
     submenu: [
+      { label: 'Open File' },
+      { type: 'separator' },
+      { label: 'Export as .asm' },
+      { label: 'Export as .c' },
+      { label: 'Export as .hex' },
+      { type: 'separator' },
       { role: 'close' },
       { role: 'quit' }
       // {label: 'About Me', selector: 'orderFrontStandardAboutPanel:'},
@@ -20,6 +26,10 @@ const menu = Menu.buildFromTemplate([
   }, {
     label: 'Edit',
     submenu: [
+      { label: 'Cut' },
+      { label: 'Copy' },
+      { label: 'Paste' },
+      { type: 'separator' },
       { label: 'Preferences' },
     ]
   }, {
@@ -43,6 +53,7 @@ const menu = Menu.buildFromTemplate([
   }, {
     label: 'Window',
     submenu: [
+      { label: 'Developer Tools' },
       { label: 'Close' },
     ]
   }, {
@@ -362,6 +373,18 @@ function createPanelMenu (event) {
     }
   }));
   menu.append(new MenuItem({
+    label: 'Maps',
+    click () {
+      shell_list(event, 'maps');
+    }
+  }));
+  menu.append(new MenuItem({
+    label: 'Files',
+    click () {
+      shell_list(event, 'files');
+    }
+  }));
+  menu.append(new MenuItem({
     label: 'Class Methods',
     click () {
       shell_list(event, 'methods');
@@ -498,6 +521,9 @@ function shell_list (event, type) {
     }
   }
   switch (type) {
+    case 'maps':
+      globalR2.cmdj('omj|', cb);
+      break;
     case 'regs':
       globalR2.cmdj('drj|', cb);
       break;
@@ -506,6 +532,9 @@ function shell_list (event, type) {
       break;
     case 'fcns':
       globalR2.cmdj('aflj|', cb);
+      break;
+    case 'files':
+      globalR2.cmdj('oj|', cb);
       break;
     case 'imports':
       globalR2.cmdj('iij|', cb);
