@@ -215,7 +215,9 @@ window.addEventListener('contextmenu', (e) => {
 */
 
 function loadPluginTabs () {
-  r2app.tabAdd('r2frida');
+  r2app.tabAdd('r2frida', `<h1>R2Frida</h1>
+hello world
+`);
 }
 
 function seekTo (addr) {
@@ -526,32 +528,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         break;
       case 1:
-        resetTabs();
+        r2app.resetTabs();
         addClass(consoleTab, 'active');
         break;
       case 2:
-        resetTabs();
+        r2app.resetTabs();
         addClass(dashboardTab, 'active');
         if (dashboardWindow) {
           dashboardWindow.style.visibility = 'visible';
         }
         break;
       case 3:
-        resetTabs();
+        r2app.resetTabs();
         addClass(searchTab, 'active');
         if (searchWindow) {
           searchWindow.style.visibility = 'visible';
         }
         break;
       case 4:
-        resetTabs();
+        r2app.resetTabs();
         addClass(scriptingTab, 'active');
         if (scriptingWindow) {
           scriptingWindow.style.visibility = 'visible';
         }
         break;
       case 5:
-        resetTabs();
+        r2app.resetTabs();
         addClass(notesTab, 'active');
         if (notesWindow) {
           notesWindow.style.visibility = 'visible';
@@ -855,53 +857,36 @@ function filterList() {
       }
     });
 }
+//when all tabs are geneated with r2app.tabAdd() we can remove this hardcoding
 r2app.tabs = [
 'console',
 'dashboard',
 'scripting',
 'notes',
 'search',
+'r2frida'
 ];
-  function resetTabs () {
-    for (let tab of r2app.tabs) {
-      removeClass($(tab + '-tab'), 'active');
-      const tw = $(tab + '-window');
-      if (tw) tw.style.visibility = 'hidden';
-    }
-    if (notesWindow) {
-      notesWindow.style.visibility = 'hidden';
-    }
-    if (searchWindow) {
-      searchWindow.style.visibility = 'hidden';
-    }
-    if (scriptingWindow) {
-      scriptingWindow.style.visibility = 'hidden';
-    }
-    if (dashboardWindow) {
-      dashboardWindow.style.visibility = 'hidden';
-    }
-  }
   scriptingTab.onclick = () => {
-    resetTabs();
+    r2app.resetTabs();
     addClass(scriptingTab, 'active');
     if (scriptingWindow) {
       scriptingWindow.style.visibility = 'visible';
     }
   };
   consoleTab.onclick = () => {
-    resetTabs();
+    r2app.resetTabs();
     addClass(consoleTab, 'active');
     if (consoleDiv) {
       consoleDiv.style.visibility = 'visible';
     }
   };
   dashboardTab.onclick = () => {
-    resetTabs();
+    r2app.resetTabs();
     addClass(dashboardTab, 'active');
     $('dashboard-window').style.visibility = 'visible';
   };
   notesTab.onclick = () => {
-    resetTabs();
+    r2app.resetTabs();
     addClass(notesTab, 'active');
     if (notesWindow) {
       notesWindow.style.visibility = 'visible';
@@ -909,7 +894,7 @@ r2app.tabs = [
     }
   };
   searchTab.onclick = () => {
-    resetTabs();
+    r2app.resetTabs();
     addClass(searchTab, 'active');
       $('search-input').focus();
     if (searchWindow) {
@@ -917,7 +902,7 @@ r2app.tabs = [
     }
   };
 
-  function reset () {
+  function resetViewButtons () {
     for (let button of viewButtons) {
       removeClass($(button), 'active');
     }
@@ -926,34 +911,34 @@ r2app.tabs = [
   labelPicButton.onclick = _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', printCommand = eyeCommand + '|H');
-    reset();
+    resetViewButtons();
     addClass(labelPicButton, 'active');
   };
   labelHexButton.onclick = _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', printCommand = hexCommand + '|H');
-    reset();
+    resetViewButtons();
     addClass(labelHexButton, 'active');
   };
 
   labelDisButton.onclick = _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', printCommand = 'pd|H');
-    reset();
+    resetViewButtons();
     addClass(labelDisButton, 'active');
   };
 
   labelDecButton.onclick = _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', printCommand = 'pdsf;pdc|H');
-    reset();
+    resetViewButtons();
     addClass(labelDecButton, 'active');
   };
 
   labelGphButton.onclick = _ => {
     clearScreen = true;
     electron.ipcRenderer.send('run-command', printCommand = 'agf|H');
-    reset();
+    resetViewButtons();
     addClass(labelGphButton, 'active');
   };
 
