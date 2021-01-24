@@ -21,7 +21,8 @@
     "semistandard": "^16.0.0"
   },
   "devDependencies": {
-    "electron-icon-builder": "*"
+    "electron-icon-bualder": "*",
+    "pretty": "^2.0.0"
   },
   "author": "",
   "license": "MIT"

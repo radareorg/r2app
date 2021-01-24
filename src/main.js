@@ -1,8 +1,9 @@
 // host/nodejs
-const { nativeTheme, ipcRenderer, app, dialog, webView, ipcMain, BrowserWindow, globalShortcut, clipboard } = require('electron');
+const { setVisualZoomLimits, nativeTheme, ipcRenderer, app, dialog, webView, ipcMain, BrowserWindow, globalShortcut, clipboard } = require('electron');
 const localShortcut = require('electron-localshortcut');
 const path = require('path');
 const { Menu, MenuItem } = require('electron');
+const rasm2 = require('./p/rasm2');
 
 nativeTheme.themeSource = 'light';
 
@@ -43,7 +44,7 @@ const menu = Menu.buildFromTemplate([
       { label: 'rax2' },
       { label: 'r2pm' },
       { label: 'ragg2' },
-      { label: 'rasm2' },
+      { label: 'rasm2', click: () => { openWindow('Rasm2', 'p/rasm2/index.html'); } },
       { label: 'rabin2' },
       { label: 'rahash2' },
       { label: 'rasign2' },
@@ -197,9 +198,11 @@ function openFile (targetFile, event) {
 const isMac = process.platform === 'darwin';
 const r2appIconPath = path.join(__dirname, isMac ? 'img/icon64.icns' : 'img/icon64.png');
 
-function openSettings () {
+// dupe of createWindow
+function openWindow (title, file) {
   const win = new BrowserWindow({
-    title: 'Settings',
+    // useContentSize: true,
+    title: title,
     icon: r2appIconPath,
     backgroundColor: 'white',
     width: 600,
@@ -208,13 +211,19 @@ function openSettings () {
     minHeight: 300,
     frame: false,
     titleBarStyle: 'hiddenInset',
-    show: false,
     webPreferences: {
-      nodeIntegration: true,
-      zoomFactor: 0.5
-    }
+      zoomFactor: 1.5
+    },
+    show: false
   });
-  // win.once
+  const webContents = win.webContents;
+  webContents.on('did-finish-load', () => {
+    webContents.setZoomFactor(1);
+    webContents.setVisualZoomLevelLimits(1, 1);
+    //webContents.setLayoutZoomLevelLimits(0, 0);
+  });
+  // setVisualZoomLevelLimits(4,1);
+  win.webContents.setZoomFactor(2.0);
   if (devConsole) {
     win.webContents.openDevTools();
   }
@@ -223,7 +232,7 @@ function openSettings () {
     win.show();
   });
   win.loadURL(url.format({
-    pathname: path.join(__dirname, 'ui-settings.html'),
+    pathname: path.join(__dirname, file),
     protocol: 'file:',
     slashes: true
   }));
@@ -440,7 +449,7 @@ ipcMain.on('open-file', function (event, arg) {
 });
 
 ipcMain.on('open-settings', function (event, arg) {
-  openSettings();
+  openWindow('Settings', 'ui-settings.html');
 });
 
 const exec = require('child_process').exec;
