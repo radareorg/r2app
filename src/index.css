@@ -1,59 +1,66 @@
 input:hover {
-  cursor: text;
+    cursor: text;
 }
+
 button:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 span:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 label {
-  font-size: 1.1em;
+    font-size: 1.1em;
 }
+
 .hover {
-  font-size:2em;
-  color:#f0f0f0;
+    font-size: 2em;
+    color: #f0f0f0;
 }
+
 .hover:hover {
-  font-size:2em;
-  color:#505050;
+    font-size: 2em;
+    color: #505050;
 }
 
 .hlhover:hover {
-  background-color:#f0f0f0;
-  cursor: hand;
+    background-color: #f0f0f0;
+    cursor: hand;
 }
+
 li {
-  font-family: 'agave';
+    font-family: 'agave';
 }
+
 p {
-  font-family: 'Verdana';
+    font-family: 'Verdana';
 }
+
 .green {
-  list-style: none;
-  line-height: 16px;
-  padding-left:16px;
-  cursor: hand;
+    list-style: none;
+    line-height: 16px;
+    padding-left: 16px;
+    cursor: hand;
 }
+
 .green:before {
-   content: '';
-   display: inline-block;
-   height: 16px;
-   width: 16px;
-   background-image: url('img/green.png');
-   background-size: 16px auto
+    content: '';
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url('img/green.png');
+    background-size: 16px auto
 }
+
 .my-group-item {
-   padding-top:8px;
-   height:32px;
+    padding-top: 8px;
+    height: 32px;
 }
 
 body {
-  transition: background-color 0.5s ease;
-  style="-webkit-app-region: drag";
+    transition: background-color 0.5s ease;
+    style="-webkit-app-region: drag";
 }
 
-// button << btn;
-.sidebar {
-	background-color: #f0f0f0 !important;
-}
+// button << btn; .sidebar { background-color: #f0f0f0 !important; }

@@ -220,7 +220,7 @@ function openWindow (title, file) {
   webContents.on('did-finish-load', () => {
     webContents.setZoomFactor(1);
     webContents.setVisualZoomLevelLimits(1, 1);
-    //webContents.setLayoutZoomLevelLimits(0, 0);
+    // webContents.setLayoutZoomLevelLimits(0, 0);
   });
   // setVisualZoomLevelLimits(4,1);
   win.webContents.setZoomFactor(2.0);

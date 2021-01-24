@@ -21,7 +21,8 @@
     "semistandard": "^16.0.0"
   },
   "devDependencies": {
-    "electron-icon-bualder": "*",
+    "electron-icon-builder": "*",
+    "cssbeautify": "^0.3.1",
     "pretty": "^2.0.0"
   },
   "author": "",
