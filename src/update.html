@@ -1,23 +1,25 @@
 <html>
-<link rel="stylesheet" href="dist/css/photon.css"></link>
-<script>
-const electron = require('electron');
-document.addEventListener('DOMContentLoaded', function () {
-  document.ondragover = (ev) => {
-    ev.preventDefault()
-  };
-  document.ondrop = (ev) => {
-    ev.preventDefault()
-    const path = ev.dataTransfer.files[0].path;
-    electron.ipcRenderer.send('ondragstart', path);
-  }
-  const homeButton = document.getElementById('home-button');
-  homeButton.onclick = _ => {
-    location.href = 'index.html';
-  };
-});
-</script>
-<body>
-</body>
-</html>
+  <link rel="stylesheet" href="dist/css/photon.css">
+  </link>
+  <script>
+    const electron = require('electron');
+    document.addEventListener('DOMContentLoaded', function() {
+      document.ondragover = (ev) => {
+        ev.preventDefault()
+      };
+      document.ondrop = (ev) => {
+        ev.preventDefault()
+        const path = ev.dataTransfer.files[0].path;
+        electron.ipcRenderer.send('ondragstart', path);
+      }
+      const homeButton = document.getElementById('home-button');
+      homeButton.onclick = _ => {
+        location.href = 'index.html';
+      };
+    });
+  </script>
 
+  <body>
+  </body>
+
+</html>

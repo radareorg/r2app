@@ -1,46 +1,51 @@
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<style>
-td,th {
-  font-family:Courier New;
-}
-font {
-  user-select:text;
-}
-</style>
-<link rel="stylesheet" href="dist/css/photon.css"></link>
-<link rel="stylesheet" href="shell.css"></link>
-<script src="util.js"></script>
-<script src="ui-settings.js"></script>
-<body id="draggable">
-<div class="window draggable" style="overflow:hidden" style="background-color:red">
-<br /><br />
-<header class="toolbar toolbar-header">
-<div style="position:absolute;top:0px;left:0px;height:3em;width:100%;background-image:linear-gradient(#f0f0f0, #d0d0d0);"></div>
-  <div class="tab-group">
-    <div class="tab-item active" id="general-tab">
-      <span class="icon icon-cancel icon-close-tab"></span>
-      General
-    </div>
-    <div class="tab-item" id="disasm-tab">
-      <span class="icon icon-cancel icon-close-tab"></span>
-      Disasm
-    </div>
-<!--
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <style>
+    td,
+    th {
+      font-family: Courier New;
+    }
+
+    font {
+      user-select: text;
+    }
+  </style>
+  <link rel="stylesheet" href="dist/css/photon.css">
+  </link>
+  <link rel="stylesheet" href="shell.css">
+  </link>
+  <script src="util.js"></script>
+  <script src="ui-settings.js"></script>
+
+  <body id="draggable">
+    <div class="window draggable" style="overflow:hidden" style="background-color:red">
+      <br /><br />
+      <header class="toolbar toolbar-header">
+        <div style="position:absolute;top:0px;left:0px;height:3em;width:100%;background-image:linear-gradient(#f0f0f0, #d0d0d0);"></div>
+        <div class="tab-group">
+          <div class="tab-item active" id="general-tab">
+            <span class="icon icon-cancel icon-close-tab"></span>
+            General
+          </div>
+          <div class="tab-item" id="disasm-tab">
+            <span class="icon icon-cancel icon-close-tab"></span>
+            Disasm
+          </div>
+          <!--
     <div class="tab-item" id="colors-tab">
       <span class="icon icon-cancel icon-close-tab"></span>
       Colors
     </div>
 -->
-    <div class="tab-item" id="analysis-tab">
-      <span class="icon icon-cancel icon-close-tab"></span>
-      Analysis
-    </div>
-    <div class="tab-item" id="debugger-tab">
-      <span class="icon icon-cancel icon-close-tab"></span>
-      Debugger
-    </div>
-<!--
+          <div class="tab-item" id="analysis-tab">
+            <span class="icon icon-cancel icon-close-tab"></span>
+            Analysis
+          </div>
+          <div class="tab-item" id="debugger-tab">
+            <span class="icon icon-cancel icon-close-tab"></span>
+            Debugger
+          </div>
+          <!--
     <div class="tab-item" id="project-tab">
       <span class="icon icon-cancel icon-close-tab"></span>
       Project
@@ -50,217 +55,218 @@ font {
       Eval
     </div>
 -->
- </div>
-</header>
-<!-- ------------- -->
-<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;padding:60px;padding-bottom:0px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="colors-window">
-<div id="general-div" class="pane" style="overflow-x:hidden;overflow-y:scroll;padding:0px;bottom:0px;top:0px;height:100%">
-<br /><br />
-Font Family
-<select id="colors-light">
-<option>agave</option>
-<option>Courier New</option>
-<option>IBM 8x8</option>
-<option>PT Mono</option>
-<option>Monospaced</option>
-<option>Courier Prime</option>
-<option>Ubuntu Mono</option>
-</select>
-<br /> <br />
-Light Theme:
-<select id="colors-light">
-<option>white</option>
-<option>basic</option>
-<option>behelit</option>
-<option>cga</option>
-<option>consonance</option>
-<option>dark</option>
-<option>focus</option>
-<option>lima</option>
-<option>matrix</option>
-<option>ogray</option>
-<option>pink</option>
-<option>rasta</option>
-<option>smyck</option>
-<option>solarized</option>
-<option>tango</option>
-<option>twilight</option>
-<option>xvilka</option>
-<option>zenburn</option>
-</select>
-<br /><br />
-Dark Theme:
-<select id="colors-dark">
-<option>twilight</option>
-<option>basic</option>
-<option>behelit</option>
-<option>cga</option>
-<option>consonance</option>
-<option>dark</option>
-<option>focus</option>
-<option>lima</option>
-<option>matrix</option>
-<option>ogray</option>
-<option>pink</option>
-<option>rasta</option>
-<option>smyck</option>
-<option>solarized</option>
-<option>tango</option>
-<option>white</option>
-<option>xvilka</option>
-<option>zenburn</option>
-</select>
-<br /><br />
-      <button id="home-button" class="btn btn-default" title="home">
-        <span class="icon icon-check"></span>
-Change Theme
-      </button>
-<br /><br />
-</div>
-</div>
-<!-- ------------- -->
-<div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="analysis-window">
-<div id="analysis-div" class="pane" style="overflow-x:hidden;overflow-y:scroll;bottom:0px;top:0px;padding:0px;height:100%">
-<div style="padding:15px">
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Jump Tables
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Has Next
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Data References
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Strings
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox" checked> Variables
-    </label>
-  </div>
-<br /><br />
-</div>
-</div>
+        </div>
+      </header>
+      <!-- ------------- -->
+      <div class="window-content" style="overflow-x:hidden;overflow-y:scroll;padding:60px;padding-bottom:0px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="colors-window">
+        <div id="general-div" class="pane" style="overflow-x:hidden;overflow-y:scroll;padding:0px;bottom:0px;top:0px;height:100%">
+          <br /><br />
+          Font Family
+          <select id="colors-light">
+            <option>agave</option>
+            <option>Courier New</option>
+            <option>IBM 8x8</option>
+            <option>PT Mono</option>
+            <option>Monospaced</option>
+            <option>Courier Prime</option>
+            <option>Ubuntu Mono</option>
+          </select>
+          <br /> <br />
+          Light Theme:
+          <select id="colors-light">
+            <option>white</option>
+            <option>basic</option>
+            <option>behelit</option>
+            <option>cga</option>
+            <option>consonance</option>
+            <option>dark</option>
+            <option>focus</option>
+            <option>lima</option>
+            <option>matrix</option>
+            <option>ogray</option>
+            <option>pink</option>
+            <option>rasta</option>
+            <option>smyck</option>
+            <option>solarized</option>
+            <option>tango</option>
+            <option>twilight</option>
+            <option>xvilka</option>
+            <option>zenburn</option>
+          </select>
+          <br /><br />
+          Dark Theme:
+          <select id="colors-dark">
+            <option>twilight</option>
+            <option>basic</option>
+            <option>behelit</option>
+            <option>cga</option>
+            <option>consonance</option>
+            <option>dark</option>
+            <option>focus</option>
+            <option>lima</option>
+            <option>matrix</option>
+            <option>ogray</option>
+            <option>pink</option>
+            <option>rasta</option>
+            <option>smyck</option>
+            <option>solarized</option>
+            <option>tango</option>
+            <option>white</option>
+            <option>xvilka</option>
+            <option>zenburn</option>
+          </select>
+          <br /><br />
+          <button id="home-button" class="btn btn-default" title="home">
+            <span class="icon icon-check"></span>
+            Change Theme
+          </button>
+          <br /><br />
+        </div>
+      </div>
+      <!-- ------------- -->
+      <div class="window-content" style="overflow:hidden;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="analysis-window">
+        <div id="analysis-div" class="pane" style="overflow-x:hidden;overflow-y:scroll;bottom:0px;top:0px;padding:0px;height:100%">
+          <div style="padding:15px">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Jump Tables
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Has Next
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Data References
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Strings
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" checked> Variables
+              </label>
+            </div>
+            <br /><br />
+          </div>
+        </div>
 
-</div>
+      </div>
 
-<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="debugger-window">
-<div id="debugger-div" class="pane" style="bottom:0px;top:0px;padding:0px;height:100%">
+      <div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="debugger-window">
+        <div id="debugger-div" class="pane" style="bottom:0px;top:0px;padding:0px;height:100%">
 
-<div style="padding:15px">
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Forks
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Executions
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Follow Child
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Slow
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Breakpoint in maps
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Software Step
-    </label>
-  </div>
-<br /><br />
-</div>
-</div>
+          <div style="padding:15px">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Forks
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Executions
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Follow Child
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Slow
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Breakpoint in maps
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Software Step
+              </label>
+            </div>
+            <br /><br />
+          </div>
+        </div>
 
-</div>
-</div>
-<!-- ------------- -->
-<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="analysis-window">
-<div id="project-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
-TODO
-</div>
-</div>
+      </div>
+    </div>
+    <!-- ------------- -->
+    <div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="analysis-window">
+      <div id="project-div" class="pane" style="overflow:hidden;bottom:0px;top:0px;padding:0px;height:100%">
+        TODO
+      </div>
+    </div>
 
-<!-- ------------- -->
-<div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="disasm-window">
-<div id="disasm-div" class="pane" style="bottom:0px;top:0px;padding:0px;height:100%">
+    <!-- ------------- -->
+    <div class="window-content" style="overflow-x:hidden;overflow-y:scroll;top:60px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="disasm-window">
+      <div id="disasm-div" class="pane" style="bottom:0px;top:0px;padding:0px;height:100%">
 
-<div style="padding:15px">
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Split basic blocks
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> ESIL emulation comments
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Uppercase disassembly
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Show Relative Offset
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Tabulate disasm
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Show Bytes
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Show Jump lines
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Capitalize disassembly
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> AT&amp;T Syntax
-    </label>
-  </div>
- <div class="checkbox">
-    <label>
-      <input type="checkbox"> Comments at right
-    </label>
-  </div>
-</div>
-</div>
-</div>
-<!-- ------------- -->
-<div class="window-content" id="wtf-window" style="overflow:hidden; position:absolute;top:60px;bottom:0px;width:100%">
+        <div style="padding:15px">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Split basic blocks
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> ESIL emulation comments
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Uppercase disassembly
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Show Relative Offset
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Tabulate disasm
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Show Bytes
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Show Jump lines
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Capitalize disassembly
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> AT&amp;T Syntax
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Comments at right
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ------------- -->
+    <div class="window-content" id="wtf-window" style="overflow:hidden; position:absolute;top:60px;bottom:0px;width:100%">
 
-</div>
-</body>
+    </div>
+  </body>
+
 </html>
