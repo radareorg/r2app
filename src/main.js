@@ -3,7 +3,7 @@ const { setVisualZoomLimits, nativeTheme, ipcRenderer, app, dialog, webView, ipc
 const localShortcut = require('electron-localshortcut');
 const path = require('path');
 const { Menu, MenuItem } = require('electron');
-const rasm2 = require('./p/rasm2');
+const rasm2 = require('./ui/rasm2');
 
 nativeTheme.themeSource = 'light';
 
@@ -44,12 +44,27 @@ const menu = Menu.buildFromTemplate([
       { label: 'rax2' },
       { label: 'r2pm' },
       { label: 'ragg2' },
-      { label: 'rasm2', click: () => { openWindow('Rasm2', 'p/rasm2/index.html'); } },
+      { label: 'rasm2', click: () => { openWindow('Rasm2', 'ui/rasm2/index.html'); } },
       { label: 'rabin2' },
       { label: 'rahash2' },
       { label: 'rasign2' },
       { label: 'rafind2' },
-      { label: 'r2agent' }
+      { label: 'r2agent' },
+      {
+        label: 'doom',
+        click: () => {
+          const cfg = {
+            titleBarStyle: 'default'
+          };
+          const w = openWindow('DOOM', 'ui/doom/index.html', cfg);
+          const off = 30;
+          const ww = 640 + (off / 2);
+          const hh = 400 + off;
+          w.setMinimumSize(ww, hh);
+          w.setMaximumSize(ww, hh);
+          w.setSize(ww, hh);
+        }
+      }
     ]
   }, {
     label: 'Window',
@@ -199,8 +214,8 @@ const isMac = process.platform === 'darwin';
 const r2appIconPath = path.join(__dirname, isMac ? 'img/icon64.icns' : 'img/icon64.png');
 
 // dupe of createWindow
-function openWindow (title, file) {
-  const win = new BrowserWindow({
+function openWindow (title, file, options) {
+  const cfg = {
     // useContentSize: true,
     title: title,
     icon: r2appIconPath,
@@ -209,13 +224,19 @@ function openWindow (title, file) {
     height: 500,
     minWidth: 400,
     minHeight: 300,
-    frame: false,
-    titleBarStyle: 'hiddenInset',
-    webPreferences: {
-      zoomFactor: 1.5
-    },
+    frame: true, // false,
+    // titleBarStyle: 'hiddenInset',
+    //  webPreferences: {
+    //   zoomFactor: 1.5
+    // },
     show: false
-  });
+  };
+  if (options) {
+    for (const k of Object.keys(options)) {
+      cfg[k] = options[k];
+    }
+  }
+  const win = new BrowserWindow(cfg);
   const webContents = win.webContents;
   webContents.on('did-finish-load', () => {
     webContents.setZoomFactor(1);
@@ -237,6 +258,7 @@ function openWindow (title, file) {
     slashes: true
   }));
   windows.push(win);
+  return win;
 }
 
 function createWindow (withFrame) {
