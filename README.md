@@ -15,7 +15,7 @@ You can run it by just typing `make`.
 Developers
 ----------
 
-To debug/develop/inspect the UI edit main.js and set `devConsole = true`
+To debug/develop/inspect the UI set the `R2APP_DEBUG=1` environment var
 
 Packaging
 ---------
