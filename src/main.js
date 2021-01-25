@@ -124,7 +124,7 @@ ipcMain.handle('plugins', async (ev, type) => {
 
 function jso2jsonstr (o) {
   const r = JSON.parse(JSON.stringify(o));
-  console.error(r);
+  // console.error(r);
   return r;
 }
 
@@ -224,11 +224,12 @@ function openWindow (title, file, options) {
     height: 500,
     minWidth: 400,
     minHeight: 300,
-    frame: true, // false,
-    // titleBarStyle: 'hiddenInset',
-    //  webPreferences: {
-    //   zoomFactor: 1.5
-    // },
+    frame: false,
+    titleBarStyle: 'hiddenInset',
+    webPreferences: {
+      nodeIntegration: true,
+      zoomFactor: 1.0
+    },
     show: false
   };
   if (options) {
@@ -243,8 +244,7 @@ function openWindow (title, file, options) {
     webContents.setVisualZoomLevelLimits(1, 1);
     // webContents.setLayoutZoomLevelLimits(0, 0);
   });
-  // setVisualZoomLevelLimits(4,1);
-  win.webContents.setZoomFactor(2.0);
+  win.webContents.setZoomFactor(1.0);
   if (devConsole) {
     win.webContents.openDevTools();
   }
@@ -471,7 +471,7 @@ ipcMain.on('open-file', function (event, arg) {
 });
 
 ipcMain.on('open-settings', function (event, arg) {
-  openWindow('Settings', 'ui-settings.html');
+  openWindow('Settings', 'ui/settings/index.html');
 });
 
 const exec = require('child_process').exec;
