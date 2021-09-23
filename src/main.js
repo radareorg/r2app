@@ -2,6 +2,7 @@
 const { setVisualZoomLimits, nativeTheme, ipcRenderer, app, dialog, webView, ipcMain, BrowserWindow, globalShortcut, clipboard } = require('electron');
 const localShortcut = require('electron-localshortcut');
 const path = require('path');
+const os = require('os');
 const { Menu, MenuItem } = require('electron');
 const rasm2 = require('./ui/rasm2');
 
@@ -84,7 +85,7 @@ Menu.setApplicationMenu(menu);
 
 ipcMain.handle('r2rmProject', (ev, cmd) => {
   return new Promise((resolve, reject) => {
-    r2pipe.syscmd('r2', (err, res) => {
+    r2pipe.syscmd('r2', {}, (err, res) => {
       (err ? reject : resolve)(err);
     });
   });
@@ -158,7 +159,9 @@ function openFile (targetFile, event) {
     targetFile = targetFile.path || path.join(__dirname,'samples','ls');
   }
   console.log('openFile', targetFile, options);
-  process.env.PATH = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:.';
+  if (os.platform() !== 'win32') {
+    process.env.PATH = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:.';
+  }
   if (targetFile == '.') {
     return '';
   }
@@ -630,7 +633,7 @@ ipcMain.on('run-command', (event, arg) => {
 });
 
 ipcMain.on('version', (event, arg) => {
-  r2pipe.syscmd('r2 -qv', (err, res) => {
+  r2pipe.syscmd('r2 -qv', {}, (err, res) => {
     try {
       if (err) {
         throw err;
