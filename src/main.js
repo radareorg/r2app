@@ -155,7 +155,7 @@ function openFile (targetFile, event) {
   let options = [];
   if (typeof targetFile === 'object') {
     options = targetFile.options || [];
-    targetFile = targetFile.path || '/bin/ls';
+    targetFile = targetFile.path || path.join(__dirname,'samples','ls');
   }
   console.log('openFile', targetFile, options);
   process.env.PATH = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:.';

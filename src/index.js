@@ -58,7 +58,7 @@ function removeProject (prj) {
 // r2app api
 function openFile (opts) {
   electron.ipcRenderer.send('open-file', {
-    path: $('file-input').value || '/bin/ls', options: opts
+    path: $('file-input').value || path.join(__dirname, 'samples', 'ls'), options: opts
   });
 }
 
