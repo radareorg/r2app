@@ -201,14 +201,20 @@ function openFile (targetFile, event) {
         return;
       }
       // :D
-      windows[0].hide();
-      windows.shift();
-      createWindow(true);
-      windows[0].loadURL(url.format({
+if (os.platform() === 'win32') {
+// do nothing
+} else {
+if (windows.length > 0) {
+  windows[0].hide();
+ windows.shift()
+  createWindow(true);
+  windows[0].loadURL(url.format({
         pathname: path.join(__dirname, 'shell.html'),
         protocol: 'file:',
         slashes: true
       }));
+}
+}
     });
   });
 }
@@ -252,6 +258,10 @@ function openWindow (title, file, options) {
   if (devConsole) {
     win.webContents.openDevTools();
   }
+  win.on('ready', () => {
+    win.center();
+    win.show();
+  });
   win.on('ready-to-show', () => {
     win.center();
     win.show();
@@ -289,11 +299,14 @@ function createWindow (withFrame) {
   let win = new BrowserWindow(windowOptions);
   mainWindow = win;
 
+      win.center();
+if (os.platform() === 'win32') {
+//win.show();
+}
   // win.once
   win.on('ready-to-show', () => {
     // consider 1s enough time to be ready
     setTimeout(function () {
-      win.center();
       win.show();
     }, 1000);
   });
@@ -381,7 +394,7 @@ function createWindow (withFrame) {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  const needsWindowControls = process.platform === 'win32';
+  const needsWindowControls = os.platform() === 'win32';
   createWindow(needsWindowControls);
 });
 
