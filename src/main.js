@@ -224,8 +224,8 @@ function openWindow (title, file, options) {
     height: 500,
     minWidth: 400,
     minHeight: 300,
-    frame: false,
-    titleBarStyle: 'hiddenInset',
+    // frame: false,
+    titleBarStyle: 'hiddenInset', // TITLEBAR
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -269,7 +269,7 @@ function createWindow (withFrame) {
     icon: r2appIconPath,
     backgroundColor: 'white',
     width: 1024,
-    height: 768,
+    height: 600,
     minWidth: 500,
     minHeight: 200,
     show: false,
@@ -281,7 +281,7 @@ function createWindow (withFrame) {
   };
   if (!withFrame) {
     windowOptions.frame = false;
-    windowOptions.titleBarStyle = 'hiddenInset';
+    windowOptions.titleBarStyle = 'hiddenInset'; // TITLEBAR
   }
   let win = new BrowserWindow(windowOptions);
   mainWindow = win;
@@ -378,7 +378,8 @@ function createWindow (withFrame) {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  createWindow(false);
+  const needsWindowControls = process.platform === 'win32';
+  createWindow(needsWindowControls);
 });
 
 // Quit when all windows are closed.
