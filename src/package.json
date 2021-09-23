@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "dialogs": "*",
-    "electron": "^11.1.1",
+    "electron": "^15.0.0",
     "electron-localshortcut": "^3.0.1",
-    "electron-packager": "^15.2.0",
+    "electron-packager": "^15.4.0",
     "photonkit": "^0.1.2",
     "r2pipe": "^2.5.1",
     "semistandard": "^16.0.0"

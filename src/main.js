@@ -228,6 +228,7 @@ function openWindow (title, file, options) {
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       zoomFactor: 1.0
     },
     show: false
@@ -274,6 +275,7 @@ function createWindow (withFrame) {
     show: false,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       zoomFactor: 1.0
     }
   };
