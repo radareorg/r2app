@@ -1,8 +1,10 @@
+ELECTRON=node_modules/.bin/electron
+
 all: dist
-	node_modules/.bin/electron --unhandled-rejections=strict .
+	$(ELECTRON) --disable-gpu --unhandled-rejections=strict .
 
 file:
-	node_modules/.bin/electron . /bin/ls
+	$(ELECTRON) . /bin/ls
 
 node_modules:
 	npm i

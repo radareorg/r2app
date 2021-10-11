@@ -1,14 +1,25 @@
 // host/nodejs
+const url = require('url');
+const r2pipe = require('r2pipe');
+const electron = require('electron');
+const exec = require('child_process').exec;
+const devConsole = process.env.R2APP_DEBUG === '1';
 const { setVisualZoomLimits, nativeTheme, ipcRenderer, app, dialog, webView, ipcMain, BrowserWindow, globalShortcut, clipboard } = require('electron');
 const localShortcut = require('electron-localshortcut');
 const path = require('path');
 const os = require('os');
 const { Menu, MenuItem } = require('electron');
 const rasm2 = require('./ui/rasm2');
+const isMac = process.platform === 'darwin';
+const r2appIconPath = path.join(__dirname, isMac ? 'img/icon64.icns' : 'img/icon64.png');
+
+const windows = [];
+let globalR2 = null;
+let sessions = [];
+let mainWindow = null;
+let lastWindow = null;
 
 nativeTheme.themeSource = 'light';
-
-let mainWindow = null;
 
 const menu = Menu.buildFromTemplate([
   {
@@ -129,21 +140,12 @@ function jso2jsonstr (o) {
   return r;
 }
 
-const url = require('url');
-
-const r2pipe = require('r2pipe');
-const devConsole = process.env.R2APP_DEBUG === '1';
-
-const windows = [];
-let globalR2 = null;
-let sessions = [];
-
 app.commandLine.appendSwitch('--enable-viewport-meta', 'true');
 app.commandLine.appendSwitch('--disable-pinch');
 
 ipcMain.handle('select-file', function (event, options) {
   event.preventDefault();
-  return dialog.showOpenDialog(mainWindow, options);
+  return dialog.showOpenDialog(lastWindow, options);
 });
 
 app.on('open-file', function (event, filePath, options) {
@@ -151,6 +153,16 @@ app.on('open-file', function (event, filePath, options) {
   console.log('app.on("open-file", ' + filePath + ')');
   openFile({ path: filePath, opts: options }, event);
 });
+
+if (process.argv.length > 2) {
+  for (let i = 2; i < process.argv.length; i++) {
+    if (!process.argv[i].startsWith('-')) {
+      const fileToOpen = process.argv[i];
+      openFile(process.argv[i]);
+      break;
+    }
+  }
+}
 
 function openFile (targetFile, event) {
   let options = [];
@@ -201,10 +213,17 @@ function openFile (targetFile, event) {
         return;
       }
       // :D
-      windows[0].hide();
+      const win = createWindow(true);
+      if (mainWindow != null) {
+        mainWindow.hide();
+        mainWindow.destroy();
+        mainWindow = win;
+      }
+      /*
       windows.shift();
-      createWindow(true);
-      windows[0].loadURL(url.format({
+*/
+      lastWindow.hide();
+      lastWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'shell.html'),
         protocol: 'file:',
         slashes: true
@@ -212,9 +231,6 @@ function openFile (targetFile, event) {
     });
   });
 }
-
-const isMac = process.platform === 'darwin';
-const r2appIconPath = path.join(__dirname, isMac ? 'img/icon64.icns' : 'img/icon64.png');
 
 // dupe of createWindow
 function openWindow (title, file, options) {
@@ -287,7 +303,10 @@ function createWindow (withFrame) {
     windowOptions.titleBarStyle = 'hiddenInset'; // TITLEBAR
   }
   let win = new BrowserWindow(windowOptions);
-  mainWindow = win;
+  lastWindow = win;
+  if (mainWindow === null) {
+    mainWindow = win;
+  }
 
   // win.once
   win.on('ready-to-show', () => {
@@ -350,10 +369,6 @@ function createWindow (withFrame) {
     slashes: true
   }));
 
-  if (process.argv.length > 2) {
-    openFile(process.argv[2]);
-  }
-
   // and load the index.html of the app.
   /*
   console.log("1");
@@ -375,6 +390,7 @@ function createWindow (withFrame) {
       console.error('There are running sessions, close them first');
     }
   });
+  return win;
 }
 
 // This method will be called when Electron has finished
@@ -395,7 +411,6 @@ app.on('window-all-closed', () => {
 });
 
 function createPanelMenu (event) {
-  const electron = require('electron');
   const menu = new Menu();
   menu.append(new MenuItem({
     label: 'Functions',
@@ -469,7 +484,7 @@ function createPanelMenu (event) {
 
 ipcMain.on('create-panel-menu', function (event, arg) {
   const menu = createPanelMenu(event);
-  menu.popup(mainWindow);
+  menu.popup(lastWindow);
 });
 
 ipcMain.on('open-file', function (event, arg) {
@@ -479,8 +494,6 @@ ipcMain.on('open-file', function (event, arg) {
 ipcMain.on('open-settings', function (event, arg) {
   openWindow('Settings', 'ui/settings/index.html');
 });
-
-const exec = require('child_process').exec;
 
 ipcMain.on('package-install', function (event, pkgName) {
   exec('r2pm -i ' + pkgName, (err, out) => {
@@ -511,7 +524,6 @@ ipcMain.on('package-uninstall', function (event, pkgName) {
 
 ipcMain.on('package-list', function (event, arg) {
   windows[0].setTitle('Package Manager');
-  const exec = require('child_process').exec;
   function execute (command, callback) {
     exec(command, function (error, stdout, stderr) { callback(erstdout); });
   }
