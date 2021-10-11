@@ -4,6 +4,7 @@ const openButton = document.querySelector('.button');
 const electron = require('electron');
 const packageJson = require('./package.json');
 const rasm2 = require('./ui/rasm2');
+const path = require('path');
 
 forceDefaultZoom();
 
