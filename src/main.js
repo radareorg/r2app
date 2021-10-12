@@ -11,6 +11,7 @@ const os = require('os');
 const { Menu, MenuItem } = require('electron');
 const rasm2 = require('./ui/rasm2');
 const isMac = process.platform === 'darwin';
+const isLinux = process.platform === 'linux';
 const r2appIconPath = path.join(__dirname, isMac ? 'img/icon64.icns' : 'img/icon64.png');
 
 const windows = [];
@@ -92,7 +93,6 @@ const menu = Menu.buildFromTemplate([
       // {label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: function() {force_quit=true; app.quit();}}
     ]
   }]);
-Menu.setApplicationMenu(menu);
 
 ipcMain.handle('r2rmProject', (ev, cmd) => {
   return new Promise((resolve, reject) => {
@@ -218,6 +218,7 @@ function openFile (targetFile, event) {
         mainWindow.destroy();
         mainWindow = win;
       }
+      win.setMenuBarVisibility(true);
       win.hide();
       win.loadURL(url.format({
         pathname: path.join(__dirname, 'shell.html'),
@@ -295,7 +296,7 @@ function createWindow (withFrame) {
       zoomFactor: 1.0
     }
   };
-  if (!withFrame) {
+  if (!withFrame && !isLinux) {
     windowOptions.frame = false;
     windowOptions.titleBarStyle = 'hiddenInset'; // TITLEBAR
   }
@@ -367,6 +368,7 @@ function createWindow (withFrame) {
   }));
   win.show();
 
+  win.setMenuBarVisibility(withFrame);
   // and load the index.html of the app.
   /*
   console.log("1");
