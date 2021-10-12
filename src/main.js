@@ -212,22 +212,19 @@ function openFile (targetFile, event) {
         console.error(err);
         return;
       }
-      // :D
       const win = createWindow(true);
       if (mainWindow != null) {
         mainWindow.hide();
         mainWindow.destroy();
         mainWindow = win;
       }
-      /*
-      windows.shift();
-*/
-      lastWindow.hide();
-      lastWindow.loadURL(url.format({
+      win.hide();
+      win.loadURL(url.format({
         pathname: path.join(__dirname, 'shell.html'),
         protocol: 'file:',
         slashes: true
       }));
+      win.show();
     });
   });
 }
@@ -368,6 +365,7 @@ function createWindow (withFrame) {
     protocol: 'file:',
     slashes: true
   }));
+  win.show();
 
   // and load the index.html of the app.
   /*

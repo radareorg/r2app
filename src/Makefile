@@ -1,7 +1,10 @@
 ELECTRON=node_modules/.bin/electron
 
 all: dist
-	$(ELECTRON) --disable-gpu --unhandled-rejections=strict .
+	$(ELECTRON) --unhandled-rejections=strict .
+
+try:
+	$(ELECTRON) --disable-software-rasterizer --disable-gpu --unhandled-rejections=strict .
 
 file:
 	$(ELECTRON) . /bin/ls
