@@ -14,8 +14,6 @@
   </link>
   <link rel="stylesheet" href="../../shell.css">
   </link>
-  <script src="../../util.js"></script>
-  <script src="index.js"></script>
 
   <body id="draggable">
     <div class="window draggable" style="overflow:hidden" style="background-color:red">
@@ -58,7 +56,7 @@
         </div>
       </header>
       <!-- ------------- -->
-      <div class="window-content" style="overflow-x:hidden;overflow-y:scroll;padding:60px;padding-bottom:0px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="colors-window">
+      <div class="window-content" style="overflow-x:hidden;overflow-y:scroll;padding:60px;padding-left:16px;padding-bottom:0px;width:100%;height:100%;visibility:hidden;position:absolute;z-index:10000" id="colors-window">
         <div id="general-div" class="pane" style="overflow-x:hidden;overflow-y:scroll;padding:0px;bottom:0px;top:0px;height:100%">
           <br /><br />
           Font Family
@@ -90,18 +88,20 @@
             <option>solarized</option>
             <option>tango</option>
             <option>twilight</option>
-            <option>xvilka</option>
             <option>zenburn</option>
           </select>
           <br /><br />
           Dark Theme:
           <select id="colors-dark">
-            <option>twilight</option>
+            <option>default</option>
+            <option>ayu</option>
+            <option>bluy</option>
             <option>basic</option>
             <option>behelit</option>
             <option>cga</option>
             <option>consonance</option>
             <option>dark</option>
+            <option>darkda</option>
             <option>focus</option>
             <option>lima</option>
             <option>matrix</option>
@@ -111,15 +111,17 @@
             <option>smyck</option>
             <option>solarized</option>
             <option>tango</option>
+            <option>twilight</option>
             <option>white</option>
-            <option>xvilka</option>
             <option>zenburn</option>
           </select>
+<!--
           <br /><br />
           <button id="home-button" class="btn btn-default" title="home">
             <span class="icon icon-check"></span>
             Change Theme
           </button>
+-->
           <br /><br />
         </div>
       </div>
@@ -269,4 +271,6 @@
     </div>
   </body>
 
+  <script src="../../util.js"></script>
+  <script src="index.js"></script>
 </html>

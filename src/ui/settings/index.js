@@ -18,6 +18,10 @@ const filterWord = '';
 
 document.addEventListener('DOMContentLoaded', function () {
   electron.ipcRenderer.send('run-command', 'ej|');
+  const cd = document.getElementById('colors-dark')
+  cd.onchange = function(e) {
+    electron.ipcRenderer.send('run-command', 'eco ' + cd.value);
+  };
 
   document.ondragover = (ev) => {
     ev.preventDefault();
