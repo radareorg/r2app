@@ -227,7 +227,7 @@ const html = '<!DOCTYPE html>
 		</div>
 		<div class="ButtonBox">
 		<div class="Button" onclick="my_v_func()">Cancel</div>
-		<div class="Button" onclick="my_v_ok()">Ok</div>
+		<div class="Button" onclick="exit()">Ok</div>
 		</div>
 		<div class="SideLeft">
 		This is the left side
@@ -253,8 +253,8 @@ fn my_v_func(event_id &char, args &char, app &App) {
 	println('Hello From V!')
 }
 
-fn my_v_ok(event_id &char, args &char, app &App) {
-	app.w.eval('document.body.style.backgroundColor="#f0f0f0"')
+fn my_v_exit(event_id &char, args &char, app &App) {
+	// app.w.eval('document.body.style.backgroundColor="#f0f0f0"')
 	exit(0)
 }
 
@@ -263,7 +263,7 @@ fn main() {
 		w: webview.create(debug: true)
 	}
 	app.w.bind('my_v_func', my_v_func, app)
-	app.w.bind('exit', my_v_ok, app)
+	app.w.bind('exit', my_v_exit, app)
 	app.w.set_size(450, 300, .min)
 	app.w.set_size(600, 400, .@none)
 	app.w.set_html(html)
